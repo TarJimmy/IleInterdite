@@ -128,7 +128,6 @@ public class Accueil  {
         
         
         
-        
         //Image à Droite
         DROIT.setBackground(Color.white);
         JLabel image = new JLabel();
