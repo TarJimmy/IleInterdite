@@ -1,3 +1,8 @@
+package Vue;
+
+import Modele.CarteJoueur;
+
+
 public class VueAventurier {
 
 	/**
@@ -5,7 +10,7 @@ public class VueAventurier {
 	 * @param carte
 	 */
 
-	public void ajouterVueCarte(Modele.CarteJoueur carte) {
+	public void ajouterVueCarte(CarteJoueur carte) {
 		// TODO - implement VueAventurier.ajouterVueCarte
 		throw new UnsupportedOperationException();
 	}
@@ -19,7 +24,7 @@ public class VueAventurier {
 	 * 
 	 * @param carte
 	 */
-	public void SupprimerVueCarte(Modele.CarteJoueur carte) {
+	public void SupprimerVueCarte(CarteJoueur carte) {
 		// TODO - implement VueAventurier.SupprimerVueCarte
 		throw new UnsupportedOperationException();
 	}

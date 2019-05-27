@@ -1,3 +1,8 @@
+package Vue;
+
+import Modele.Aventurier;
+import Modele.CarteJoueur;
+import Modele.Tuile;
 import java.util.*;
 
 public class VueJeu {
@@ -8,7 +13,7 @@ public class VueJeu {
 	 * 
 	 * @param ActionsPossible
 	 */
-	public String DemandeAction(Collections<String> ActionsPossible) {
+	public String DemandeAction(ArrayList<String> ActionsPossible) {
 		// TODO - implement vueJeu.DemandeAction
 		throw new UnsupportedOperationException();
 	}
@@ -28,7 +33,7 @@ public class VueJeu {
 		throw new UnsupportedOperationException();
 	}
 
-	public Modele.CarteJoueur DemandeCarte() {
+	public CarteJoueur DemandeCarte() {
 		// TODO - implement vueJeu.DemandeCarte
 		throw new UnsupportedOperationException();
 	}

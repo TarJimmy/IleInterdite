@@ -1,3 +1,7 @@
+package Vue;
+
+import Modele.Tuile;
+
 public class VueGrille {
 
 	/**
