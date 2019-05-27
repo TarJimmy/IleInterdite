@@ -1,8 +1,10 @@
+package Modele;
+
 import java.util.*;
 
 public abstract class DeckInnondation implements Deck {
 
-	Collection<CarteInnondation> pioche;
-	Collection<CarteInnondation> defausse;
+	ArrayList<CarteInnondation> pioche;
+	ArrayList<CarteInnondation> defausse;
 
 }

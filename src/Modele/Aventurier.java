@@ -1,10 +1,14 @@
+package Modele;
+
+import Vue.MesEnums.tresor;
+import Vue.MesEnums.typeAction;
 import java.util.*;
 
 public abstract class Aventurier {
 
 	private Tuile maPos;
 	Collection<CarteJoueur> mesCartes;
-	private collections<tresor> mesTresors;
+	private ArrayList<tresor> mesTresors;
 	private int actionsRestantes;
 
 	/**
@@ -40,7 +44,7 @@ public abstract class Aventurier {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collections<CarteJoueur> getCartes() {
+	public ArrayList<CarteJoueur> getCartes() {
 		// TODO - implement Aventurier.getCartes
 		throw new UnsupportedOperationException();
 	}

@@ -1,3 +1,5 @@
+package Modele;
+
 public class Explorateur extends Aventurier {
 
 	private Pion pionVert;

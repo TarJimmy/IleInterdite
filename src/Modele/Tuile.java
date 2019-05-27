@@ -1,15 +1,20 @@
+package Modele;
+
+import Vue.MesEnums.tresor;
+import java.util.ArrayList;
+
 public class Tuile {
 
 	private Grille maGrille;
-	private nomCase nom;
-	private etat etat;
+	private Utils.nomCase nom;
+	private Utils.EtatTuile etat;
 
 	public void estDisponible() {
 		// TODO - implement Tuile.estDisponible
 		throw new UnsupportedOperationException();
 	}
 
-	public Collections<Aventurier> getAventuriers() {
+	public ArrayList<Aventurier> getAventuriers() {
 		// TODO - implement Tuile.getAventuriers
 		throw new UnsupportedOperationException();
 	}

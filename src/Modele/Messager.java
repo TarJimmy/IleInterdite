@@ -1,3 +1,5 @@
+package Modele;
+
 public class Messager extends Aventurier {
 
 	private Pion pionGris;

@@ -1,3 +1,5 @@
+package Modele;
+
 public class Pilote extends Aventurier {
 
 	private Pion pionBleu;

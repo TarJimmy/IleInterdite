@@ -1,3 +1,5 @@
+package Modele;
+
 import java.util.*;
 
 public class Grille {
@@ -33,7 +35,7 @@ public class Grille {
 	 * 
 	 * @param tui
 	 */
-	public collections<Tuile> getVoisins(Tuile tui) {
+	public ArrayList<Tuile> getVoisins(Tuile tui) {
 		// TODO - implement Grille.getVoisins
 		throw new UnsupportedOperationException();
 	}

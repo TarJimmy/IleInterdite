@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package Modele;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -71,6 +71,9 @@ public class Utils {
             return null ;
         }
     }
+     public static enum nomCase {
+         
+     }
 
     public static ArrayList<Aventurier> melangerAventuriers(ArrayList<Aventurier> arrayList) {
         if (Parameters.ALEAS) {

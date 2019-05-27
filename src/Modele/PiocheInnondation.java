@@ -1,3 +1,5 @@
+package Modele;
+
 public class PiocheInnondation {
 
 	public void PiocherCarte() {

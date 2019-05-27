@@ -1,3 +1,5 @@
+package Modele;
+
 public class Ingenieur extends Aventurier {
 
 	private Pion pionRouge;

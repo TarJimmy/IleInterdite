@@ -1,3 +1,5 @@
+package Modele;
+
 public interface Deck {
 
 	void Melanger();
@@ -8,6 +10,6 @@ public interface Deck {
 	 * 
 	 * @param carte
 	 */
-	void Defausser(Carte carte);
+	void Defausser(CarteJoueur carte);
 
 }
