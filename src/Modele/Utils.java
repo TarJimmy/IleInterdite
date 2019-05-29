@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modele;
+package util;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -71,9 +71,6 @@ public class Utils {
             return null ;
         }
     }
-     public static enum nomCase {
-         
-     }
 
     public static ArrayList<Aventurier> melangerAventuriers(ArrayList<Aventurier> arrayList) {
         if (Parameters.ALEAS) {
@@ -92,7 +89,7 @@ public class Utils {
         int reponse = JOptionPane.showConfirmDialog (null, question, "", JOptionPane.YES_NO_OPTION) ;
         System.out.println("\tréponse : " + (reponse == JOptionPane.YES_OPTION ? "Oui" : "Non"));
         return reponse == JOptionPane.YES_OPTION;
-    }
+    }    
     
     /**
      * Permet d'afficher un message d'information avec un bouton OK
