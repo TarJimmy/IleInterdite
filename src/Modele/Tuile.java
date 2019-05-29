@@ -1,37 +1,100 @@
-package Modele;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ile_interdite;
 
-import Vue.MesEnums.tresor;
-import java.util.ArrayList;
-
+/**
+ *
+ * @author beaufima
+ */
 public class Tuile {
+    
+    private nomTuile nom;
+    private Utils.EtatTuile etat;
+    private int[] coords;
+    //private Tresor tresor;
 
-	private Grille maGrille;
-	private Utils.nomCase nom;
-	private Utils.EtatTuile etat;
+    //CONSTRUCTEUR 
+    //Il faut rajouter Tresor
+    public Tuile(nomTuile nom, Utils.EtatTuile etat, int[] coords) {
+        this.setNom(nom);
+        this.setEtat(etat);
+        this.setCoords(coords);
+    }
 
-	public void estDisponible() {
-		// TODO - implement Tuile.estDisponible
-		throw new UnsupportedOperationException();
-	}
+    //GETTERS
+    
+    public nomTuile getNom() {
+        return nom;
+    }
 
-	public ArrayList<Aventurier> getAventuriers() {
-		// TODO - implement Tuile.getAventuriers
-		throw new UnsupportedOperationException();
-	}
+    public Utils.EtatTuile getEtat() {
+        return etat;
+    }
 
-	public tresor getTresor() {
-		// TODO - implement Tuile.getTresor
-		throw new UnsupportedOperationException();
-	}
+    public int[] getCoords() {
+        return coords;
+    }
 
-	public int[] getCoords() {
-		// TODO - implement Tuile.getCoords
-		throw new UnsupportedOperationException();
-	}
+    /*public Tresor getTresor() {
+     *   return tresor;
+    }*/
+      
+    //SETTERS
+    
+    private void setNom(nomTuile nom) {
+        this.nom = nom;
+    }
 
-	public boolean Innonder() {
-		// TODO - implement Tuile.Innonder
-		throw new UnsupportedOperationException();
-	}
+    private void setEtat(Utils.EtatTuile etat) {
+        this.etat = etat;
+    }
+    
+    private void setCoords(int[] Coords) {
+        this.coords = Coords;
+    }
 
+    /*public void setTresor(Tresor tresor) {
+     *   this.tresor = tresor;
+    }*/
+    
+    //methodes
+    
+    public boolean estDisponible(){
+        return this.etat != Utils.EtatTuile.COULEE;
+            
+    }
+    
+    public void Inonder(){
+        
+        if(etat == Utils.EtatTuile.ASSECHEE){
+            etat = Utils.EtatTuile.INONDEE;
+        }
+        else if(etat == Utils.EtatTuile.INONDEE){
+            etat = Utils.EtatTuile.COULEE;
+        }
+        else {
+            System.out.println("La tuile est coulée");
+        }
+    }
+    
+    public void Assecher(){
+        if(etat == Utils.EtatTuile.INONDEE){
+            etat = Utils.EtatTuile.ASSECHEE;
+        }
+        else if(etat == Utils.EtatTuile.ASSECHEE) {
+            System.out.println("La tuile est déjà asséchée");
+        }
+        else {
+            System.out.println("La tuile est coulée");
+        }
+    }
+    
+    public boolean isInonder(){
+        return this.etat == Utils.EtatTuile.INONDEE;
+    }
+    
+    
 }
