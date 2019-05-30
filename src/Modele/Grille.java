@@ -51,15 +51,11 @@ public final class Grille {
                 
 	}
 
-	/**
-	 * 
-	 * @param depart
-	 * @param coords
-	 */
-	public int[] getVoisins(Tuile depart, int[] coords) {
+
+	public int[] getVoisins(Tuile depart, int[] coords) {       //je ne vois pas ce que c'est, si tu pouvait m'expliquer à l'occase à quoi elle sert (ça peut peut être m'être utile)
 		// TODO - implement Grille.getVoisins
 		int[] mesVoisins = new int[4];
-                mesVoisins[4]= -1;
+                mesVoisins[4]= -1;                                  //cette ligne provoque un NullPointerException
                 int i=0;
                 while (i< 6 || mesVoisins[4]!=-1){
                     
@@ -67,7 +63,16 @@ public final class Grille {
                 
                 return mesVoisins;
 	}
-
+        public ArrayList<Tuile> getVoisins(Tuile depart, ArrayList<int[]> coords) {
+                ArrayList<Tuile> voisins = new ArrayList<>();
+                int x,y;
+                x = depart.getCoords()[0];
+                y = depart.getCoords()[1];
+                for(int[] coord : coords){
+                    voisins.add(getTuile(x + coord[0],y + coord[1]));
+                }
+                return voisins;
+        }
 	
 
 
@@ -81,5 +86,13 @@ public final class Grille {
 	}
  public static void main(String[]args){
         Grille grille = new Grille(2);
+    }
+
+    private Tuile getTuile(int x, int y) {
+        if (x >=0 && x<5 && y >=0 && y<5 ){
+            return getMesTuiles()[x][y];
+        }else{
+            return null;
+        }
     }
 }
