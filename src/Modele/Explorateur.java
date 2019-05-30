@@ -1,27 +1,18 @@
 package Modele;
 
 import Modele.Utils.Pion;
+import java.util.ArrayList;
 
 public class Explorateur extends Aventurier {
 
-	private Pion pionVert;
-
-	/**
-	 * 
-	 * @param tuile
-	 */
-	public void deplacer(Tuile tuile) {
-		// TODO - implement Explorateur.deplacer
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param Tuile
-	 */
-	public void assecher(Tuile Tuile) {
-		// TODO - implement Explorateur.assecher
-		throw new UnsupportedOperationException();
-	}
-
+    @Override
+    public ArrayList<int[]> getCoordsProche() {
+        ArrayList<int[]> coords = new ArrayList<>();
+        for (int x = -1;x <=2;x++){
+            for (int y = -1;y <=2;y++){
+                coords.add((x != 0 && y != 0)? new int[] {x,y}:null);
+            }
+        }
+        return coords;
+    }
 }
