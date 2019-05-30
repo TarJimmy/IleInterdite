@@ -9,11 +9,11 @@ public abstract class Aventurier {
 
     private Tuile maPos;
     ArrayList<CarteJoueur> mesCartes;
-    private int actionsRestantes;
+    protected int actionsRestantes;
     private Pion pion;
     private static HashSet<tresor> tresorsRecuperer = new HashSet<>();
 
-
+    
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
     }
@@ -24,9 +24,9 @@ public abstract class Aventurier {
 
 
     public void assecher(Tuile tuile) {
-    tuile.assecher();
+    tuile.Assecher();
     actionsRestantes--;
-     }
+    }
 
     public void DonnerCarte(CarteJoueur carte, Aventurier av) {
         av.AddCarte(carte);
@@ -35,7 +35,7 @@ public abstract class Aventurier {
     }
 
 
-    public boolean GagnerTresor(tresor tres) {
+    public boolean GagnerTresor(Utils.tresor tres) {
             if(getTresorsRecuperer().contains(tres)){
                 int nbRetirés = 0;
                 Iterator it = getCartes().iterator();
@@ -76,9 +76,14 @@ public abstract class Aventurier {
     }
 
     public ArrayList<Tuile> getDeplacement(Grille grille) {
-        grille.getVoisins(getTuile(),getCoordsProche());
-        //TO DO
-        return null;
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
+        
+        Iterator it = collecTuiles.iterator();
+        while(it.hasNext()){
+            Tuile tui = (Tuile) it.next();
+            if(checkDeplacement(tui)) it.remove();
+        }
+        return collecTuiles;
     }
 
     public void DebutTour() {
