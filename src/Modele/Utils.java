@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package Modele;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.swing.JOptionPane;
-import model.aventuriers.Aventurier;
 
 /**
  *
@@ -72,13 +71,55 @@ public class Utils {
         }
     }
 
-    public static ArrayList<Aventurier> melangerAventuriers(ArrayList<Aventurier> arrayList) {
+   /* public static ArrayList<Aventurier> melangerAventuriers(ArrayList<Aventurier> arrayList) {
         if (Parameters.ALEAS) {
             Collections.shuffle(arrayList);
         }
         return arrayList ;
+    }*/
+    public enum tresor {
+        PIERRE_SACREE,
+        STATUE_ZEPHYR,
+        CRISTAL_ARDENT,
+        CALICE_ONDE;
     }
+    public enum nomTuile {
+    pont_des_abimes ("Le Pont des Abimes"),
+    porte_de_bronze ("La Porte de Bronze"),
+    caverne_des_ombres ("La Caverne des Ombres"),
+    porte_de_fer ("La Porte de Fer"),
+    porte_dor ("La Porte d’Or"),
+    falaises_de_loubli ("Les Falaises de l’Oubli"),
+    palais_de_corail ("Le Palais de Corail"),
+    porte_dargent ("La Porte d’Argent"),
+    dunes_de_lillusion ("Les Dunes de l’Illusion"),
+    heliport ("Héliport"),
+    porte_de_cuivre ("La Porte de Cuivre"),
+    jardin_des_hurlements ("Le Jardin des Hurlements"),
+    foret_pourpre ("La Foret Pourpre"),
+    lagon_perdu ("Le Lagon Perdu"),
+    marais_brumeux ("Le Marais Brumeux"),
+    observatoire ("Observatoire"),
+    rocher_fantome ("Le Rocher Fantôme"),
+    caverne_du_brasier ("La Caverne du Brasier"),
+    temple_du_soleil ("Le Temple du Soleil"),
+    temple_de_la_lune ("Le Temple de La Lune"),
+    palais_des_marees ("Le Palais des Marees"),
+    val_du_crepuscule ("Le Val du Crepuscule"),
+    tour_du_guet ("La Tour du Guet"),
+    jardin_des_murmures ("Le Jardin des Murmures");
+
+        public String getNom() {
+            return nom;
+        }
+
+    private String nom = "";
     
+    //Constructeur
+    nomTuile(String nom){
+        this.nom = nom;
+    }
+    }
     /**
      * Permet de poser une question à laquelle l'utilisateur répond par oui ou non
      * @param question texte à afficher

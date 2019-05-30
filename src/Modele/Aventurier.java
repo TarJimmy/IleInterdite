@@ -1,6 +1,6 @@
 package Modele;
 
-import Vue.MesEnums.tresor;
+import Modele.Utils.tresor;
 import Vue.MesEnums.typeAction;
 import java.util.*;
 

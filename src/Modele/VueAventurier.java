@@ -1,4 +1,4 @@
-package view;
+package Modele;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
-import util.Utils.Pion;
+import Modele.Utils.Pion;
 
  
 public class VueAventurier  {

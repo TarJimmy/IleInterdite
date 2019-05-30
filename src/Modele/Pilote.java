@@ -1,5 +1,7 @@
 package Modele;
 
+import Modele.Utils.Pion;
+
 public class Pilote extends Aventurier {
 
 	private Pion pionBleu;

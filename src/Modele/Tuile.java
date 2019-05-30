@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ile_interdite;
+package Modele;
+
+import Modele.Utils.nomTuile;
+import Modele.Utils.EtatTuile;
+
 
 /**
  *
@@ -12,15 +16,15 @@ package ile_interdite;
 public class Tuile {
     
     private nomTuile nom;
-    private Utils.EtatTuile etat;
+    private EtatTuile etat;
     private int[] coords;
     //private Tresor tresor;
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
-    public Tuile(nomTuile nom, Utils.EtatTuile etat, int[] coords) {
+    public Tuile(nomTuile nom, int[] coords) {
         this.setNom(nom);
-        this.setEtat(etat);
+        this.setEtat(EtatTuile.ASSECHEE);
         this.setCoords(coords);
     }
 
@@ -30,7 +34,7 @@ public class Tuile {
         return nom;
     }
 
-    public Utils.EtatTuile getEtat() {
+    public EtatTuile getEtat() {
         return etat;
     }
 
@@ -48,7 +52,7 @@ public class Tuile {
         this.nom = nom;
     }
 
-    private void setEtat(Utils.EtatTuile etat) {
+    private void setEtat(EtatTuile etat) {
         this.etat = etat;
     }
     
@@ -63,38 +67,48 @@ public class Tuile {
     //methodes
     
     public boolean estDisponible(){
-        return this.etat != Utils.EtatTuile.COULEE;
+        return this.etat != EtatTuile.COULEE;
             
     }
     
     public void Inonder(){
         
-        if(etat == Utils.EtatTuile.ASSECHEE){
-            etat = Utils.EtatTuile.INONDEE;
-        }
-        else if(etat == Utils.EtatTuile.INONDEE){
-            etat = Utils.EtatTuile.COULEE;
-        }
-        else {
-            System.out.println("La tuile est coulée");
+         switch (etat) {
+            case ASSECHEE:
+                etat = EtatTuile.INONDEE;
+                System.out.println("La tuile est devenue innondee");
+                break;
+            case INONDEE:
+                etat = EtatTuile.COULEE;
+                System.out.println("La tuile est devenue coulee");
+                break;
+            default:
+                System.out.println("La tuile est déjà coulée");
+                break;
         }
     }
     
     public void Assecher(){
-        if(etat == Utils.EtatTuile.INONDEE){
-            etat = Utils.EtatTuile.ASSECHEE;
-        }
-        else if(etat == Utils.EtatTuile.ASSECHEE) {
-            System.out.println("La tuile est déjà asséchée");
-        }
-        else {
-            System.out.println("La tuile est coulée");
+         switch (etat) {
+            case INONDEE:
+                etat = EtatTuile.ASSECHEE;
+                System.out.println("La tuile est devenue assechée");
+                break;
+            case ASSECHEE:
+                System.out.println("La tuile est déjà asséchée");
+                break;
+            default:
+                System.out.println("La tuile est coulée et ne peut être asseché");
+                break;
         }
     }
     
     public boolean isInonder(){
-        return this.etat == Utils.EtatTuile.INONDEE;
+        return this.etat == EtatTuile.INONDEE;
     }
-    
+    @Override
+    public String toString(){
+        return getNom().getNom();
+    }
     
 }

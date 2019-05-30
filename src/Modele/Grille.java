@@ -1,13 +1,41 @@
 package Modele;
 
+import Modele.Utils.nomTuile;
 import java.util.*;
 
-public class Grille {
+public final class Grille {
 
-	private Collection<Tuile> mesTuiles;
+	private Tuile[][] mesTuiles;
 	private int EchelonMonteEau;
 
-	public boolean partieFini() {
+        
+        public Grille(int echelon){
+            this.EchelonMonteEau=echelon;
+            initTableau();
+            System.out.println(mesTuiles[1].length);
+        }
+        
+        
+        private void initTableau(){
+            mesTuiles = new Tuile[6][6];
+            int i =0;
+            for (int x = 0;x<6;x++){
+                for (int y=0;y<6;y++){
+                    if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
+                        mesTuiles[x][y]=null;
+                    }
+                    else{
+                        int[] c = {x,y};
+                        mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i] ,c);
+                        i++;
+                    }
+                }
+            }
+        }
+        
+        
+        
+	public boolean partieGagner() {
 		// TODO - implement Grille.partieFini
 		throw new UnsupportedOperationException();
 	}
@@ -15,10 +43,12 @@ public class Grille {
 	/**
 	 * 
 	 * @param Tuile
+     * @return 
 	 */
-	public Tuile getTuile(Tuile Tuile) {
+	public Tuile[][] getMesTuiles() {
 		// TODO - implement Grille.getTuile
-		throw new UnsupportedOperationException();
+		return mesTuiles;
+                
 	}
 
 	/**
@@ -26,24 +56,20 @@ public class Grille {
 	 * @param depart
 	 * @param coords
 	 */
-	public void getVoisins(Tuile depart, int[] coords) {
+	public int[] getVoisins(Tuile depart, int[] coords) {
 		// TODO - implement Grille.getVoisins
-		throw new UnsupportedOperationException();
+		int[] mesVoisins = new int[4];
+                mesVoisins[4]= -1;
+                int i=0;
+                while (i< 6 || mesVoisins[4]!=-1){
+                    
+                }
+                
+                return mesVoisins;
 	}
 
-	/**
-	 * 
-	 * @param tui
-	 */
-	public ArrayList<Tuile> getVoisins(Tuile tui) {
-		// TODO - implement Grille.getVoisins
-		throw new UnsupportedOperationException();
-	}
+	
 
-	public static Grille getGrille() {
-		// TODO - implement Grille.getGrille
-		throw new UnsupportedOperationException();
-	}
 
 	/**
 	 * 
@@ -53,5 +79,7 @@ public class Grille {
 		// TODO - implement Grille.getTuile
 		throw new UnsupportedOperationException();
 	}
-
+ public static void main(String[]args){
+        Grille grille = new Grille(2);
+    }
 }
