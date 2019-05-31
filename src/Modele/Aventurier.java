@@ -13,6 +13,18 @@ public abstract class Aventurier {
     private Pion pion;
     private static HashSet<tresor> tresorsRecuperer = new HashSet<>();
 
+    public Aventurier(Tuile maPos, Pion pion) {
+        this.maPos = maPos;
+        this.pion = pion;
+        setActionsRestantes(3);
+        mesCartes = new ArrayList<>();
+    }
+
+    
+    
+    
+    
+    
     
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
@@ -114,8 +126,13 @@ public abstract class Aventurier {
 
 
     public ArrayList<Tuile> getAssechement(Grille grille) {
-        // TODO - implement Aventurier.getAssechement
-        throw new UnsupportedOperationException();
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
+        Iterator it = collecTuiles.iterator();
+        while(it.hasNext()){
+            Tuile tui = (Tuile) it.next();
+            if(!tui.isInnondee()) it.remove();
+        }
+        return collecTuiles;
     }
 
 
