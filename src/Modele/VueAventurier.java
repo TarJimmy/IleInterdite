@@ -1,5 +1,7 @@
-package Modele;
+package Vue;
 
+import Modele.CarteJoueur;
+import Modele.Utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -12,12 +14,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
-import Modele.Utils.Pion;
 
- 
-public class VueAventurier  {
-     
-    private final JPanel panelBoutons ;
+
+public class VueAventurier {
+private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
     private final JFrame window;
     private final JPanel panelAventurier;
@@ -27,11 +27,8 @@ public class VueAventurier  {
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
     private JTextField position;
-   
-   
-   
-    
-    public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
+
+public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
 
         this.window = new JFrame();
         window.setSize(350, 200);
@@ -107,11 +104,26 @@ public class VueAventurier  {
         return btnTerminerTour;
     }
  
-     public static void main(String [] args) {
-        // Instanciation de la fenêtre 
-        VueAventurier vueAventurier = new VueAventurier("Manon", "Explorateur",Pion.ROUGE.getCouleur() );
-    }
+     
+	public void ajouterVueCarte(CarteJoueur carte) {
+		// TODO - implement VueAventurier.ajouterVueCarte
+		throw new UnsupportedOperationException();
+	}
+
+	public void choixCarte() {
+		// TODO - implement VueAventurier.choixCarte
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param carte
+	 */
+	public void SupprimerVueCarte(CarteJoueur carte) {
+		// TODO - implement VueAventurier.SupprimerVueCarte
+		throw new UnsupportedOperationException();
+	}
+        public static void main(String[] args){
+            new VueAventurier("Manon","jsp", Color.blue);
+        }
 }
-
- 
-
