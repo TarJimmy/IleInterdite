@@ -48,6 +48,7 @@ public abstract class Aventurier {
                     }
                 }
             }
+            return true;
     }
 
     public ArrayList<CarteJoueur> getCartes() {
@@ -101,11 +102,14 @@ public abstract class Aventurier {
         for(int x = -1;x<=1;x++){
             for(int y = -1;y <= 1;y++){
                 d = Math.abs(x+y);
-                coords.add((d == 1)? new int[] {x,y} :null);
+                if(d == 1){
+                    coords.add(new int[] {x,y});
+                }
             }
         }
         return coords;
     }
+     
 
 
 
