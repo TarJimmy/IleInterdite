@@ -10,12 +10,7 @@ package Vue;
  * @author groott
  */
 public class MesEnums {
-    public enum typeAction {
-	ASSECHER,
-	GAGNERCARTE,
-	DONNERCARTE,
-	DEPLACER
-    }
+    
     
     public enum typeMessage {
 	ACTION,

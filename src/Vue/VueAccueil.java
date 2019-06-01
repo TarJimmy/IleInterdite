@@ -1,5 +1,6 @@
 package Vue;
 
+import Controleur.TypeMessage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -9,13 +10,13 @@ import javax.swing.JFrame;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Observable;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import Controleur.Message;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -30,7 +31,7 @@ import javax.swing.JTextField;
  /* - AddListener des boutons en bas du constructeur
     - Tout les objet sont intialiser seulement il ne peuvent pas être tous visibles,
     - C'est fait de cette manière pour optimisé le temps d'attente des interractions*/
-public class VueAccueil extends java.util.Observable{
+public class VueAccueil extends Controleur.Observe{
     private JFrame window;
     private JButton jouer; 
     private ArrayList<String> mesNoms=new ArrayList<>();; //Utilisé pour que les joueurs se repères lors du jeu
@@ -40,9 +41,9 @@ public class VueAccueil extends java.util.Observable{
     private final Color ROUGE_FONCER = new Color(240, 0, 0);
     private final Color COULEUR_PRINCIPAL = Color.white;
     JRadioButton[] mesDif;
-    private final int NB_DIFFICULTE =3;
-    private final String[] mesStringDif = {"Normal","Difficile","Extreme"};
-    VueAccueil(){
+    private final int NB_DIFFICULTE =4;
+    private final String[] StrDif = {"Novic","Normal","Elite","Légendaire"};
+    public VueAccueil(){
         //Configure Fenetre
         window = new JFrame();
         window.setTitle("Accueil");
@@ -141,7 +142,7 @@ public class VueAccueil extends java.util.Observable{
          ButtonGroup group = new ButtonGroup();
          mesDif = new JRadioButton[NB_DIFFICULTE];
          for (int i = 0; i<NB_DIFFICULTE;i++){
-             mesDif[i]= new JRadioButton(mesStringDif[i]);
+             mesDif[i]= new JRadioButton(StrDif[i]);
              mesDif[i].setBackground(COULEUR_PRINCIPAL);
              group.add(mesDif[i]);
              Gbas.add(mesDif[i]);
@@ -156,7 +157,7 @@ public class VueAccueil extends java.util.Observable{
         DROIT.setBackground(COULEUR_PRINCIPAL);
         JLabel image = new JLabel();
         DROIT.add(image,BorderLayout.CENTER);
-//        image.setIcon(new ImageIcon(getClass().getResource("/Images/imageAccueil.jpg")));
+        image.setIcon(new ImageIcon("C:\\Users\\tardy\\Downloads\\IleInterdite-master\\src\\Images\\imAccueil.jpg"));
         
         
         
@@ -174,7 +175,10 @@ public class VueAccueil extends java.util.Observable{
                                                                     mesNoms.add(mesChamp.getText());
                                                                 }
                                                             }
-                                                            System.out.println(mesNoms);
+                                                            Message m = new Message(TypeMessage.DEBUTJEU);
+                                                            m.nbJoueur = nbJoueur;
+                                                            m.difficulte = DonneEchelon();
+                                                            notifier(m);
                                                         }
                                                         @Override
                                                         public void mousePressed(MouseEvent e) {}
@@ -262,11 +266,20 @@ public class VueAccueil extends java.util.Observable{
     public int getNB_JOUEUR_MAX() {
         return NB_JOUEUR_MAX;
     }
-    
+    private int DonneEchelon(){
+        int i=0;
+        while (i<mesDif.length || !mesDif[i].isSelected()){
+            i++;
+        }
+        return i;
+    }
     
     public void afficher(boolean b){
             window.setVisible(b);
     }
 
-    
+    public static void main(String[] args){
+        VueAccueil a = new VueAccueil();
+        a.afficher(true);
+    }
 }
