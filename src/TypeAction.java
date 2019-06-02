@@ -13,6 +13,8 @@ package Controleur;
 	ASSECHER,
 	GAGNERCARTE,
 	DONNERCARTE,
-	DEPLACER
+	DEPLACER,
+        CHOIX_TUILE,
+        TERMINER_TOUR;
     }
 

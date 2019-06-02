@@ -7,6 +7,7 @@ package Controleur;
 
 import Controleur.Message;
 import Controleur.TypeMessage;
+import Modele.Tuile;
 import Vue.MesEnums;
 
 /**
@@ -14,8 +15,9 @@ import Vue.MesEnums;
  * @author tardy
  */
 public class MessageAction extends Message {
-    private TypeAction typeact;
-    MessageAction(){
+    public TypeAction typeact;
+    public Tuile tui;
+    public MessageAction(){
         super.type = TypeMessage.ACTION;
     }
 

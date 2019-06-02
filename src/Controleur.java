@@ -7,15 +7,7 @@ package Controleur;
 
 import Modele.*;
 import Vue.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -30,17 +22,44 @@ public class Controleur implements Observateur {
     private Grille grille;
     private DeckInnondation deckInnondation;
     private DeckTresor deckTresor;
+    private Aventurier AvTrActuel;
+    private int index;
+    private VueAventurier vueAvTrActuel;
     
     Controleur(){
         accueil = new VueAccueil();
         accueil.addObservateur(this);
         accueil.afficher(true);
     }
+
+    private void setTrAv() {
+        this.AvTrActuel = mesAventuriers.get(index);
+        System.out.println("Initialise aux tour de l'aventurier : "+ AvTrActuel);
+        this.vueAvTrActuel = mesVuesAventuriers.get(index);
+        System.out.println("Initialise aux tour de la VueAventurier :" + vueAvTrActuel);
+    }
+    private void addIndex(){
+        index++;
+        if (index>mesAventuriers.size()){
+            index=0;
+        }
+    }
     public void piocher (Aventurier av){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public boolean partieGagne(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    private void debutTour(){
+        for (VueAventurier vue : mesVuesAventuriers){
+            if (vue != vueAvTrActuel){
+                vue.activer(false);
+                System.out.println("Desactive " + vue);
+            }
+            else{
+                vue.activer(true);
+            }
+        }
     }
     public void TourDeJeu(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -51,9 +70,7 @@ public class Controleur implements Observateur {
     public boolean partiePerdu(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    public void FaireAction(String Action){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     public void MonteeDesEaux(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -61,7 +78,7 @@ public class Controleur implements Observateur {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void finTour(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void CheckNbCarte(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -97,6 +114,7 @@ public class Controleur implements Observateur {
             System.out.println("Crée une VueAventurier avec pour parametre : ["+mesNoms.get(i)+"]"
                                                                                + "["+ mesAvs.get(i).getNomAventurier()+"]"
                                                                                + "["+ mesAvs.get(i).getPion().toString()+"]");
+            mesVues.get(i).addObservateur(this);
         }
         System.out.println("Liste Finale : " + mesVues);
         return mesVues;
@@ -107,10 +125,11 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message msg) {
         switch(msg.type){
             case DEBUTJEU:
+                index = 0;
                 System.out.println("------------Desactive L'accueil---------");
                 accueil.afficher(false);
                 System.out.println("------------Creation de la Grille-------");
-                grille= new Grille(3);
+                grille= new Grille(msg.difficulte);
                 System.out.println("-----------Création de la VueGrille-----");
                 vueGrille = new VueGrille(grille);
                 System.out.println("----------Creations des Aventuriers-----");
@@ -121,6 +140,28 @@ public class Controleur implements Observateur {
                 jeu = new VueJeu(vueGrille,mesVuesAventuriers);
                 System.out.println("--------------Affiche la VueJeu---------");
                 jeu.afficher(true);
+                System.out.println("-----------Initialise le tour Actuel de l'aventurier");
+                vueGrille.addObservateur(this);
+                setTrAv();
+                debutTour();
+                AvTrActuel.setMaPos(grille.getTuile(3,3));
+        }
+    }
+
+    @Override
+    public void traiterMessage(MessageAction msg) {
+        switch (msg.typeact){
+            case DEPLACER :
+                System.out.println("hey");
+                vueGrille.proposeCase(AvTrActuel.getDeplacement(grille));
+            case CHOIX_TUILE:
+                AvTrActuel.deplacer(msg.tui);
+            case ASSECHER:;
+            
+            case TERMINER_TOUR:
+                addIndex();
+                setTrAv();
+                debutTour();
         }
     }
     public static void main(String[]args ){

@@ -17,9 +17,14 @@ public class Observe {
         this.observateur = o;
     }
     
-    public void notifier(Message m) {
+    public void notifierMessage(Message m) {
         if (observateur != null) {
             observateur.traiterMessage(m);
+        }
+    }
+    public void notifierMessageAction(MessageAction msg){
+        if (observateur != null) {
+            observateur.traiterMessage(msg);
         }
     }
 }
