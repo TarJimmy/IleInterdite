@@ -39,8 +39,8 @@ public abstract class Aventurier {
 
 
     public void assecher(Tuile tuile) {
-    tuile.Assecher();
-    actionsRestantes--;
+        tuile.Assecher();
+        actionsRestantes--;
     }
 
     public void DonnerCarte(CarteJoueur carte, Aventurier av) {
@@ -93,7 +93,6 @@ public abstract class Aventurier {
 
     public ArrayList<Tuile> getDeplacement(Grille grille) {
         ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
-        
         Iterator it = collecTuiles.iterator();
         while(it.hasNext()){
             Tuile tui = (Tuile) it.next();
@@ -147,7 +146,7 @@ public abstract class Aventurier {
         return maPos;
     }
 
-    private void setMaPos(Tuile maPos) {
+    public void setMaPos(Tuile maPos) { //Doit etre changer en private apres demo
         this.maPos = maPos;
     }
 

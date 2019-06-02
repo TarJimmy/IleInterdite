@@ -14,7 +14,7 @@ public final class Grille {
     private Tuile depPlon;
     private Tuile depPilote;
     private Tuile depNav;
-
+    
     public Grille(int echelon){
         this.EchelonMonteEau=echelon;
         initTableau();
@@ -25,12 +25,13 @@ public final class Grille {
      * @param nom
      * @return
      */
+    
     public Tuile getTuile(nomTuile nom){
         int x=0, y=0;
         Tuile tui = null;
         while (x<6 && tui==null){
            while (y<6 && tui ==null){
-                if (getTuile(x,y).getNom().equals(nom)){
+                if (getTuile(x,y).getNom().name().equals(nom.name())){
                     tui = getTuile(x,y);
                 }
                 y++;
@@ -59,31 +60,58 @@ public final class Grille {
             }
         }
         //Melange le tableau
-        System.out.println("Melange Le Tableau");
+        System.out.println("Mélange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
             for(int y=0;y<mesTuiles[x].length;y++){
                 if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
                     int r1 = (int) (Math.random() * 6);
                     int r2 = (int) (Math.random() * 6);
-                    while (r1+r2<2 || r1+r2>=9 || r1+5-r2>=9 || r1+5-r2<2){
+                    while (!(r1+r2<2 || r1+r2>=9 || r1+5-r2>=9 || r1+5-r2<2)){
                         r1 = (int) (Math.random() * 6);
                         r2 = (int) (Math.random() * 6);
                     }
+                    Tuile sauv = mesTuiles[x][y];
                     mesTuiles[x][y]= mesTuiles[r1][r2];
-                    mesTuiles[r1][r2]= mesTuiles[x][y];
+                    mesTuiles[r1][r2]= sauv;
                 }
             }
         }
-        //Recupere l'heliport
-       /* for (int x=0;x<mesTuiles.length;x++){
-            for(int y=0;y<mesTuiles[x].length;y++){
-                
-                        
-                
-                
-            }
-        }*/
+        //Recupere depart
+        /*depPilote = getTuile(nomTuile.heliport); // erreur sur getTuile
+        depExplo = getTuile(nomTuile.porte_de_cuivre);
+        depIng = getTuile(nomTuile.porte_de_bronze);
+        depNav = getTuile(nomTuile.porte_dor);
+        depPlon = getTuile(nomTuile.porte_de_fer);
+        depMes = getTuile(nomTuile.porte_dargent);*/
+        
     }
+
+    public Tuile getDepIng() {
+        return depIng;
+    }
+
+    public Tuile getDepExplo() {
+        return depExplo;
+    }
+
+    public Tuile getDepMes() {
+        return depMes;
+    }
+
+    public Tuile getDepPlon() {
+        return depPlon;
+    }
+
+    public Tuile getDepPilote() {
+        return depPilote;
+    }
+
+    public Tuile getDepNav() {
+        return depNav;
+    }
+        
+              
+    
 
 
 
@@ -102,19 +130,7 @@ public final class Grille {
     public Tuile[][] getMesTuiles() {
             return mesTuiles;
     }
-
-
-    public int[] getVoisins(Tuile depart, int[] coords) {       //je ne vois pas ce que c'est, si tu pouvait m'expliquer à l'occase à quoi elle sert (ça peut peut être m'être utile)
-            // TODO - implement Grille.getVoisins
-            int[] mesVoisins = new int[4];
-            mesVoisins[4]= -1;                                  //cette ligne provoque un NullPointerException
-            int i=0;
-            while (i< 6 || mesVoisins[4]!=-1){
-
-            }
-
-            return mesVoisins;
-    }
+    
     public ArrayList<Tuile> getVoisins(Tuile depart, ArrayList<int[]> coords) {
             ArrayList<Tuile> voisins = new ArrayList<>();
             int x,y;
@@ -137,7 +153,7 @@ public final class Grille {
      */
 
 
-    private Tuile getTuile(int x, int y) {
+    public Tuile getTuile(int x, int y) { // est change en public pour demo
         if (x >=0 && x<=5 && y >=0 && y<=5 ){
             return getMesTuiles()[x][y];
         }else{
@@ -147,10 +163,10 @@ public final class Grille {
 
     public ArrayList<Tuile> getTuilesDisponibles() {
         ArrayList<Tuile> tuilesDispos = new ArrayList<>();
-        for (int x=0;x< mesTuiles.length;x++){
-            for (int y=0;y<mesTuiles[x].length;y++){
-                if(mesTuiles[x][y].estDisponible()){
-                    tuilesDispos.add(mesTuiles[x][y]);
+        for (Tuile[] mesTuile : mesTuiles) {
+            for (Tuile mesTuile1 : mesTuile) {
+                if (mesTuile1.estDisponible()) {
+                    tuilesDispos.add(mesTuile1);
                 }
             }
         }

@@ -27,6 +27,7 @@ public class Tuile {
         this.setEtat(EtatTuile.ASSECHEE);
         this.setCoords(coords);
     }
+    
 
     //GETTERS
     
