@@ -52,9 +52,12 @@ private final JPanel panelBoutons ;
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
     private JTextField position;
+    //A enlever apres demo
+    private String nomAventurier;
 
 public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
-
+        //A enelevr apres demo
+        this.nomAventurier = nomAventurier;
         //le titre = nom du joueur 
         this.setLayout(new BorderLayout());
         add(new JLabel(nomJoueur), BorderLayout.NORTH);
@@ -127,5 +130,7 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         return btnTerminerTour;
     }
  
- 
+    public String toString(){
+        return "[VueAventurier : "+ nomAventurier+"]";
+    }
 }

@@ -7,14 +7,15 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class VueGrille extends JPanel {
+public class VueGrille extends Controleur.Observe {
 
 	/**
 	 * 
 	 * @param collecTuiles
 	 */
+        private JPanel vueGrille ;
 	public VueGrille (Grille grille){
-            setLayout(new GridLayout(6,6));
+            vueGrille = new JPanel(new GridLayout(6,6));
             initGrille(grille);
         }
         
@@ -25,24 +26,26 @@ public class VueGrille extends JPanel {
                     if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
                         JPanel j = new JPanel();
                         j.setBackground(Color.white);
-                        add(j);
+                        vueGrille.add(j);
                     }
                     else{
-                    add(new VueTuile(tuiles[x][y]));
+                        vueGrille.add(new VueTuile(tuiles[x][y]));
                     }
                 }
             }
         }
         public static void main (String[] args){
-            
-            
             JFrame f = new JFrame("Test");
             f.setSize(1000,500);
             System.out.println("cou");
             Grille g = new Grille(2);
             System.out.println("cou2");
             VueGrille gr = new VueGrille(g);
-            f.add(gr);
+            f.add(gr.vueGrille);
             f.setVisible(true);
         }
+
+    public JPanel getVueGrille() {
+        return vueGrille;
+    }
 }

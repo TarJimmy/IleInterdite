@@ -14,14 +14,20 @@ public class VueJeu {
 	private ArrayList<VueAventurier> mesAvs;
         private JFrame window = new JFrame();
         public VueJeu(VueGrille grille,ArrayList<VueAventurier> mesAvs){
+            System.out.println("Initialise la fenetre VueJeu (Layout : BorderLayout");
             initWindow(mesAvs);
+            System.out.println("Recupere le nombre d'aventurier");
             int taille = mesAvs.size();
+            System.out.println("Change le layout en GridLaout(tailleRecuperer,1");
             JPanel mesVuesAvs = new JPanel(new GridLayout(taille,1));
             for (int i=0; i<taille;i++){
                 mesVuesAvs.add(mesAvs.get(i));
+                System.out.println("Ajoute " + mesAvs.get(i) + "A mesVuesAvs");
             }
+            System.out.println("Ajoute mesVuesAvs à la fenetre (A l'est");
             window.add(mesVuesAvs,BorderLayout.EAST);
-            window.add(grille,BorderLayout.CENTER);
+            System.out.println("Ajoute la grille au centre");
+            window.add(grille.getVueGrille(),BorderLayout.CENTER);
             
             
         }

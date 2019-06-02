@@ -180,6 +180,10 @@ public class VueAccueil extends Controleur.Observe{
                                                             m.nbJoueur = nbJoueur;
                                                             //m.difficulte = DonneEchelon();
                                                             m.noms = mesNoms;
+                                                            
+                                                            System.out.println("Notifie : \n\tTypeMessage : "+m.type
+                                                                                        + "\n\tNombre de joueurs : "+m.nbJoueur
+                                                                                        +"\n\tNoms des Joueurs : "+m.noms);
                                                             notifier(m);
                                                         }
                                                         @Override

@@ -3,11 +3,11 @@ package Vue;
 import Modele.Tuile;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-public class VueTuile extends JPanel {
+public class VueTuile extends JButton {
     Color etat;
     VueTuile (Tuile tuile){
         setLayout(new BorderLayout());
@@ -16,6 +16,10 @@ public class VueTuile extends JPanel {
         setBackground(etat);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
 
+    }
+    VueTuile (){
+        setEnabled(false);
+        setBackground(Color.white);
     }
 
     
