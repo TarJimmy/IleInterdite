@@ -178,13 +178,14 @@ public class VueAccueil extends Controleur.Observe{
                                                             Message m = new Message();
                                                             m.type = TypeMessage.DEBUTJEU;
                                                             m.nbJoueur = nbJoueur;
-                                                            //m.difficulte = DonneEchelon();
+                                                            m.difficulte = DonneEchelon();
                                                             m.noms = mesNoms;
                                                             
                                                             System.out.println("Notifie : \n\tTypeMessage : "+m.type
                                                                                         + "\n\tNombre de joueurs : "+m.nbJoueur
-                                                                                        +"\n\tNoms des Joueurs : "+m.noms);
-                                                            notifier(m);
+                                                                                        +"\n\tNoms des Joueurs : "+m.noms
+                                                                                        +"\n\tdifficulte : "+ m.difficulte);
+                                                            notifierMessage(m);
                                                         }
                                                         @Override
                                                         public void mousePressed(MouseEvent e) {}
@@ -272,13 +273,13 @@ public class VueAccueil extends Controleur.Observe{
     public int getNB_JOUEUR_MAX() {
         return NB_JOUEUR_MAX;
     }
-    /*private int DonneEchelon(){
+    private int DonneEchelon(){
         int i=0;
-        while (i<mesDif.length || !mesDif[i].isSelected()){
+        while (i<mesDif.length && !mesDif[i].isSelected()){
             i++;
         }
-        return i;
-    }*/
+        return i+1;
+    }
     
     public void afficher(boolean b){
             window.setVisible(b);

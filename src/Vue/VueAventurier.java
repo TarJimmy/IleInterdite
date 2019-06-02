@@ -1,9 +1,14 @@
 package Vue;
 
+import Controleur.MessageAction;
+import Controleur.Observe;
+import Controleur.TypeAction;
 import Modele.CarteJoueur;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +20,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 
 
-public class VueAventurier extends JPanel{
+public class VueAventurier extends Observe{
 
 	/**
 	 * 
@@ -42,8 +47,8 @@ public class VueAventurier extends JPanel{
 	}
 
 
-
-private final JPanel panelBoutons ;
+    private JPanel principal;
+    private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
     private final JPanel panelAventurier;
     private final JPanel mainPanel;
@@ -51,18 +56,22 @@ private final JPanel panelBoutons ;
     private final JButton btnAssecher;
     private final JButton btnAutreAction;
     private final JButton btnTerminerTour;
+
+    public JPanel getPrincipal() {
+        return principal;
+    }
     private JTextField position;
     //A enlever apres demo
     private String nomAventurier;
 
-public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
+    public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         //A enelevr apres demo
-        this.nomAventurier = nomAventurier;
+        nomAventurier = nomAventurier;
         //le titre = nom du joueur 
-        this.setLayout(new BorderLayout());
-        add(new JLabel(nomJoueur), BorderLayout.NORTH);
+        principal = new JPanel(new BorderLayout());
+        principal.add(new JLabel(nomJoueur), BorderLayout.NORTH);
         mainPanel = new JPanel(new BorderLayout());
-        add(mainPanel,BorderLayout.CENTER);
+        principal.add(mainPanel,BorderLayout.CENTER);
         
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
@@ -96,16 +105,25 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
 
         this.btnBouger = new JButton("Bouger") ;
         this.btnAssecher = new JButton( "Assecher");
-        this.btnAutreAction = new JButton("AutreAction") ;
+        this.btnAutreAction = new JButton("Valider") ;
         this.btnTerminerTour = new JButton("Terminer Tour") ;
         
         this.panelBoutons.add(btnBouger);
         this.panelBoutons.add(btnAssecher);
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
+        btnBouger.addActionListener(new ActionListener(){
 
-    } 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MessageAction msg = new MessageAction();
+                msg.typeact = TypeAction.DEPLACER;
+                notifierMessageAction(msg);
+            }
+        });
+    }
     
+  
     public void setPosition(String pos) {
         this.position.setText(pos);
     }
@@ -132,5 +150,11 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
  
     public String toString(){
         return "[VueAventurier : "+ nomAventurier+"]";
+    }
+    public void activer(boolean b){
+        btnBouger.setEnabled(b);
+        btnAssecher.setEnabled(b);
+        btnAutreAction.setEnabled(b);
+        btnTerminerTour.setEnabled(b);
     }
 }
