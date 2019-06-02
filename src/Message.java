@@ -6,21 +6,16 @@
 package Controleur;
 
 import Controleur.TypeMessage;
+import java.util.ArrayList;
 
 /**
  *
  * @author tardy
  */
 public class Message {
-    private TypeMessage type;
+    public TypeMessage type;
     public int nbJoueur;
     public int difficulte;
-    public Message(TypeMessage type){
-        setType(type);
-    }
-
-    private void setType(TypeMessage type) {
-        this.type = type;
-    }
+    public ArrayList<String> noms;
 
 }

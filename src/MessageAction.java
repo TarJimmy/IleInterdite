@@ -15,12 +15,8 @@ import Vue.MesEnums;
  */
 public class MessageAction extends Message {
     private TypeAction typeact;
-    MessageAction(TypeAction act){
-        super(TypeMessage.ACTION);
-        setTypeact(act);
+    MessageAction(){
+        super.type = TypeMessage.ACTION;
     }
 
-    public void setTypeact(TypeAction typeact) {
-        this.typeact = typeact;
-    }
 }
