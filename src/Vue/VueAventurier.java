@@ -60,7 +60,7 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         add(new JLabel(nomJoueur), BorderLayout.NORTH);
         mainPanel = new JPanel(new BorderLayout());
         add(mainPanel,BorderLayout.CENTER);
-
+        
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
 

@@ -14,13 +14,13 @@ public class VueJeu {
 	private ArrayList<VueAventurier> mesAvs;
         private JFrame window = new JFrame();
         public VueJeu(VueGrille grille,ArrayList<VueAventurier> mesAvs){
-            initWindow();
+            initWindow(mesAvs);
             int taille = mesAvs.size();
-            JPanel mesVuesAvs = new JPanel(new GridLayout(1,taille));
+            JPanel mesVuesAvs = new JPanel(new GridLayout(taille,1));
             for (int i=0; i<taille;i++){
                 mesVuesAvs.add(mesAvs.get(i));
             }
-            window.add(mesVuesAvs,BorderLayout.NORTH);
+            window.add(mesVuesAvs,BorderLayout.EAST);
             window.add(grille,BorderLayout.CENTER);
             
             
@@ -50,11 +50,14 @@ public class VueJeu {
 		throw new UnsupportedOperationException();
 	}
 	
-        private void initWindow(){
-            window.setLocationRelativeTo(null);
-            window.setResizable(true);
+        private void initWindow(ArrayList<VueAventurier> mesAvs){
+            int heigth = mesAvs.size()*200;
+            int width = mesAvs.size()*400;
+            window.setResizable(false);
             window.setDefaultLookAndFeelDecorated(true);
-            window.setExtendedState(window.MAXIMIZED_BOTH);
+            
+            window.setSize(width,heigth);
+            
             window.setLayout(new BorderLayout());
         }
 
