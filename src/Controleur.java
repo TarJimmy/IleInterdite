@@ -7,8 +7,15 @@ package Controleur;
 
 import Modele.*;
 import Vue.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -87,13 +94,13 @@ public class Controleur implements Observateur {
         return mesVues;
     }
     
-
+    
     @Override
     public void traiterMessage(Message msg) {
         switch(msg.type){
             case DEBUTJEU:
-                grille= new Grille(3);
                 accueil.afficher(false);
+                grille= new Grille(3);
                 vueGrille = new VueGrille(grille);
                 mesAventuriers = creationAventurier(msg.nbJoueur);
                 mesVuesAventuriers = creationVuesAventuriers(mesAventuriers,msg.noms);
