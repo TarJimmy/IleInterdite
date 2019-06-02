@@ -15,7 +15,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 
 
-public class VueAventurier {
+public class VueAventurier extends JPanel{
 
 	/**
 	 * 
@@ -45,7 +45,6 @@ public class VueAventurier {
 
 private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
-    private final JFrame window;
     private final JPanel panelAventurier;
     private final JPanel mainPanel;
     private final JButton btnBouger  ;
@@ -56,12 +55,11 @@ private final JPanel panelBoutons ;
 
 public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
 
-        this.window = new JFrame();
-        window.setSize(350, 200);
         //le titre = nom du joueur 
-        window.setTitle(nomJoueur);
+        this.setLayout(new BorderLayout());
+        add(new JLabel(nomJoueur), BorderLayout.NORTH);
         mainPanel = new JPanel(new BorderLayout());
-        this.window.add(mainPanel);
+        add(mainPanel,BorderLayout.CENTER);
 
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
@@ -103,7 +101,6 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
 
-        this.window.setVisible(true);
     } 
     
     public void setPosition(String pos) {
@@ -129,5 +126,6 @@ public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
     public JButton getBtnTerminerTour() {
         return btnTerminerTour;
     }
+ 
  
 }

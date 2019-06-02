@@ -42,7 +42,7 @@ public class VueAccueil extends Controleur.Observe{
     private final Color COULEUR_PRINCIPAL = Color.white;
     JRadioButton[] mesDif;
     private final int NB_DIFFICULTE =4;
-    private final String[] StrDif = {"Novic","Normal","Elite","Légendaire"};
+    private final String[] StrDif = {"Novice","Normal","Elite","Légendaire"};
     public VueAccueil(){
         //Configure Fenetre
         window = new JFrame();
@@ -175,9 +175,11 @@ public class VueAccueil extends Controleur.Observe{
                                                                     mesNoms.add(mesChamp.getText());
                                                                 }
                                                             }
-                                                            Message m = new Message(TypeMessage.DEBUTJEU);
+                                                            Message m = new Message();
+                                                            m.type = TypeMessage.DEBUTJEU;
                                                             m.nbJoueur = nbJoueur;
-                                                            m.difficulte = DonneEchelon();
+                                                            //m.difficulte = DonneEchelon();
+                                                            m.noms = mesNoms;
                                                             notifier(m);
                                                         }
                                                         @Override
@@ -266,13 +268,13 @@ public class VueAccueil extends Controleur.Observe{
     public int getNB_JOUEUR_MAX() {
         return NB_JOUEUR_MAX;
     }
-    private int DonneEchelon(){
+    /*private int DonneEchelon(){
         int i=0;
         while (i<mesDif.length || !mesDif[i].isSelected()){
             i++;
         }
         return i;
-    }
+    }*/
     
     public void afficher(boolean b){
             window.setVisible(b);
