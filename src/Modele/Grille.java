@@ -8,12 +8,16 @@ public final class Grille {
 
     private static Tuile[][] mesTuiles;
     private int EchelonMonteEau;
-    private Tuile heliport;
+    private Tuile depIng;
+    private Tuile depExplo;
+    private Tuile depMes;
+    private Tuile depPlon;
+    private Tuile depPilote;
+    private Tuile depNav;
 
     public Grille(int echelon){
         this.EchelonMonteEau=echelon;
         initTableau();
-        System.out.println(mesTuiles[1].length);
     }
     
     /**
@@ -39,20 +43,23 @@ public final class Grille {
     private void initTableau(){
         //Cree les tuiles du tableau
         mesTuiles = new Tuile[6][6];
-        int i =0;
+        int i = 0; //index pour recuperer le bon nomTuile
         for (int x = 0;x<6;x++){
             for (int y=0;y<6;y++){
                 if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
                     mesTuiles[x][y]=null;
+                    System.out.println("Ajoute NULL");
                 }
                 else{
                     int[] c = {x,y};
                     mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i] ,c);
+                    System.out.println("Ajoute " + mesTuiles[x][y]);
                     i++;
                 }
             }
         }
         //Melange le tableau
+        System.out.println("Melange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
             for(int y=0;y<mesTuiles[x].length;y++){
                 if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
@@ -68,8 +75,16 @@ public final class Grille {
             }
         }
         //Recupere l'heliport
-        
+       /* for (int x=0;x<mesTuiles.length;x++){
+            for(int y=0;y<mesTuiles[x].length;y++){
+                
+                        
+                
+                
+            }
+        }*/
     }
+
 
 
 

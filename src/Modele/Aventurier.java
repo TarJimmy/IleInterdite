@@ -158,4 +158,7 @@ public abstract class Aventurier {
     private void setActionsRestantes(int actionsRestantes) {
         this.actionsRestantes = actionsRestantes;
     }
+    public String toString(){
+        return getNomAventurier();
+    }
 }
