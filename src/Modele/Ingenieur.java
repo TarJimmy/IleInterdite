@@ -1,10 +1,15 @@
 package Modele;
 
-import Modele.Utils.Pion;
+import Controleur.Utils.tresor;
+import Controleur.Utils.Pion;
 
 public class Ingenieur extends Aventurier {
 
     private boolean aAssecher;
+
+    public Ingenieur() {
+        super.setPion(Pion.ROUGE);
+    }
 
     public void setaAssecher(boolean aAssecher) {
         this.aAssecher = aAssecher;
@@ -26,7 +31,7 @@ public class Ingenieur extends Aventurier {
     }
 
     @Override
-    public boolean GagnerTresor(Utils.tresor tres) {
+    public boolean GagnerTresor(tresor tres) {
         setaAssecher(false);
         return super.GagnerTresor(tres);
     }
@@ -47,6 +52,11 @@ public class Ingenieur extends Aventurier {
     public void DebutTour() {
         super.DebutTour();
         setaAssecher(false);
+    }
+
+    @Override
+    public String getNomAventurier() {
+     return "Ingénieur";
     }
 
 }

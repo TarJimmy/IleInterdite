@@ -5,9 +5,9 @@
  */
 package Modele;
 
-import Modele.Utils.nomTuile;
-import Modele.Utils.EtatTuile;
-
+import Controleur.Utils.nomTuile;
+import Controleur.Utils.EtatTuile;
+import Controleur.Utils.tresor;
 
 /**
  *
@@ -18,7 +18,7 @@ public class Tuile {
     private nomTuile nom;
     private EtatTuile etat;
     private int[] coords;
-    //private Tresor tresor;
+    private tresor tresor;
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
@@ -42,9 +42,9 @@ public class Tuile {
         return coords;
     }
 
-    /*public Tresor getTresor() {
-     *   return tresor;
-    }*/
+    public tresor getTresor() {
+        return tresor;
+    }
       
     //SETTERS
     
@@ -60,9 +60,9 @@ public class Tuile {
         this.coords = Coords;
     }
 
-    /*public void setTresor(Tresor tresor) {
-     *   this.tresor = tresor;
-    }*/
+    public void setTresor(tresor tresor) {
+        this.tresor = tresor;
+    }
     
     //methodes
     
@@ -103,7 +103,7 @@ public class Tuile {
         }
     }
     
-    public boolean isInonder(){
+    public boolean isInnondee(){
         return this.etat == EtatTuile.INONDEE;
     }
     @Override

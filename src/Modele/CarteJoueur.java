@@ -5,10 +5,16 @@
  */
 package Modele;
 
+import Controleur.Utils;
+
 /**
  *
  * @author tardy
  */
 public abstract class CarteJoueur {
+
+    Utils.tresor getTresor() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

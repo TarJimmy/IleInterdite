@@ -1,7 +1,7 @@
 package Modele;
 
+import Controleur.Utils;
 import Vue.MesEnums.tresor;
-import Vue.MesEnums.typeAction;
 
 import java.util.*;
 
@@ -10,26 +10,29 @@ public abstract class Aventurier {
     private Tuile maPos;
     ArrayList<CarteJoueur> mesCartes;
     protected int actionsRestantes;
-    private Pion pion;
+    Utils.Pion pion;
     private static HashSet<tresor> tresorsRecuperer = new HashSet<>();
-
-    public Aventurier(Tuile maPos, Pion pion) {
-        this.maPos = maPos;
-        this.pion = pion;
+    public Aventurier() {
         setActionsRestantes(3);
         mesCartes = new ArrayList<>();
     }
 
+    public Utils.Pion getPion() {
+        return pion;
+    }
+
     
     
-    
+    protected void setPion(Utils.Pion pion){
+        this.pion = pion;
+    }
     
     
     
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
     }
-
+    public abstract String getNomAventurier();
     public static HashSet<tresor> getTresorsRecuperer() {
         return tresorsRecuperer;
     }

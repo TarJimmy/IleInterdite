@@ -1,6 +1,6 @@
 package Modele;
 
-import Modele.Utils.tresor;
+import Controleur.Utils.tresor;
 
 public class CarteTresor extends CarteJoueur {
 

@@ -1,9 +1,15 @@
 package Modele;
-
-import Modele.Utils.Pion;
 import java.util.ArrayList;
 
 public class Explorateur extends Aventurier {
+
+    /**
+     *
+     * @param pion
+     */
+    public Explorateur() {
+        super.setPion(Controleur.Utils.Pion.VERT);
+    }
 
     @Override
     public ArrayList<int[]> getCoordsProche() {
@@ -14,5 +20,10 @@ public class Explorateur extends Aventurier {
             }
         }
         return coords;
+    }
+
+    @Override
+    public String getNomAventurier() {
+        return "Explorateur";
     }
 }

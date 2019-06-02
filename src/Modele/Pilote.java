@@ -1,13 +1,21 @@
 package Modele;
 
-import Modele.Utils.Pion;
 import java.util.ArrayList;
 
 public class Pilote extends Aventurier {
 
     private boolean aVoler;
 
-        
+    public Pilote() {
+        super.setPion(Controleur.Utils.Pion.BLEU);
+    }
+
+    /**
+     *
+     * @param grille
+     * @return
+     */
+    @Override
     public ArrayList<Tuile> getDeplacement(Grille grille) {
         if(aVoler){
             return super.getDeplacement(grille);
@@ -24,10 +32,13 @@ public class Pilote extends Aventurier {
         this.aVoler = aVoler;
     }
 
+    @Override
     public void DebutTour() {
+            super.DebutTour();
             setaVoler(false);
     }
 
+    @Override
     public void deplacer(Tuile tuile) {
         int[] depart = getTuile().getCoords();
         int[] arrivee = tuile.getCoords();
@@ -36,6 +47,11 @@ public class Pilote extends Aventurier {
             setaVoler(true);
         }
         super.deplacer(tuile);
+    }
+
+    @Override
+    public String getNomAventurier() {
+       return "Pilote";
     }
 
 }

@@ -1,22 +1,43 @@
 package Modele;
 
-import Modele.Utils.nomTuile;
+import Controleur.Utils;
+import Controleur.Utils.nomTuile;
 import java.util.*;
 
 public final class Grille {
 
-    private Tuile[][] mesTuiles;
+    private static Tuile[][] mesTuiles;
     private int EchelonMonteEau;
-
+    private Tuile heliport;
 
     public Grille(int echelon){
         this.EchelonMonteEau=echelon;
         initTableau();
         System.out.println(mesTuiles[1].length);
     }
-
-
+    
+    /**
+     *
+     * @param nom
+     * @return
+     */
+    public Tuile getTuile(nomTuile nom){
+        int x=0, y=0;
+        Tuile tui = null;
+        while (x<6 && tui==null){
+           while (y<6 && tui ==null){
+                if (getTuile(x,y).getNom().equals(nom)){
+                    tui = getTuile(x,y);
+                }
+                y++;
+            }
+            x++;
+        }
+        return tui;
+    }
+    
     private void initTableau(){
+        //Cree les tuiles du tableau
         mesTuiles = new Tuile[6][6];
         int i =0;
         for (int x = 0;x<6;x++){
@@ -31,13 +52,31 @@ public final class Grille {
                 }
             }
         }
+        //Melange le tableau
+        for (int x=0;x<mesTuiles.length;x++){
+            for(int y=0;y<mesTuiles[x].length;y++){
+                if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
+                    int r1 = (int) (Math.random() * 6);
+                    int r2 = (int) (Math.random() * 6);
+                    while (r1+r2<2 || r1+r2>=9 || r1+5-r2>=9 || r1+5-r2<2){
+                        r1 = (int) (Math.random() * 6);
+                        r2 = (int) (Math.random() * 6);
+                    }
+                    mesTuiles[x][y]= mesTuiles[r1][r2];
+                    mesTuiles[r1][r2]= mesTuiles[x][y];
+                }
+            }
+        }
+        //Recupere l'heliport
+        
     }
 
 
 
     public boolean partieGagner() {
+        return false;
             // TODO - implement Grille.partieFini
-            throw new UnsupportedOperationException();
+            
     }
 
     /**
@@ -81,11 +120,29 @@ public final class Grille {
      * 
      * @param coords
      */
-    public Tuile getTuile(int[] coords) {
-            // TODO - implement Grille.getTuile
-            throw new UnsupportedOperationException();
+
+
+    private Tuile getTuile(int x, int y) {
+        if (x >=0 && x<=5 && y >=0 && y<=5 ){
+            return getMesTuiles()[x][y];
+        }else{
+            return null;
+        }
     }
-public static void main(String[]args){
+
+    public ArrayList<Tuile> getTuilesDisponibles() {
+        ArrayList<Tuile> tuilesDispos = new ArrayList<>();
+        for (int x=0;x< mesTuiles.length;x++){
+            for (int y=0;y<mesTuiles[x].length;y++){
+                if(mesTuiles[x][y].estDisponible()){
+                    tuilesDispos.add(mesTuiles[x][y]);
+                }
+            }
+        }
+        return tuilesDispos;
+    }
+    
+    public static void main(String[]args){
         Grille grille = new Grille(2);
         ArrayList<int[]> coords = new ArrayList<>();
         coords.add(new int[] {0,1});
@@ -100,19 +157,17 @@ public static void main(String[]args){
         for(Tuile tui : voisins){
             int[] coord = tui.getCoords();
             System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
-            
-            
         }
-
+        for (int x=0;x<mesTuiles.length;x++){
+            for(int y=0;y<mesTuiles[x].length;y++){
+                
+                    System.out.println(mesTuiles[x][y].getNom());
+                
+            }
+        } 
+        System.out.println("coucou");
+        System.out.println("test : " + grille.getTuile(nomTuile.caverne_du_brasier));
 
                 
-    }
-
-    private Tuile getTuile(int x, int y) {
-        if (x >=0 && x<=5 && y >=0 && y<=5 ){
-            return getMesTuiles()[x][y];
-        }else{
-            return null;
-        }
     }
 }
