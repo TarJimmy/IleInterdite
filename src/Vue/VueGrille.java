@@ -1,6 +1,5 @@
 package Vue;
 
-import Controleur.Message;
 import Controleur.MessageAction;
 import Controleur.TypeAction;
 import Modele.Grille;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sun.security.util.Length;
 public class VueGrille extends Controleur.Observe {
 
 	/**
@@ -48,17 +46,13 @@ public class VueGrille extends Controleur.Observe {
                 }
             }
         }
-        public int[] getCoords(VueTuile vue) { // est change en public pour demo
-            int[] c = new int[2];
-            for( int x=0;x<vuesTuiles.length;x++){
-                for (int y=0;y<vuesTuiles[x].length;y++){
-                    if (vuesTuiles[x][y]==vue){
-                        c = new int[]{x,y};
-                    }
-                }
-            } 
-            return c;
+        public VueTuile getTuile(int x, int y) { // est change en public pour demo
+        if (x >=0 && x<=5 && y >=0 && y<=5 ){
+            return vuesTuiles[x][y];
+        }else{
+            return null;
         }
+    }
         public static void main (String[] args){
             JFrame f = new JFrame("Test");
             f.setSize(1000,500);
@@ -70,30 +64,33 @@ public class VueGrille extends Controleur.Observe {
             f.setVisible(true);
         }
         public void proposeCase(ArrayList<Tuile> tuiles){
-            ActionListener act = new ActionListener() {
-                                                    @Override
-                                                    public void actionPerformed(ActionEvent e) {
-                                                        MessageAction m= new MessageAction();
-                                                        m.typeact = TypeAction.CHOIX_TUILE;
-                                                        VueTuile vue = (VueTuile) e.getSource();
-                                                        m.coord = getCoords(vue);
-                                                        notifierMessageAction(m);
-                                                    }
-                                                    };
-                for (Tuile tui : tuiles){
-                    int x = tui.getCoords()[0];
-                    int y = tui.getCoords()[1];
-                    vuesTuiles[x][y].setBackground(Color.red);
-                    vuesTuiles[x][y].addActionListener(act);
+            for (int x=0;x<vuesTuiles.length;x++){
+                for (int y=0;y<vuesTuiles[x].length;y++){
+                    for (Tuile tui:tuiles){
+                        int x1 = tui.getCoords()[0];
+                        int y1 = tui.getCoords()[1];
+                        if (x==x1&&y==y1){
+                            vuesTuiles[x][y].setEnabled(true);
+                            vuesTuiles[x][y].addActionListener(new ActionListener() {
+                                                                                    @Override
+                                                                                    public void actionPerformed(ActionEvent e) {
+                                                                                        MessageAction m= new MessageAction();
+                                                                                        m.typeact = TypeAction.CHOIX_TUILE;
+                                                                                        m.tui = tui;
+                                                                                        notifierMessageAction(m);
+                                                                                    }
+                                                                                    });
+                        }
+                        else{
+                            vuesTuiles[x][y].setEnabled(false);
+                        }
+                    }
                 }
                 
             }
-        
+        }
 
     public JPanel getVueGrille() {
         return vueGrille;
     }
-
-    
-
 }

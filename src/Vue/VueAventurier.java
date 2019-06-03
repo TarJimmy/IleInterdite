@@ -1,6 +1,5 @@
 package Vue;
 
-import Controleur.Message;
 import Controleur.MessageAction;
 import Controleur.Observe;
 import Controleur.TypeAction;
@@ -21,22 +20,13 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 
 
-public class VueAventurier extends Observe implements Controleur.Observateur{
+public class VueAventurier extends Observe{
 
 	/**
 	 * 
 	 * @param carte
 	 */
-    private JPanel principal;
-    private final JPanel panelBoutons ;
-    private final JPanel panelCentre ;
-    private final JPanel panelAventurier;
-    private final JPanel mainPanel;
-    private final JButton btnBouger  ;
-    private final JButton btnAssecher;
-    private final JButton btnValider;
-    private final JButton btnTerminerTour;
-    private int[] coords;
+
 	public void ajouterVueCarte(CarteJoueur carte) {
 		// TODO - implement VueAventurier.ajouterVueCarte
 		throw new UnsupportedOperationException();
@@ -57,7 +47,16 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
 	}
 
 
-    
+    private JPanel principal;
+    private final JPanel panelBoutons ;
+    private final JPanel panelCentre ;
+    private final JPanel panelAventurier;
+    private final JPanel mainPanel;
+    private final JButton btnBouger  ;
+    private final JButton btnAssecher;
+    private final JButton btnAutreAction;
+    private final JButton btnTerminerTour;
+
     public JPanel getPrincipal() {
         return principal;
     }
@@ -106,11 +105,15 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
 
         this.btnBouger = new JButton("Bouger") ;
         this.btnAssecher = new JButton( "Assecher");
-        this.btnValider = new JButton("Valider") ;
+        this.btnAutreAction = new JButton("Valider") ;
         this.btnTerminerTour = new JButton("Terminer Tour") ;
         
         this.panelBoutons.add(btnBouger);
+        this.panelBoutons.add(btnAssecher);
+        this.panelBoutons.add(btnAutreAction);
+        this.panelBoutons.add(btnTerminerTour);
         btnBouger.addActionListener(new ActionListener(){
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 MessageAction msg = new MessageAction();
@@ -118,27 +121,6 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
                 notifierMessageAction(msg);
             }
         });
-        this.panelBoutons.add(btnAssecher);
-        this.panelBoutons.add(btnValider);
-        btnValider.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MessageAction msg = new MessageAction();
-                msg.typeact = TypeAction.CHOIX_TUILE;
-                msg.coord = coords;
-                notifierMessageAction(msg);
-            }
-        });
-        this.panelBoutons.add(btnTerminerTour);
-        btnTerminerTour.addActionListener(new ActionListener(){
-                 @Override
-            public void actionPerformed(ActionEvent e) {
-                MessageAction msg = new MessageAction();
-                msg.typeact = TypeAction.TERMINER_TOUR;
-                     notifierMessageAction(msg);
-            }
-        });
-        
     }
     
   
@@ -146,8 +128,8 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
         this.position.setText(pos);
     }
     
-     public JButton getBtnValider() {
-        return btnValider;
+     public JButton getBtnAutreAction() {
+        return btnAutreAction;
     }
     
     public String getPosition() {
@@ -172,19 +154,7 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
     public void activer(boolean b){
         btnBouger.setEnabled(b);
         btnAssecher.setEnabled(b);
-        btnValider.setEnabled(b);
+        btnAutreAction.setEnabled(b);
         btnTerminerTour.setEnabled(b);
-    }
-
-    @Override
-    public void traiterMessage(Message msg) {
-        
-    }
-
-    @Override
-    public void traiterMessage(MessageAction msg) {
-        if(msg.typeact == TypeAction.CHOIX_TUILE){
-           this.coords = msg.coord;
-        }
     }
 }
