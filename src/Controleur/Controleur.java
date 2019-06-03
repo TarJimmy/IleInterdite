@@ -117,6 +117,7 @@ public class Controleur implements Observateur {
                                                                                + "["+ mesAvs.get(i).getNomAventurier()+"]"
                                                                                + "["+ mesAvs.get(i).getPion().toString()+"]");
             mesVues.get(i).addObservateur(this);
+            vueGrille.addObservateur(mesVues.get(i));
         }
         System.out.println("Liste Finale : " + mesVues);
         return mesVues;
@@ -143,10 +144,10 @@ public class Controleur implements Observateur {
                 System.out.println("--------------Affiche la VueJeu---------");
                 jeu.afficher(true);
                 System.out.println("-----------Initialise le tour Actuel de l'aventurier");
-                vueGrille.addObservateur(this);
                 setTrAv();
                 debutTour();
-                AvTrActuel.setMaPos(grille.getTuile(3,3));
+                
+                
         }
     }
 
@@ -154,10 +155,9 @@ public class Controleur implements Observateur {
     public void traiterMessage(MessageAction msg) {
         switch (msg.typeact){
             case DEPLACER :
-                System.out.println("hey");
                 vueGrille.proposeCase(AvTrActuel.getDeplacement(grille));
             case CHOIX_TUILE:
-                AvTrActuel.deplacer(msg.tui);
+                AvTrActuel.deplacer(grille.getTuile(msg.coord[0],msg.coord[1]));
             case ASSECHER:;
             
             case TERMINER_TOUR:

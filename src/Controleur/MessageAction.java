@@ -8,7 +8,6 @@ package Controleur;
 import Controleur.Message;
 import Controleur.TypeMessage;
 import Modele.Tuile;
-import Vue.MesEnums;
 
 /**
  *
@@ -17,6 +16,7 @@ import Vue.MesEnums;
 public class MessageAction extends Message {
     public TypeAction typeact;
     public Tuile tui;
+    public int[] coord;
     public MessageAction(){
         super.type = TypeMessage.ACTION;
     }
