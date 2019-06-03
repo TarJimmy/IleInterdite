@@ -1,18 +1,19 @@
 package Modele;
 import Controleur.Utils;
+import Controleur.Utils.Pion;
 import java.util.ArrayList;
 
 public class Explorateur extends Aventurier {
 
-    /**
-     *
-     * @param pion
-     */
-    public Explorateur(Grille grille) {
-        super.setPion(Controleur.Utils.Pion.VERT);
-        super.setMaPos(grille.getTuile(Utils.nomTuile.porte_de_cuivre));
+    public Explorateur(Tuile maPos) {
+        super(maPos);
     }
-
+    public Explorateur(Grille grille){
+        super(grille.getTuile(Utils.nomTuile.porte_de_cuivre));
+        setPion(Pion.VERT);
+    }
+    
+    
     @Override
     public ArrayList<int[]> getCoordsProche() {
         ArrayList<int[]> coords = new ArrayList<>();

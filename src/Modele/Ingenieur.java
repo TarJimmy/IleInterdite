@@ -8,13 +8,17 @@ public class Ingenieur extends Aventurier {
 
     private boolean aAssecher;
 
-    public Ingenieur() {
-        super.setPion(Pion.ROUGE);
-    }
+
     public Ingenieur(Grille grille){
-        super.setMaPos(grille.getTuile(Utils.nomTuile.porte_de_bronze));
-        super.setPion(Pion.ROUGE);
+        super(grille.getTuile(Utils.nomTuile.porte_de_bronze));
+        setPion(Pion.ROUGE);
     }
+    public Ingenieur(Tuile maPos) {
+        super(maPos);
+    }
+    
+    
+    
 
     public void setaAssecher(boolean aAssecher) {
         this.aAssecher = aAssecher;

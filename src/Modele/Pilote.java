@@ -1,18 +1,20 @@
 package Modele;
 
 import Controleur.Utils;
+import Controleur.Utils.Pion;
 import java.util.ArrayList;
 
 public class Pilote extends Aventurier {
 
     private boolean aVoler;
 
-    public Pilote() {
-        super.setPion(Controleur.Utils.Pion.BLEU);
-    }
     public Pilote(Grille grille){
-        super.setMaPos(grille.getTuile(Utils.nomTuile.heliport));
-         super.setPion(Controleur.Utils.Pion.BLEU);
+        super(grille.getTuile(Utils.nomTuile.heliport));
+        setPion(Pion.BLEU);
+    }
+
+    public Pilote(Tuile maPos) {
+        super(maPos);
     }
     
     

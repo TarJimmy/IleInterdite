@@ -16,11 +16,14 @@ public abstract class Aventurier {
         mesCartes = new ArrayList<>();
     }
 
+    public Aventurier(Tuile maPos) {
+        this.maPos = maPos;
+    }
+    
+
     public Utils.Pion getPion() {
         return pion;
     }
-
-    
     
     protected void setPion(Utils.Pion pion){
         this.pion = pion;
@@ -127,7 +130,9 @@ public abstract class Aventurier {
 
 
     public ArrayList<Tuile> getAssechement(Grille grille) {
-        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
+        ArrayList<int[]> coords = getCoordsProche();
+        coords.add(new int[] {0,0});
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),coords);
         Iterator it = collecTuiles.iterator();
         while(it.hasNext()){
             Tuile tui = (Tuile) it.next();
