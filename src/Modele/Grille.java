@@ -6,7 +6,7 @@ import java.util.*;
 
 public final class Grille {
 
-    private static Tuile[][] mesTuiles;
+    public static Tuile[][] mesTuiles;
     private int EchelonMonteEau;
     private Tuile depIng;
     private Tuile depExplo;
@@ -29,10 +29,12 @@ public final class Grille {
     public Tuile getTuile(nomTuile nom){
         int x=0, y=0;
         Tuile tui = null;
-        while (x<6 && tui==null){
-           while (y<6 && tui ==null){
-                if (getTuile(x,y).getNom().name().equals(nom.name())){
-                    tui = getTuile(x,y);
+        while (x<6 && tui == null){
+           while (y<6 && tui == null){
+                if (getTuile(x,y) != null){
+                    if (getTuile(x,y).getNom().name().equals(nom.name())){
+                        tui = getTuile(x,y);
+                    }
                 }
                 y++;
             }
@@ -63,13 +65,14 @@ public final class Grille {
         System.out.println("Mélange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
             for(int y=0;y<mesTuiles[x].length;y++){
-                if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
+                if (!(x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2)){
                     int r1 = (int) (Math.random() * 6);
                     int r2 = (int) (Math.random() * 6);
-                    while (!(r1+r2<2 || r1+r2>=9 || r1+5-r2>=9 || r1+5-r2<2)){
+                    while ((r1+r2<2 || r1+r2>=9 || r1+5-r2>=9 || r1+5-r2<2)){
                         r1 = (int) (Math.random() * 6);
                         r2 = (int) (Math.random() * 6);
                     }
+                    System.out.println("r1 = " + r1 + "\tr2 = " + r2);
                     Tuile sauv = mesTuiles[x][y];
                     mesTuiles[x][y]= mesTuiles[r1][r2];
                     mesTuiles[r1][r2]= sauv;
@@ -77,12 +80,12 @@ public final class Grille {
             }
         }
         //Recupere depart
-        /*depPilote = getTuile(nomTuile.heliport); // erreur sur getTuile
+        depPilote = getTuile(nomTuile.heliport); // erreur sur getTuile
         depExplo = getTuile(nomTuile.porte_de_cuivre);
         depIng = getTuile(nomTuile.porte_de_bronze);
         depNav = getTuile(nomTuile.porte_dor);
         depPlon = getTuile(nomTuile.porte_de_fer);
-        depMes = getTuile(nomTuile.porte_dargent);*/
+        depMes = getTuile(nomTuile.porte_dargent);
         
     }
 
@@ -183,17 +186,19 @@ public final class Grille {
         System.out.println("la tuile est bien recuperer");
         
         ArrayList<Tuile> voisins = grille.getVoisins(depart,coords);
-            System.out.println("la methode getVoisins a marche");
+            System.out.println("la methode getVoisins a marche\n\n");
                 
-        for(Tuile tui : voisins){
+        /*for(Tuile tui : voisins){
             int[] coord = tui.getCoords();
             System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
-        }
-        for (int x=0;x<mesTuiles.length;x++){
-            for(int y=0;y<mesTuiles[x].length;y++){
-                
-                    System.out.println(mesTuiles[x][y].getNom());
-                
+        }*/
+        for (int x=0;x<grille.mesTuiles.length;x++){
+            for(int y=0;y<grille.mesTuiles[x].length;y++){
+               if(grille.mesTuiles[x][y] != null){
+                    System.out.println(grille.mesTuiles[x][y].getNom());
+               }else{
+                   System.out.println("NULL");
+               }
             }
         } 
         System.out.println("coucou");
