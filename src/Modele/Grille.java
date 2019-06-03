@@ -32,7 +32,7 @@ public final class Grille {
         while (x<6 && tui == null){
            while (y<6 && tui == null){
                 if (getTuile(x,y) != null){
-                    if (getTuile(x,y).getNom().name().equals(nom.name())){
+                    if (getTuile(x,y).getNom().equals(nom)){
                         tui = getTuile(x,y);
                     }
                 }
@@ -61,6 +61,10 @@ public final class Grille {
                 }
             }
         }
+        Tuile depart = this.getTuile(3,3);
+        int[] coord = depart.getCoords();
+        System.out.println(depart.getNom().getNom());
+            System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
         //Melange le tableau
         System.out.println("Mélange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
@@ -74,18 +78,14 @@ public final class Grille {
                     }
                     System.out.println("r1 = " + r1 + "\tr2 = " + r2);
                     Tuile sauv = mesTuiles[x][y];
+                    int[] sauv2 = mesTuiles[x][y].getCoords();
                     mesTuiles[x][y]= mesTuiles[r1][r2];
+                    mesTuiles[x][y].setCoords(mesTuiles[r1][r2].getCoords());
                     mesTuiles[r1][r2]= sauv;
+                    mesTuiles[r1][r2].setCoords(sauv2);
                 }
             }
         }
-        //Recupere depart
-        depPilote = getTuile(nomTuile.heliport); // erreur sur getTuile
-        depExplo = getTuile(nomTuile.porte_de_cuivre);
-        depIng = getTuile(nomTuile.porte_de_bronze);
-        depNav = getTuile(nomTuile.porte_dor);
-        depPlon = getTuile(nomTuile.porte_de_fer);
-        depMes = getTuile(nomTuile.porte_dargent);
         
     }
 
@@ -179,6 +179,7 @@ public final class Grille {
     public static void main(String[]args){
         Grille grille = new Grille(2);
         ArrayList<int[]> coords = new ArrayList<>();
+        Ingenieur ing = new Ingenieur();
         coords.add(new int[] {0,1});
         coords.add(new int[] {1,0});
         System.out.println("on peut bien ajouter des valeur dans ce vecteur");
@@ -186,12 +187,15 @@ public final class Grille {
         System.out.println("la tuile est bien recuperer");
         
         ArrayList<Tuile> voisins = grille.getVoisins(depart,coords);
+            System.out.println("la methode getVoisins a marche");
+        System.out.println(ing.getCoordsProche());
+        System.out.println();
             System.out.println("la methode getVoisins a marche\n\n");
                 
-        /*for(Tuile tui : voisins){
-            int[] coord = tui.getCoords();
+        //for(Tuile tui : voisins){
+            int[] coord = depart.getCoords();
             System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
-        }*/
+        //}
         for (int x=0;x<grille.mesTuiles.length;x++){
             for(int y=0;y<grille.mesTuiles[x].length;y++){
                if(grille.mesTuiles[x][y] != null){
@@ -202,7 +206,6 @@ public final class Grille {
             }
         } 
         System.out.println("coucou");
-        System.out.println("test : " + grille.getTuile(nomTuile.caverne_du_brasier));
 
                 
     }

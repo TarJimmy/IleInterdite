@@ -1,6 +1,5 @@
 package Modele;
 
-import Controleur.Utils;
 import Controleur.Utils.tresor;
 import Controleur.Utils.Pion;
 
@@ -10,9 +9,6 @@ public class Ingenieur extends Aventurier {
 
     public Ingenieur() {
         super.setPion(Pion.ROUGE);
-    }
-    public Ingenieur(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.porte_de_bronze));
     }
 
     public void setaAssecher(boolean aAssecher) {

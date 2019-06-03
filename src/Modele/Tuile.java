@@ -57,7 +57,7 @@ public class Tuile {
         this.etat = etat;
     }
     
-    private void setCoords(int[] Coords) {
+    public void setCoords(int[] Coords) {
         this.coords = Coords;
     }
 
