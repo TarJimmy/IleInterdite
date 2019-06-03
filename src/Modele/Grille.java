@@ -179,7 +179,7 @@ public final class Grille {
     public static void main(String[]args){
         Grille grille = new Grille(2);
         ArrayList<int[]> coords = new ArrayList<>();
-        Ingenieur ing = new Ingenieur();
+        Ingenieur ing = new Ingenieur(grille);
         coords.add(new int[] {0,1});
         coords.add(new int[] {1,0});
         System.out.println("on peut bien ajouter des valeur dans ce vecteur");
