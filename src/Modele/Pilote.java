@@ -11,7 +11,8 @@ public class Pilote extends Aventurier {
         super.setPion(Controleur.Utils.Pion.BLEU);
     }
     public Pilote(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.heliport));
+        super.setMaPos(grille.getTuile(Utils.nomTuile.heliport));
+         super.setPion(Controleur.Utils.Pion.BLEU);
     }
     
     
