@@ -27,7 +27,7 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
 	 * 
 	 * @param carte
 	 */
-    private JPanel principal;
+    private final JPanel principal;
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
     private final JPanel panelAventurier;
@@ -37,6 +37,9 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
     private final JButton btnValider;
     private final JButton btnTerminerTour;
     private int[] coords;
+    private JTextField position;
+    //A enlever apres demo
+    private String nomAventurier;
 	public void ajouterVueCarte(CarteJoueur carte) {
 		// TODO - implement VueAventurier.ajouterVueCarte
 		throw new UnsupportedOperationException();
@@ -57,13 +60,12 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
 	}
 
 
-    
+    public void setPos(int[] coord){
+        position.setText("x= " + coord[0] +" / y= "+coord[1]);
+    }
     public JPanel getPrincipal() {
         return principal;
     }
-    private JTextField position;
-    //A enlever apres demo
-    private String nomAventurier;
 
     public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         //A enelevr apres demo

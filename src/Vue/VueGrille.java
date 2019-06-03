@@ -9,20 +9,17 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sun.security.util.Length;
 public class VueGrille extends Controleur.Observe {
 
 	/**
 	 * 
 	 * @param collecTuiles
 	 */
-        private JPanel vueGrille ;
+        private final JPanel vueGrille ;
         private VueTuile[][] vuesTuiles;
         
 	public VueGrille (Grille grille){
@@ -49,6 +46,16 @@ public class VueGrille extends Controleur.Observe {
                 }
             }
         }
+        public VueTuile getVueTuile(int[] coords){
+            if(vuesTuiles[coords[0]][coords[1]]!= null){
+                return vuesTuiles[coords[0]][coords[1]];
+            }
+            else{
+                return null;
+            }
+        }
+        
+        
         public int[] getCoords(VueTuile vue) { // est change en public pour demo
             int[] c = new int[2];
             for( int x=0;x<vuesTuiles.length;x++){
@@ -60,6 +67,8 @@ public class VueGrille extends Controleur.Observe {
             } 
             return c;
         }
+
+    
         public static void main (String[] args){
             JFrame f = new JFrame("Test");
             f.setSize(1000,500);
@@ -77,6 +86,7 @@ public class VueGrille extends Controleur.Observe {
                                                         MessageAction m= new MessageAction();
                                                         m.typeact = TypeAction.CHOIX_TUILE;
                                                         VueTuile vue = (VueTuile) e.getSource();
+                                                        System.out.println(vue);
                                                         m.coord = getCoords(vue);
                                                         notifierMessageAction(m);
                                                     }
@@ -84,7 +94,7 @@ public class VueGrille extends Controleur.Observe {
                 for (Tuile tui : tuiles){
                     int x = tui.getCoords()[0];
                     int y = tui.getCoords()[1];
-                    vuesTuiles[x][y].setBackground(Color.red);
+                    vuesTuiles[x][y].setBackground(Color.gray);
                     vuesTuiles[x][y].addActionListener(act);
                 }
                 
