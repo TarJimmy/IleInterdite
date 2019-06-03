@@ -1,6 +1,7 @@
 package Modele;
 
 import Controleur.Utils;
+import Vue.MesEnums.tresor;
 
 import java.util.*;
 
@@ -10,7 +11,7 @@ public abstract class Aventurier {
     ArrayList<CarteJoueur> mesCartes;
     protected int actionsRestantes;
     Utils.Pion pion;
-    private static HashSet<Utils.tresor> tresorsRecuperer = new HashSet<>();
+    private static HashSet<tresor> tresorsRecuperer = new HashSet<>();
     public Aventurier() {
         setActionsRestantes(3);
         mesCartes = new ArrayList<>();
@@ -32,7 +33,7 @@ public abstract class Aventurier {
         setMaPos(tuile);
     }
     public abstract String getNomAventurier();
-    public static HashSet<Utils.tresor> getTresorsRecuperer() {
+    public static HashSet<tresor> getTresorsRecuperer() {
         return tresorsRecuperer;
     }
 
