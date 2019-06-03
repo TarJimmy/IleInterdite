@@ -27,7 +27,7 @@ public class Controleur implements Observateur {
     private Aventurier AvTrActuel;
     private int index;
     private VueAventurier vueAvTrActuel;
-    
+    private ArrayList<VuePion> mesPions;
     Controleur(){
         accueil = new VueAccueil();
         accueil.addObservateur(this);
@@ -42,7 +42,7 @@ public class Controleur implements Observateur {
     }
     private void addIndex(){
         index++;
-        if (index>mesAventuriers.size()){
+        if (index>=mesAventuriers.size()){
             index=0;
         }
     }
@@ -53,6 +53,9 @@ public class Controleur implements Observateur {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void debutTour(){
+        
+        setTrAv();
+        AvTrActuel.DebutTour();
         for (VueAventurier vue : mesVuesAventuriers){
             if (vue != vueAvTrActuel){
                 vue.activer(false);
@@ -80,7 +83,9 @@ public class Controleur implements Observateur {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void finTour(){
-               throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            addIndex();
+            debutTour();
+            
     }
     public void CheckNbCarte(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -107,22 +112,33 @@ public class Controleur implements Observateur {
         
         return mesAvs;
     }
-    private ArrayList<VueAventurier> creationVuesAventuriers(ArrayList<Aventurier> mesAvs, ArrayList<String> mesNoms){
+    private ArrayList<VueAventurier> creationVuesAventuriers( ArrayList<String> mesNoms){
         ArrayList<VueAventurier> mesVues = new ArrayList<>();
         System.out.println("Créé une liste de VueAventurier a partir celui des Aventuriers");
-        int taille = mesAvs.size();
+        int taille = mesAventuriers.size();
         for (int i =0;i<taille;i++){
-            mesVues.add(new VueAventurier(mesNoms.get(i),mesAvs.get(i).getNomAventurier(),mesAvs.get(i).getPion().getCouleur()));
+            mesVues.add(new VueAventurier(mesNoms.get(i),mesAventuriers.get(i).getNomAventurier(),mesAventuriers.get(i).getPion().getCouleur()));
             System.out.println("Crée une VueAventurier avec pour parametre : ["+mesNoms.get(i)+"]"
-                                                                               + "["+ mesAvs.get(i).getNomAventurier()+"]"
-                                                                               + "["+ mesAvs.get(i).getPion().toString()+"]");
+                                                                               + "["+ mesAventuriers.get(i).getNomAventurier()+"]"
+                                                                               + "["+ mesAventuriers.get(i).getPion().toString()+"]");
+            System.out.println(mesAventuriers.get(i).getMaPos());
+            //mesVues.get(i).setPos(mesAventuriers.get(i).getMaPos().getCoords());
             mesVues.get(i).addObservateur(this);
             vueGrille.addObservateur(mesVues.get(i));
         }
         System.out.println("Liste Finale : " + mesVues);
         return mesVues;
     }
-    
+    private void creePion(){
+        mesPions = new ArrayList<>();
+        int i=0;
+        for (Aventurier av : mesAventuriers){
+            mesPions.add(new VuePion(av.getPion()));
+            vueGrille.getVueTuile(av.getTuile().getCoords()).initVuePion(mesPions.get(i));
+            i++;
+        }
+        
+    }
     
     @Override
     public void traiterMessage(Message msg) {
@@ -138,7 +154,8 @@ public class Controleur implements Observateur {
                 System.out.println("----------Creations des Aventuriers-----");
                 mesAventuriers = creationAventurier(msg.nbJoueur);
                 System.out.println("----------Création des VuesAventuriers--");
-                mesVuesAventuriers = creationVuesAventuriers(mesAventuriers,msg.noms);
+                mesVuesAventuriers = creationVuesAventuriers(msg.noms);
+                creePion();
                 System.out.println("------------Création de la VueJeu-------");
                 jeu = new VueJeu(vueGrille,mesVuesAventuriers);
                 System.out.println("--------------Affiche la VueJeu---------");
@@ -146,26 +163,39 @@ public class Controleur implements Observateur {
                 System.out.println("-----------Initialise le tour Actuel de l'aventurier");
                 setTrAv();
                 debutTour();
-                
-                
+                //A enlever apres demo
+                grille.getTuile(2, 2).Inonder();
+                vueGrille.getVueTuile(new int[] {2,2}).changeEtat(grille.getTuile(2, 2).getEtat());
+                grille.getTuile(4, 4).Inonder();
+                vueGrille.getVueTuile(new int[] {4,4}).changeEtat(grille.getTuile(2, 2).getEtat());
         }
     }
 
     @Override
     public void traiterMessage(MessageAction msg) {
-        switch (msg.typeact){
-            case DEPLACER :
+        if (msg.typeact==TypeAction.DEPLACER){
                 vueGrille.proposeCase(AvTrActuel.getDeplacement(grille));
-            case CHOIX_TUILE:
-                AvTrActuel.deplacer(grille.getTuile(msg.coord[0],msg.coord[1]));
-            case ASSECHER:;
-            
-            case TERMINER_TOUR:
-                addIndex();
-                setTrAv();
-                debutTour();
+                System.out.println((AvTrActuel.getDeplacement(grille)));
+                for (Tuile tui :AvTrActuel.getDeplacement(grille)){
+                    System.out.println(tui.getCoords()[0] +"   "+ tui.getCoords()[1]);
+                }
+        }
+        else if(msg.typeact== TypeAction.CHOIX_TUILE){
+            Tuile t = grille.getTuile(msg.coord[0],msg.coord[1]);
+            AvTrActuel.deplacer(t);
+            mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
+            if (AvTrActuel.getActionsRestantes()==0){
+                finTour();
+            }
+        }
+        else if (msg.typeact==TypeAction.ASSECHER){
+
+        }
+        else if(msg.typeact== TypeAction.TERMINER_TOUR){
+            finTour();
         }
     }
+    
     public static void main(String[]args ){
         new Controleur();
     }
