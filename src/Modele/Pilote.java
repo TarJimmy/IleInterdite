@@ -1,5 +1,6 @@
 package Modele;
 
+import Controleur.Utils;
 import java.util.ArrayList;
 
 public class Pilote extends Aventurier {
@@ -9,7 +10,11 @@ public class Pilote extends Aventurier {
     public Pilote() {
         super.setPion(Controleur.Utils.Pion.BLEU);
     }
-
+    public Pilote(Grille grille){
+        super(grille.getTuile(Utils.nomTuile.heliport));
+    }
+    
+    
     /**
      *
      * @param grille
