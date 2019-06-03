@@ -90,12 +90,12 @@ public class Controleur implements Observateur {
     }
     private ArrayList<Aventurier> creationAventurier(int nbAventuriers){
         ArrayList<Aventurier> mesAvs = new ArrayList<>();
-        mesAvs.add(new Ingenieur());
-        mesAvs.add(new Messager());
-        mesAvs.add(new Navigateur());
-        mesAvs.add(new Explorateur());
-        mesAvs.add(new Plongeur());
-        mesAvs.add(new Pilote());
+        mesAvs.add(new Ingenieur(grille));
+        mesAvs.add(new Messager(grille));
+        mesAvs.add(new Navigateur(grille));
+        mesAvs.add(new Explorateur(grille));
+        mesAvs.add(new Plongeur(grille));
+        mesAvs.add(new Pilote(grille));
         System.out.println("Créé un ArrayList d'aventurier : "+ mesAvs);
         System.out.println("Supprime "+(6-nbAventuriers)+" aventuriers de la liste pour avoir une taille de "+nbAventuriers+" Aventuriers");
         for (int i=0;i<(6-nbAventuriers);i++){
