@@ -9,7 +9,8 @@ public class Navigateur extends Aventurier {
         super.setPion(Controleur.Utils.Pion.JAUNE);
     }
     public Navigateur(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.porte_dor));
+        super.setMaPos(grille.getTuile(Utils.nomTuile.porte_dor));
+        super.setPion(Controleur.Utils.Pion.JAUNE);
     }
 
     @Override

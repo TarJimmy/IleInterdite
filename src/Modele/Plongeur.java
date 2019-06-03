@@ -9,7 +9,8 @@ public class Plongeur extends Aventurier {
         super.setPion(Controleur.Utils.Pion.NOIR);
     }
     public Plongeur(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.porte_de_fer));
+        super.setMaPos(grille.getTuile(Utils.nomTuile.porte_de_fer));
+        super.setPion(Controleur.Utils.Pion.NOIR);
     }
     
     @Override
