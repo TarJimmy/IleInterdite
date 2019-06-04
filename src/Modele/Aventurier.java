@@ -11,17 +11,19 @@ public abstract class Aventurier {
     protected int actionsRestantes;
     Utils.Pion pion;
     private static HashSet<Utils.tresor> tresorsRecuperer = new HashSet<>();
-    
     public Aventurier() {
         setActionsRestantes(3);
         mesCartes = new ArrayList<>();
     }
 
+    public Aventurier(Tuile maPos) {
+        this.maPos = maPos;
+    }
+    
+
     public Utils.Pion getPion() {
         return pion;
     }
-
-    
     
     protected void setPion(Utils.Pion pion){
         this.pion = pion;
@@ -31,7 +33,6 @@ public abstract class Aventurier {
     
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
-        actionsRestantes--;
     }
     public abstract String getNomAventurier();
     public static HashSet<Utils.tresor> getTresorsRecuperer() {
@@ -64,7 +65,6 @@ public abstract class Aventurier {
                     }
                 }
             }
-            actionsRestantes--;
             return true;
     }
 
@@ -130,11 +130,13 @@ public abstract class Aventurier {
 
 
     public ArrayList<Tuile> getAssechement(Grille grille) {
-        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
+        ArrayList<int[]> coords = getCoordsProche();
+        coords.add(new int[] {0,0});
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),coords);
         Iterator it = collecTuiles.iterator();
         while(it.hasNext()){
             Tuile tui = (Tuile) it.next();
-            if(!tui.isInnondee()) it.remove();
+            if(!checkAssechement(tui)) it.remove();
         }
         return collecTuiles;
     }
