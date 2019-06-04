@@ -47,17 +47,12 @@ public final class Grille {
                     System.out.println("Ajoute NULL");
                 }
                 else{
-                    int[] c = {x,y};
-                    mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i] ,c);
+                    mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i]);
                     System.out.println("Ajoute " + mesTuiles[x][y]);
                     i++;
                 }
             }
         }
-        Tuile depart = this.getTuile(3,3);
-        int[] coord = depart.getCoords();
-        System.out.println(depart.getNom().getNom());
-            System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
         //Melange le tableau
         System.out.println("Mélange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
@@ -70,12 +65,16 @@ public final class Grille {
                         r2 = (int) (Math.random() * 6);
                     }
                     Tuile sauv = mesTuiles[x][y];
-                    int[] sauv2 = mesTuiles[x][y].getCoords();
                     System.out.println("Echange " + sauv + " et "+ mesTuiles[r1][r2]);
                     mesTuiles[x][y]= mesTuiles[r1][r2];
-                    mesTuiles[x][y].setCoords(mesTuiles[r1][r2].getCoords());
                     mesTuiles[r1][r2]= sauv;
-                    mesTuiles[r1][r2].setCoords(sauv2);
+                }
+            }
+            for (x=0;x<mesTuiles.length;x++){
+                for(int y=0;y<mesTuiles[x].length;y++){
+                    if (getTuile(x,y) != null){
+                        getTuile(x,y).setCoords(new int[] {x,y});
+                    }
                 }
             }
         }

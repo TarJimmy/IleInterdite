@@ -20,13 +20,13 @@ public class DemoConsole {
         int i = 1;
         for(Tuile tui : assechements){
             System.out.println(i +") nom : " + tui);
-            System.out.println("coordonnées : '" + tui.getCoords()[0] + " , " + tui.getCoords()[1] + "}");
+            System.out.println("coordonnées : {" + tui.getCoords()[0] + " , " + tui.getCoords()[1] + "}");
             i++;
         }
         System.out.println("\nQuelle est votre choix ?");
         Scanner sc = new Scanner(System.in);
         int nb = sc.nextInt();
-        av.deplacer(assechements.get(nb-1));
+        av.assecher(assechements.get(nb-1));
     }
     
     
@@ -38,8 +38,8 @@ public class DemoConsole {
         System.out.println("Vous pouvez vous deplacer à " + deplacements.size() + " endroits");
         int i = 1;
         for(Tuile tui : deplacements){
-            System.out.println(i +") nom : " + tui);
-            System.out.println("coordonnées : '" + tui.getCoords()[0] + " , " + tui.getCoords()[1] + "}");
+            System.out.println(i + ") nom : " + tui);
+            System.out.println("coordonnées : {" + tui.getCoords()[0] + " , " + tui.getCoords()[1] + "}");
             i++;
         }
         System.out.println("\nQuelle est votre choix ?");
@@ -63,9 +63,7 @@ public class DemoConsole {
         grille.getTuile(3,4).Inonder();                 //cette tuile est coulée et adjacente
         grille.getTuile(4,4).Inonder();                 //cette tuile est en diagonale au debut
         grille.getTuile(2,2).Inonder();                 //celle là aussi
-        
-        
-        
+
         
         
         System.out.println("Quelle type d'aventurier ?");
@@ -83,13 +81,13 @@ public class DemoConsole {
             int rep  = sc.nextInt();
             if(rep == 1){
                 DemoConsole.Assecher(grille, avs[num]);
-            }else if(rep == 1){
+            }else if(rep == 2){
                 DemoConsole.Deplacer(grille, avs[num]);
             }else{
                 System.out.println("Action non reconnue, recommencez.");
             }
             System.out.println("Il vous reste " + avs[num].getActionsRestantes() + " actions");
         }
-        System.out.println("Merci d'avoir joué");
+        System.out.println("\n\nMerci d'avoir joué");
     }
 }
