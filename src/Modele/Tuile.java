@@ -22,6 +22,10 @@ public class Tuile {
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
+    public Tuile(nomTuile nom) {
+        this.setNom(nom);
+        this.setEtat(EtatTuile.ASSECHEE);
+    }
     public Tuile(nomTuile nom, int[] coords) {
         this.setNom(nom);
         this.setEtat(EtatTuile.ASSECHEE);
