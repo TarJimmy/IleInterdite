@@ -2,6 +2,8 @@ package Modele;
 
 import Controleur.Utils;
 import Controleur.Utils.Pion;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class Plongeur extends Aventurier {
@@ -14,17 +16,55 @@ public class Plongeur extends Aventurier {
         setPion(Pion.NOIR);
     }
 
+    @Override
+    public ArrayList<Tuile> getDeplacement(Grille grille) {
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),getCoordsProche());
+        ArrayList<Tuile> deplacements = new ArrayList<>();
+        ArrayList<Tuile> mouilleesTraites = new ArrayList<>();
+        for(Tuile tui : collecTuiles){
+            if(checkDeplacement(tui)){
+                if(!deplacements.contains(tui)) {
+                    deplacements.add(tui);
+                }
+            }
+            if(tui.estMouillee()){
+                recurInnondee(tui,deplacements,mouilleesTraites,grille);
+            }
+        }
+        if(deplacements.contains(getMaPos())){
+            deplacements.remove(getMaPos());
+        }
+        return deplacements;
+    }
+    
+    public void recurInnondee(Tuile depart,ArrayList<Tuile> deplacements,ArrayList<Tuile> mouilleesTraites,Grille grille){
+        ArrayList<Tuile> newDep = grille.getVoisins(depart,getCoordsProche());
+        mouilleesTraites.add(depart);
+        for(Tuile tui : newDep){
+            if(!mouilleesTraites.contains(tui)){
+                if(checkDeplacement(tui)){
+                    if(!deplacements.contains(tui)) {
+                        deplacements.add(tui);
+                        System.out.println("on ajoute " + tui.getCoords()[0] + " , " + tui.getCoords()[1]);
+                    }
+                }
+                if(tui.estMouillee()){
+                    recurInnondee(tui,deplacements,mouilleesTraites,grille);
+                }
+            }
+        }
+    }
+    
+
     public Plongeur(Tuile maPos) {
         super(maPos);
     }
     
-    @Override
-    public boolean checkDeplacement(Tuile tui) {
-        return true;
-    }
 
     @Override
     public String getNomAventurier() {
         return "Plongeur";
     }
+
+    
 }
