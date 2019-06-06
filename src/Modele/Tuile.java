@@ -71,6 +71,11 @@ public class Tuile {
     
     //methodes
     
+    public boolean estMouillee(){
+        return this.etat != EtatTuile.ASSECHEE;
+            
+    }
+    
     public boolean estDisponible(){
         return this.etat != EtatTuile.COULEE;
             

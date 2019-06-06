@@ -44,17 +44,17 @@ public final class Grille {
             for (int y=0;y<6;y++){
                 if (x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2){
                     mesTuiles[x][y]=null;
-                    System.out.println("Ajoute NULL");
+                    //System.out.println("Ajoute NULL");
                 }
                 else{
                     mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i]);
-                    System.out.println("Ajoute " + mesTuiles[x][y]);
+                    //System.out.println("Ajoute " + mesTuiles[x][y]);
                     i++;
                 }
             }
         }
         //Melange le tableau
-        System.out.println("Mélange Le Tableau");
+        //System.out.println("Mélange Le Tableau");
         for (int x=0;x<mesTuiles.length;x++){
             for(int y=0;y<mesTuiles[x].length;y++){
                 if (!(x+y<2 || x+y>=9 || x+5-y>=9 || x+5-y<2)){
@@ -65,7 +65,7 @@ public final class Grille {
                         r2 = (int) (Math.random() * 6);
                     }
                     Tuile sauv = mesTuiles[x][y];
-                    System.out.println("Echange " + sauv + " et "+ mesTuiles[r1][r2]);
+                    //System.out.println("Echange " + sauv + " et "+ mesTuiles[r1][r2]);
                     mesTuiles[x][y]= mesTuiles[r1][r2];
                     mesTuiles[r1][r2]= sauv;
                 }
@@ -109,7 +109,7 @@ public final class Grille {
             x = depart.getCoords()[0];
             y = depart.getCoords()[1];
             for(int[] coord : coords){
-                Tuile tui =getTuile(x + coord[0],y + coord[1]);
+                Tuile tui = getTuile(x + coord[0],y + coord[1]);
                 if(tui != null){
                     voisins.add(tui);
                 }
@@ -137,8 +137,10 @@ public final class Grille {
         ArrayList<Tuile> tuilesDispos = new ArrayList<>();
         for (Tuile[] mesTuile : mesTuiles) {
             for (Tuile mesTuile1 : mesTuile) {
-                if (mesTuile1.estDisponible()) {
-                    tuilesDispos.add(mesTuile1);
+                if(mesTuile1 != null){
+                    if (mesTuile1.estDisponible()) {
+                        tuilesDispos.add(mesTuile1);
+                    }
                 }
             }
         }
