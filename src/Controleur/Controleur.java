@@ -122,9 +122,7 @@ public class Controleur implements Observateur {
                                                                                + "["+ mesAventuriers.get(i).getNomAventurier()+"]"
                                                                                + "["+ mesAventuriers.get(i).getPion().toString()+"]");
             System.out.println(mesAventuriers.get(i).getMaPos());
-            //mesVues.get(i).setPos(mesAventuriers.get(i).getMaPos().getCoords());
-            mesVues.get(i).addObservateur(this);
-            vueGrille.addObservateur(mesVues.get(i));
+           
         }
         System.out.println("Liste Finale : " + mesVues);
         return mesVues;
@@ -164,32 +162,52 @@ public class Controleur implements Observateur {
                 setTrAv();
                 debutTour();
                 //A enlever apres demo
+                for (VueAventurier av : mesVuesAventuriers){
+                    av.addObservateur(this);
+                     vueGrille.addObservateur(this);
+                }
                 grille.getTuile(2, 2).Inonder();
                 vueGrille.getVueTuile(new int[] {2,2}).changeEtat(grille.getTuile(2, 2).getEtat());
                 grille.getTuile(4, 4).Inonder();
-                vueGrille.getVueTuile(new int[] {4,4}).changeEtat(grille.getTuile(2, 2).getEtat());
+                vueGrille.getVueTuile(new int[] {4,4}).changeEtat(grille.getTuile(4, 4).getEtat());
+                 grille.getTuile(3, 4).Inonder();
+                vueGrille.getVueTuile(new int[] {3,4}).changeEtat(grille.getTuile(3, 4).getEtat());
+                 grille.getTuile(3, 3).Inonder();
+                vueGrille.getVueTuile(new int[] {3,3}).changeEtat(grille.getTuile(3, 3).getEtat());
         }
     }
 
     @Override
-    public void traiterMessage(MessageAction msg) {
+    public void traiterMessageAction(MessageAction msg) {
         if (msg.typeact==TypeAction.DEPLACER){
-                vueGrille.proposeCase(AvTrActuel.getDeplacement(grille));
-                System.out.println((AvTrActuel.getDeplacement(grille)));
-                for (Tuile tui :AvTrActuel.getDeplacement(grille)){
+                vueGrille.proposeCaseDEP(AvTrActuel.getDeplacement(grille));
+                /*for (Tuile tui :AvTrActuel.getDeplacement(grille)){
                     System.out.println(tui.getCoords()[0] +"   "+ tui.getCoords()[1]);
-                }
+                }*/
         }
-        else if(msg.typeact== TypeAction.CHOIX_TUILE){
+        else if(msg.typeact== TypeAction.CHOIX_TUILE_DEP){
             Tuile t = grille.getTuile(msg.coord[0],msg.coord[1]);
             AvTrActuel.deplacer(t);
             mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
+            System.out.println(AvTrActuel.getTuile().getCoords()[0] + "\t" + AvTrActuel.getTuile().getCoords()[1]);
+            vueGrille.actualise();
+            if (AvTrActuel.getActionsRestantes()==0){
+                finTour();
+            }
+        }
+        else if(msg.typeact== TypeAction.CHOIX_TUILE_AS){
+            Tuile t = grille.getTuile(msg.coord[0],msg.coord[1]);
+            AvTrActuel.assecher(t);
+            mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
+            System.out.println(AvTrActuel.getTuile().getCoords()[0] + "\t" + AvTrActuel.getTuile().getCoords()[1]);
+            
             if (AvTrActuel.getActionsRestantes()==0){
                 finTour();
             }
         }
         else if (msg.typeact==TypeAction.ASSECHER){
-
+                vueGrille.proposeCaseAS(AvTrActuel.getAssechement(grille));
+                
         }
         else if(msg.typeact== TypeAction.TERMINER_TOUR){
             finTour();
