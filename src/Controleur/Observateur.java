@@ -13,5 +13,5 @@ package Controleur;
  */
 public interface Observateur {
     public void traiterMessage(Message msg);
-    public void traiterMessage(MessageAction msg);
+    public void traiterMessageAction(MessageAction msg);
 }

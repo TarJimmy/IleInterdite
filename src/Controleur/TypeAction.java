@@ -14,7 +14,8 @@ package Controleur;
 	GAGNERCARTE,
 	DONNERCARTE,
 	DEPLACER,
-        CHOIX_TUILE,
+        CHOIX_TUILE_DEP,
+        CHOIX_TUILE_AS,
         TERMINER_TOUR;
     }
 

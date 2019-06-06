@@ -23,7 +23,7 @@ public class Observe {
     }
     public void notifierMessageAction(MessageAction msg){
         if (observateur != null) {
-            observateur.traiterMessage(msg);
+            observateur.traiterMessageAction(msg);
         }
     }
 }
