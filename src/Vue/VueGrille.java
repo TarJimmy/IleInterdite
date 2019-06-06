@@ -21,7 +21,7 @@ public class VueGrille extends Controleur.Observe {
 	 */
         private final JPanel vueGrille ;
         private VueTuile[][] vuesTuiles;
-        
+        private ArrayList<VueTuile> vueModif;
 	public VueGrille (Grille grille){
             vueGrille = new JPanel(new GridLayout(6,6));
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
@@ -79,12 +79,13 @@ public class VueGrille extends Controleur.Observe {
             f.add(gr.vueGrille);
             f.setVisible(true);
         }
-        public void proposeCase(ArrayList<Tuile> tuiles){
+        public void proposeCaseDEP(ArrayList<Tuile> tuiles){
+            vueModif= new ArrayList<>();
             ActionListener act = new ActionListener() {
                                                     @Override
                                                     public void actionPerformed(ActionEvent e) {
                                                         MessageAction m= new MessageAction();
-                                                        m.typeact = TypeAction.CHOIX_TUILE;
+                                                        m.typeact = TypeAction.CHOIX_TUILE_DEP;
                                                         VueTuile vue = (VueTuile) e.getSource();
                                                         System.out.println(vue);
                                                         m.coord = getCoords(vue);
@@ -96,6 +97,29 @@ public class VueGrille extends Controleur.Observe {
                     int y = tui.getCoords()[1];
                     vuesTuiles[x][y].setBackground(Color.gray);
                     vuesTuiles[x][y].addActionListener(act);
+                    vueModif.add(vuesTuiles[x][y]);
+                }
+                
+            }
+        public void proposeCaseAS(ArrayList<Tuile> tuiles){
+            vueModif= new ArrayList<>();
+            ActionListener act = new ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent e) {
+                                                        MessageAction m= new MessageAction();
+                                                        m.typeact = TypeAction.CHOIX_TUILE_AS;
+                                                        VueTuile vue = (VueTuile) e.getSource();
+                                                        System.out.println(vue);
+                                                        m.coord = getCoords(vue);
+                                                        notifierMessageAction(m);
+                                                    }
+                                                    };
+                for (Tuile tui : tuiles){
+                    int x = tui.getCoords()[0];
+                    int y = tui.getCoords()[1];
+                    vuesTuiles[x][y].setBackground(Color.gray);
+                    vuesTuiles[x][y].addActionListener(act);
+                    vueModif.add(vuesTuiles[x][y]);
                 }
                 
             }
@@ -105,6 +129,12 @@ public class VueGrille extends Controleur.Observe {
         return vueGrille;
     }
 
+    public void actualise() {
+        for (VueTuile tuile : vueModif){
+            tuile.setBackground(tuile.getEtat());
+        }
+    }
+}
+
     
 
-}

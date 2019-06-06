@@ -21,7 +21,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 
 
-public class VueAventurier extends Observe implements Controleur.Observateur{
+public class VueAventurier extends Observe {
 
 	/**
 	 * 
@@ -121,12 +121,20 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
             }
         });
         this.panelBoutons.add(btnAssecher);
+        btnAssecher.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MessageAction msg = new MessageAction();
+                msg.typeact = TypeAction.ASSECHER;
+                notifierMessageAction(msg);
+            }
+        });
         this.panelBoutons.add(btnValider);
         btnValider.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 MessageAction msg = new MessageAction();
-                msg.typeact = TypeAction.CHOIX_TUILE;
+                msg.typeact = TypeAction.CHOIX_TUILE_DEP;
                 msg.coord = coords;
                 notifierMessageAction(msg);
             }
@@ -178,15 +186,5 @@ public class VueAventurier extends Observe implements Controleur.Observateur{
         btnTerminerTour.setEnabled(b);
     }
 
-    @Override
-    public void traiterMessage(Message msg) {
-        
-    }
-
-    @Override
-    public void traiterMessage(MessageAction msg) {
-        if(msg.typeact == TypeAction.CHOIX_TUILE){
-           this.coords = msg.coord;
-        }
-    }
+    
 }

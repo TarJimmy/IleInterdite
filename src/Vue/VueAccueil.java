@@ -157,7 +157,7 @@ public class VueAccueil extends Controleur.Observe{
         DROIT.setBackground(COULEUR_PRINCIPAL);
         JLabel image = new JLabel();
         DROIT.add(image,BorderLayout.CENTER);
-        image.setIcon(new ImageIcon("C:\\Users\\tardy\\Downloads\\IleInterdite-master\\src\\Images\\imAccueil.jpg"));
+        image.setIcon(new ImageIcon("../image/im.jpg"));
         
         
         

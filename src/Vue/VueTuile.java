@@ -26,6 +26,10 @@ public class VueTuile extends JButton {
         mesVuePions = new JPanel(new GridLayout(1,4));
         add(mesVuePions,BorderLayout.SOUTH);
     }
+
+    public Color getEtat() {
+        return etat;
+    }
     public void initVuePion(VuePion vue){
         vue.setMaTuile(this);
     }
@@ -35,7 +39,7 @@ public class VueTuile extends JButton {
     public void supVuePion(VuePion vue){
         mesVuePions.remove(vue);
     }
-    private void changeFond(Color etat){
+    public void changeFond(Color etat){
         setBackground(etat);
     }
     public void changeEtat(Utils.EtatTuile etat){
