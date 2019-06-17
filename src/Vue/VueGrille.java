@@ -23,7 +23,10 @@ public class VueGrille extends Controleur.Observe {
         private VueTuile[][] vuesTuiles;
         private ArrayList<VueTuile> vueModif;
 	public VueGrille (Grille grille){
-            vueGrille = new JPanel(new GridLayout(6,6));
+            GridLayout g =new GridLayout(6,6);
+            g.setHgap(10);
+            g.setVgap(10);
+            vueGrille = new JPanel(g);
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             initGrille(grille);
         }
@@ -40,7 +43,7 @@ public class VueGrille extends Controleur.Observe {
                         vuesTuiles[x][y]= null;
                     }
                     else{
-                        vuesTuiles[x][y]= new VueTuile(tuiles[x][y],x,y);
+                        vuesTuiles[x][y]= new VueTuile(tuiles[x][y]);
                         vueGrille.add(vuesTuiles[x][y]);
                     }
                 }

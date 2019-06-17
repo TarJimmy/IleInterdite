@@ -15,18 +15,20 @@ public class VueTuile extends JButton {
         private Color etat;
         private ArrayList<VuePion> mesPions;
         private JPanel mesVuePions;
-    VueTuile (Tuile tuile, int x,int y/*Coordonner a enlever apres la demo*/){
+    VueTuile (Tuile tuile){
         mesPions = new ArrayList<>();
         setLayout(new BorderLayout());
         setEtat(Color.orange);
         add(new JLabel(tuile.getNom().getNom()),BorderLayout.CENTER);
-        add (new JLabel("["+x+","+y+"]"),BorderLayout.SOUTH);//A enlever apres la demo
         setBackground(etat);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         mesVuePions = new JPanel(new GridLayout(1,4));
         add(mesVuePions,BorderLayout.SOUTH);
     }
-
+    VueTuile (){
+        setEtat(new Color(0,0,0,0));
+        setBackground(etat);
+    }
     public Color getEtat() {
         return etat;
     }

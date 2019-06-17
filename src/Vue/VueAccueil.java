@@ -180,11 +180,6 @@ public class VueAccueil extends Controleur.Observe{
                                                             m.nbJoueur = nbJoueur;
                                                             m.difficulte = DonneEchelon();
                                                             m.noms = mesNoms;
-                                                            
-                                                            System.out.println("Notifie : \n\tTypeMessage : "+m.type
-                                                                                        + "\n\tNombre de joueurs : "+m.nbJoueur
-                                                                                        +"\n\tNoms des Joueurs : "+m.noms
-                                                                                        +"\n\tdifficulte : "+ m.difficulte);
                                                             notifierMessage(m);
                                                         }
                                                         @Override
@@ -278,7 +273,7 @@ public class VueAccueil extends Controleur.Observe{
         while (i<mesDif.length && !mesDif[i].isSelected()){
             i++;
         }
-        return i+1;
+        return i;
     }
     
     public void afficher(boolean b){
