@@ -12,8 +12,8 @@ public class DemoConsole {
     
     
     public static void Assecher(Grille grille,Aventurier av){
-        System.out.println("L'aventurier est sur la tuile : " + av.getTuile() 
-                + "\nde coordonnées : {" + av.getTuile().getCoords()[0] + " , " + av.getTuile().getCoords()[1] + "}");
+        System.out.println("L'aventurier est sur la tuile : " + av.getMaPos() 
+                + "\nde coordonnées : {" + av.getMaPos().getCoords()[0] + " , " + av.getMaPos().getCoords()[1] + "}");
         
         ArrayList<Tuile> assechements = av.getAssechement(grille);
         System.out.println("Vous pouvez assecher à " + assechements.size() + " endroits");
@@ -31,8 +31,8 @@ public class DemoConsole {
     
     
     public static void Deplacer(Grille grille,Aventurier av){
-        System.out.println("L'aventurier est sur la tuile : " + av.getTuile() 
-                + "\nde coordonnées : {" + av.getTuile().getCoords()[0] + " , " + av.getTuile().getCoords()[1] + "}");
+        System.out.println("L'aventurier est sur la tuile : " + av.getMaPos() 
+                + "\nde coordonnées : {" + av.getMaPos().getCoords()[0] + " , " + av.getMaPos().getCoords()[1] + "}");
         
         ArrayList<Tuile> deplacements = av.getDeplacement(grille);
         System.out.println("Vous pouvez vous deplacer à " + deplacements.size() + " endroits");
@@ -57,12 +57,12 @@ public class DemoConsole {
         Grille grille = new Grille(0);
         Tuile depart = grille.getTuile(3,3);
         Aventurier[] avs = new Aventurier[] {new Ingenieur(depart),new Pilote(depart),new Explorateur(depart),new Plongeur(depart)};
-        grille.getTuile(3,3).Inonder();                 //cette tuile est sous le joueur au depart
-        grille.getTuile(2,3).Inonder();                 //cette tuile est adjacente
-        grille.getTuile(3,4).Inonder();                 
-        grille.getTuile(3,4).Inonder();                 //cette tuile est coulée et adjacente
-        grille.getTuile(4,4).Inonder();                 //cette tuile est en diagonale au debut
-        grille.getTuile(2,2).Inonder();                 //celle là aussi
+        grille.getTuile(3,3).Innonder();                 //cette tuile est sous le joueur au depart
+        grille.getTuile(2,3).Innonder();                 //cette tuile est adjacente
+        grille.getTuile(3,4).Innonder();                 
+        grille.getTuile(3,4).Innonder();                 //cette tuile est coulée et adjacente
+        grille.getTuile(4,4).Innonder();                 //cette tuile est en diagonale au debut
+        grille.getTuile(2,2).Innonder();                 //celle là aussi
 
         
         

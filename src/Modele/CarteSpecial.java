@@ -1,4 +1,4 @@
 package Modele;
 
-public class CarteSpecial extends CarteJoueur {
+public abstract class CarteSpecial extends CarteJoueur {
 }

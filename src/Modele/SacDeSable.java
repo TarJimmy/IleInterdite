@@ -5,11 +5,5 @@
  */
 package Modele;
 
-import Controleur.Utils;
-
-/**
- *
- * @author tardy
- */
-public abstract class CarteJoueur {
+public class SacDeSable extends CarteSpecial{
 }

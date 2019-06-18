@@ -2,6 +2,7 @@ package Modele;
 import Controleur.Utils;
 import Controleur.Utils.Pion;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Explorateur extends Aventurier {
 
@@ -29,4 +30,16 @@ public class Explorateur extends Aventurier {
     public String getNomAventurier() {
         return "Explorateur";
     }
+
+    @Override
+    public ArrayList<Tuile> getDeplacementNav(Grille grille) {
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),super.getCoordsProche());
+        Iterator it = collecTuiles.iterator();
+        while(it.hasNext()){
+            Tuile tui = (Tuile) it.next();
+            if(!checkDeplacement(tui)) it.remove();
+        }
+        return collecTuiles;
+    }
+    
 }

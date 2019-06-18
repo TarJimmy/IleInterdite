@@ -17,6 +17,6 @@ public class Navigateur extends Aventurier {
     public String getNomAventurier() {
         return "Navigateur";
     }
-
+    
 
 }

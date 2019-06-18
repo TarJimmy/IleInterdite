@@ -5,11 +5,6 @@
  */
 package Modele;
 
-import Controleur.Utils;
-
-/**
- *
- * @author tardy
- */
-public abstract class CarteJoueur {
+public class Helicoptere extends CarteSpecial{
+    
 }

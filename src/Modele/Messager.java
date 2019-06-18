@@ -1,6 +1,7 @@
 package Modele;
 
 import Controleur.Utils;
+import java.util.ArrayList;
 
 public class Messager extends Aventurier {
 
@@ -17,6 +18,13 @@ public class Messager extends Aventurier {
        return "Messager";
     }
 
+    @Override
+    public ArrayList<Aventurier> getAvsDonsCarte(ArrayList<Aventurier> avs) {
+        ArrayList<Aventurier> voisins = new ArrayList<>();
+        voisins.addAll(avs);
+        voisins.remove(this);
+        return voisins;
+    }
 
-
+    
 }

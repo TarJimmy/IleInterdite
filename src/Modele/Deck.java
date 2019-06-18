@@ -1,15 +1,7 @@
 package Modele;
 
 public interface Deck {
-
-	void Melanger();
-
-	void Piocher();
-
-	/**
-	 * 
-	 * @param carte
-	 */
-	void Defausser(CarteJoueur carte);
-
+    public void Melanger();
+    public void ResetPioche();
+    public void initDeck();
 }

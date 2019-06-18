@@ -48,7 +48,7 @@ public class Pilote extends Aventurier {
 
     @Override
     public void deplacer(Tuile tuile) {
-        int[] depart = getTuile().getCoords();
+        int[] depart = getMaPos().getCoords();
         int[] arrivee = tuile.getCoords();
         int d =  Math.abs(depart[0]- arrivee[0]) + (depart[1]- arrivee[1]);
         if(d!=1){

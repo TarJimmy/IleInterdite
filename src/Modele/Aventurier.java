@@ -29,10 +29,13 @@ public abstract class Aventurier {
         this.pion = pion;
     }
     
-    
+    public void helicoptere(Tuile tuile){
+        setMaPos(tuile);
+    }
     
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
+        actionsRestantes--;
     }
     public abstract String getNomAventurier();
     public static HashSet<Utils.tresor> getTresorsRecuperer() {
@@ -59,7 +62,7 @@ public abstract class Aventurier {
                 while(it.hasNext()){
                     CarteJoueur carte =(CarteJoueur) it.next();
                     if(carte instanceof CarteTresor){
-                        if( carte.getTresor() == tres)
+                        if( ((CarteTresor) carte).getTresor() == tres)
                         it.remove();
                         nbRetirés++;
                     }
@@ -81,9 +84,7 @@ public abstract class Aventurier {
         getCartes().add(carte);
     }
 
-    public Tuile getTuile() {
-        return maPos;
-    }
+    
 
     public int nbCarte() {
         return getCartes().size();
@@ -92,9 +93,34 @@ public abstract class Aventurier {
     public boolean checkDeplacement(Tuile tuile) {
         return tuile.estDisponible();
     }
-
+    public ArrayList<Tuile> getDeplacementNav(Grille grille){
+        ArrayList<Tuile> collecTuiles1 = grille.getVoisins(getMaPos(),getCoordsProche());
+        ArrayList<Tuile> collecTuiles2 = new ArrayList<>();
+        Iterator it = collecTuiles1.iterator();
+        while(it.hasNext()){
+            Tuile tui = (Tuile) it.next();
+            if(!checkDeplacement(tui)){
+                it.remove();
+            }
+        }
+        collecTuiles2.addAll(collecTuiles1);
+        for(Tuile tui : collecTuiles1){
+            collecTuiles2.addAll(grille.getVoisins(tui,getCoordsProche()));
+        }
+        it = collecTuiles2.iterator();
+        while(it.hasNext()){
+            Tuile tui = (Tuile) it.next();
+            if(!checkDeplacement(tui)){
+                it.remove();
+            }
+        }
+        
+        return collecTuiles2;
+    }
+    
+    
     public ArrayList<Tuile> getDeplacement(Grille grille) {
-        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),getCoordsProche());
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),getCoordsProche());
         Iterator it = collecTuiles.iterator();
         while(it.hasNext()){
             Tuile tui = (Tuile) it.next();
@@ -107,10 +133,6 @@ public abstract class Aventurier {
         setActionsRestantes(3);
     }
 
-    public void Piocher(DeckTresor deck) {
-        // TODO - implement Aventurier.Piocher
-        throw new UnsupportedOperationException();
-    }
 
     public ArrayList<int[]> getCoordsProche() {
         ArrayList<int[]> coords = new ArrayList<>();
@@ -132,7 +154,7 @@ public abstract class Aventurier {
     public ArrayList<Tuile> getAssechement(Grille grille) {
         ArrayList<int[]> coords = getCoordsProche();
         coords.add(new int[] {0,0});
-        ArrayList<Tuile> collecTuiles = grille.getVoisins(getTuile(),coords);
+        ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),coords);
         Iterator it = collecTuiles.iterator();
         while(it.hasNext()){
             Tuile tui = (Tuile) it.next();
@@ -164,4 +186,29 @@ public abstract class Aventurier {
     public String toString(){
         return getNomAventurier();
     }
+    
+    public ArrayList<Aventurier> getAvsHelicoptere(ArrayList<Aventurier> avs){
+        ArrayList<Aventurier> voisins = new ArrayList<>();
+        for(Aventurier av : avs){
+            if (av != this && av.getMaPos() == this.getMaPos()){
+                voisins.add(av);
+            }
+        }
+        return voisins;
+    }
+    
+    public ArrayList<Aventurier> getAvsDonsCarte(ArrayList<Aventurier> avs){
+        return getAvsHelicoptere(avs);
+    }
+    public ArrayList<CarteJoueur> getCartesDonnables(){
+        ArrayList<CarteJoueur> donnables = new ArrayList<>();
+        for(CarteJoueur c : getCartes()){
+            if(!(c instanceof CarteSpecial)){
+                donnables.add(c);
+            }
+        }
+        return donnables;
+    }
+    
+    
 }

@@ -81,7 +81,7 @@ public class Tuile {
             
     }
     
-    public void Inonder(){
+    public void Innonder(){
         
          switch (etat) {
             case ASSECHEE:
