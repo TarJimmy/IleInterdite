@@ -29,7 +29,7 @@ public abstract class Aventurier {
         this.pion = pion;
     }
     
-    public void helicoptere(Tuile tuile){
+    public void deplaceHorsTour(Tuile tuile){
         setMaPos(tuile);
     }
     

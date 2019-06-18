@@ -16,6 +16,12 @@ public class Ingenieur extends Aventurier {
     public Ingenieur(Tuile maPos) {
         super(maPos);
     }
+
+    @Override
+    public void deplaceHorsTour(Tuile tuile) {
+        super.deplaceHorsTour(tuile);
+        setaAssecher(false);
+    }
     
     
     
