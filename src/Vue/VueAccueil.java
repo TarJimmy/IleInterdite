@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -149,7 +151,11 @@ public class VueAccueil extends Controleur.Observe{
         regle.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                new VueRegles();
+                try {
+                    new VueRegles();
+                } catch (IOException ex) {
+                    Logger.getLogger(VueAccueil.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
         });
