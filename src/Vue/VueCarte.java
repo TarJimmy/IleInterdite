@@ -1,16 +1,15 @@
 package Vue;
 
 import java.awt.Image;
-import static ile_interdite.CarteUtils.*;
+import static Vue.CarteUtils.*;
+import java.io.IOException;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class VueCarte {
+public class VueCarte extends PanelImage {
   
-  VueCarte(CarteUtils carte){
-    JLabel l = new JLabel();
-    l.setIcon(carte.getImage());
-       
-    add(l);
-  }
+    VueCarte(CarteUtils carte) throws IOException{
+        super(carte.getChemin());
+    }
 }
