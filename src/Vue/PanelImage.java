@@ -23,7 +23,7 @@ public class PanelImage extends JPanel{
             setNomIm(nom);
             setBackground(Color.white);
         try {
-            this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/images/"+nomIm));
+            this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/Images/"+nomIm));
         } catch (IOException ex) {
             System.err.println("Erreur de lecture de "+nom);
         }

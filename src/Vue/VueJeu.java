@@ -103,9 +103,6 @@ public class VueJeu extends Controleur.Observe {
         this.mesAvs = mesAvs;
         initHaut(grille);
         initBas();
-        
-        
-         
     }
 
     public void erreurTresor() {
@@ -133,20 +130,19 @@ public class VueJeu extends Controleur.Observe {
         window.setSize(tk.getScreenSize().width,tk.getScreenSize().height);
         window.setLayout(new BorderLayout());
         window.setBackground(Color.white);
-        
     }
-    private void initBas() {
+    private void initBas() throws IOException {
         //InitBas et ses objets
         JPanel bas = new JPanel(new BorderLayout());
         bas.setPreferredSize(new Dimension(window.getWidth(),300));
         window.add(bas,BorderLayout.SOUTH);
-        
         this.btnBouger = new JButton("Bouger") ;
         this.btnAssecher = new JButton( "Assecher");
         this.btnDonnerCarte = new JButton("Donner Carte") ;
         this.btnGagnerTresor = new JButton("GagnerTresor");
         this.btnTerminerTour = new JButton("Terminer Tour") ;
-        JPanel decks = new JPanel(new GridLayout(1,2));
+        
+        JPanel decks = new JPanel(new BorderLayout());
         decks.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(decks,BorderLayout.EAST);
         JPanel panelCentre = new JPanel(new BorderLayout());
@@ -154,25 +150,45 @@ public class VueJeu extends Controleur.Observe {
         JPanel tresors = new JPanel(new GridLayout(1,4));
         tresors.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(tresors,BorderLayout.WEST);
+        //Tresors
+        
         //Decks
-        //...
+        GridLayout gDecks = new GridLayout(1,2);
+        gDecks.setHgap(50);
+        gDecks.setVgap(100);
+        JLabel pioche = new JLabel("Pioche");
+        JLabel defausse = new JLabel("Défausse");
+        JPanel decksHaut = new JPanel(gDecks);
+        decksHaut.setBackground(Color.white);
+        decksHaut.add(pioche);
+        decksHaut.add(defausse);
+        JPanel decksBas = new JPanel(gDecks);
+        decksBas.add(new VueDeck());
+        decksBas.add(new VueDeck());
+        decksBas.setBackground(Color.white);
+        decks.add(decksHaut, BorderLayout.NORTH);
+        decks.add(decksBas,BorderLayout.CENTER);
         //panelBoutons
         indications = new LabelInfo("Coucou je m'apelle jimmy ");
         indications.setPreferredSize(new Dimension(panelCentre.getWidth(),30));
+        indications.setBackground(Color.white);
         panelCentre.add(indications,BorderLayout.NORTH);
         GridLayout g = new GridLayout(1,Nb_Boutons);
         g.setHgap(20);
         //initBoutonsAction (sauf terminertour)
         //Panel Bas -> Centre->Centre
         JPanel BCcentre = new JPanel(new GridLayout(2,2));
+        BCcentre.setBackground(Color.white);
         panelCentre.add(BCcentre,BorderLayout.CENTER);
+        panelCentre.setBackground(Color.white);
         //Panel Bas -> Centre-> Centre-> Haut
         JPanel BCCHaut = new JPanel(g);
+        BCCHaut.setBackground(Color.white);
         BCcentre.add(BCCHaut);
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
         for (int i =0;i<Nb_Boutons;i++){
             boutonUnitaire[i] = new JPanel();
-            System.out.println(i);
+            boutonUnitaire[i].setBackground(Color.white);
             BCCHaut.add(boutonUnitaire[i]);
         }
         boutonUnitaire[0].add(btnBouger);
@@ -182,6 +198,7 @@ public class VueJeu extends Controleur.Observe {
         if (Nb_Boutons==5){
             DeplacerAllier=new JButton("Deplacer Allier");
             boutonUnitaire[4].add(DeplacerAllier);
+            boutonUnitaire[4].setBackground(Color.white);
             BCCHaut.add(boutonUnitaire[4]);
         }
         //PANEL Bas->Centre->Centre->Bas
@@ -189,6 +206,7 @@ public class VueJeu extends Controleur.Observe {
         JPanel BCCBas = new JPanel();
         BCCBas.add(btnTerminerTour);
         BCcentre.add(BCCBas);
+        BCcentre.setBackground(Color.white);
                 
         btnBouger.addActionListener(creeActionListener(TypeAction.DEPLACER));
         btnAssecher.addActionListener(creeActionListener(TypeAction.ASSECHER));

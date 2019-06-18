@@ -281,12 +281,15 @@ public class VueAccueil extends Controleur.Observe{
         g.setHgap(5);
         JPanel pan = new JPanel();
         JLabel gauche = new JLabel(stringDif[0]);
+        gauche.setBackground(COULEUR_PRINCIPAL);
         gauche.setForeground(ColorDif[0]);
         gauche.setHorizontalAlignment(JLabel.RIGHT);
         JLabel droite = new JLabel(stringDif[3]);
+        droite.setBackground(COULEUR_PRINCIPAL);
         droite.setForeground(ColorDif[3]);
         droite.setHorizontalAlignment(JLabel.LEFT);
         slider =  new JSlider(SwingConstants.HORIZONTAL, 0, NB_DIFFICULTE-1, 0);
+        slider.setBackground(COULEUR_PRINCIPAL);
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent arg0) {
@@ -298,12 +301,16 @@ public class VueAccueil extends Controleur.Observe{
         choixDif = new JLabel(stringDif[0]);
         choixDif.setForeground(ColorDif[0]);
         choixDif.setHorizontalAlignment(JLabel.CENTER);
+        choixDif.setBackground(COULEUR_PRINCIPAL);
         pan.add(gauche);
         pan.add(slider);
         pan.add(droite);
-        pan.add(new JPanel());
+        JPanel PanelVide = new JPanel();
+        PanelVide.setBackground(COULEUR_PRINCIPAL);
+        pan.add(PanelVide);
         pan.add(choixDif);
-        pan.add(new JPanel());
+        pan.add(PanelVide);
+        pan.setBackground(COULEUR_PRINCIPAL);
         return pan;
     }
 
