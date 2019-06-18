@@ -45,7 +45,7 @@ public class DeckTresor implements Deck {
     }
 
     
-    private CarteJoueur Piocher() {
+    public CarteJoueur Piocher() {
         if(getPioche().isEmpty()) {
             ResetPioche();
         }
@@ -54,7 +54,7 @@ public class DeckTresor implements Deck {
         return c;
     }
 
-    private void Defausser(CarteJoueur carte) {
+    public void Defausser(CarteJoueur carte) {
         getDefausse().add(carte);
     }
 

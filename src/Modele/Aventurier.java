@@ -38,6 +38,7 @@ public abstract class Aventurier {
         actionsRestantes--;
     }
     public abstract String getNomAventurier();
+    
     public static HashSet<Utils.tresor> getTresorsRecuperer() {
         return tresorsRecuperer;
     }
@@ -74,7 +75,26 @@ public abstract class Aventurier {
     public ArrayList<CarteJoueur> getCartes() {
         return mesCartes;
     }
-
+    
+    public ArrayList<Aventurier> getAvsDonsCarte(ArrayList<Aventurier> avs){
+        return getAvsHelicoptere(avs);
+    }
+    public ArrayList<CarteJoueur> getCartesDonnables(){
+        ArrayList<CarteJoueur> donnables = new ArrayList<>();
+        for(CarteJoueur c : getCartes()){
+            if(!(c instanceof CarteSpecial)){
+                donnables.add(c);
+            }
+        }
+        return donnables;
+    }
+    public ArrayList<CarteJoueur> getCartesSpecial(){
+        ArrayList<CarteJoueur> speciales = getCartes();
+        speciales.removeAll(getCartesDonnables());
+        return speciales;
+    }
+    
+    
 
     public void SupprimerCarte(CarteJoueur carte) {
         getCartes().remove(carte);
@@ -83,8 +103,6 @@ public abstract class Aventurier {
     public void AddCarte(CarteJoueur carte) {
         getCartes().add(carte);
     }
-
-    
 
     public int nbCarte() {
         return getCartes().size();
@@ -197,18 +215,7 @@ public abstract class Aventurier {
         return voisins;
     }
     
-    public ArrayList<Aventurier> getAvsDonsCarte(ArrayList<Aventurier> avs){
-        return getAvsHelicoptere(avs);
-    }
-    public ArrayList<CarteJoueur> getCartesDonnables(){
-        ArrayList<CarteJoueur> donnables = new ArrayList<>();
-        for(CarteJoueur c : getCartes()){
-            if(!(c instanceof CarteSpecial)){
-                donnables.add(c);
-            }
-        }
-        return donnables;
-    }
+    
     
     
 }

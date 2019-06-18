@@ -13,12 +13,16 @@ public final class Grille {
         this.EchelonMonteEau=echelon;
         initTableau();
     }
+    public void MonterNiveauDeau(){
+        EchelonMonteEau++;
+    }
+
+    public int getEchelonMonteEau() {
+        return EchelonMonteEau;
+    }
     
-    /**
-     *
-     * @param nom
-     * @return
-     */
+    
+    
     
     public Tuile getTuile(nomTuile nom){
         Tuile tui = null;
