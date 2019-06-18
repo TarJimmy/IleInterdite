@@ -5,6 +5,7 @@
  */
 package Vue;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class PanelImage extends JPanel{
         public PanelImage(String nom) throws IOException { 
             setDoubleBuffered(true); 
             setNomIm(nom);
+            setBackground(Color.white);
         try {
             this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/images/"+nomIm));
         } catch (IOException ex) {
