@@ -9,12 +9,18 @@ package Controleur;
 
 import Modele.*;
 import Vue.*;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author tardy
- */
+
+
+
+
+
+
 public class Controleur implements Observateur {
     private VueAccueil accueil;
     private VueGrille vueGrille;
@@ -28,34 +34,81 @@ public class Controleur implements Observateur {
     private int index;
     private VueAventurier vueAvTrActuel;
     private ArrayList<VuePion> mesPions;
+    
+    
+    
     Controleur(){
         accueil = new VueAccueil();
         accueil.addObservateur(this);
         accueil.afficher(true);
+        index = 0;
+        
+    }
+
+    public HashSet<Utils.tresor> getTresorsRecuperers() {
+        return Aventurier.getTresorsRecuperer();
+    }
+    
+    public ArrayList<Aventurier> getMesAventuriers() {
+        return mesAventuriers;
     }
 
     private void setTrAv() {
-        this.AvTrActuel = mesAventuriers.get(index);
-        System.out.println("Initialise aux tour de l'aventurier : "+ AvTrActuel);
+        this.AvTrActuel = getMesAventuriers().get(index);
+        System.out.println("Initialise aux tour de l'aventurier : "+ getAvTrActuel());
         this.vueAvTrActuel = mesVuesAventuriers.get(index);
         System.out.println("Initialise aux tour de la VueAventurier :" + vueAvTrActuel);
     }
     private void addIndex(){
-        index++;
-        if (index>=mesAventuriers.size()){
-            index=0;
-        }
+        index = (index+1)/getMesAventuriers().size();
     }
-    public void piocher (Aventurier av){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void piocher (){
+        for (int i = 0; i < 2; i++) {
+            CarteJoueur carte = deckTresor.Piocher();
+            if(carte instanceof CarteMonteeEau){
+                MonteeDesEaux(carte);
+            }else{
+                getAvTrActuel().AddCarte(carte);
+            }
+        }
+        CheckNbCarte(getAvTrActuel());
     }
     public boolean partieGagne(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean gagne = true;
+        gagne = getTresorsRecuperers().contains(Utils.tresor.values());
+        if(gagne){
+            boolean helicoptere = false;
+            for(Aventurier av : getMesAventuriers()){
+                gagne = gagne && av.getMaPos().getNom().equals(Utils.nomTuile.heliport);
+                if(!helicoptere){
+                    for(CarteJoueur c : av.getCartesSpecial()){
+                        helicoptere = helicoptere && c instanceof Helicoptere;
+                    }
+                }
+            }
+            gagne = gagne && helicoptere;
+        }
+        return gagne;
     }
+    public boolean partiePerdu(){
+        boolean perdu = !grille.getTuile(Utils.nomTuile.heliport).estDisponible();
+        perdu = perdu || grille.getEchelonMonteEau() <= 10;
+        if(!perdu){
+            HashSet<Utils.tresor> tresors = new HashSet<>();
+            tresors.add(null);
+            for(Tuile tui : grille.getTuilesDisponibles()){
+                tresors.add(tui.getTresor());
+            }
+            tresors.remove(null);
+            perdu = tresors.contains(Utils.tresor.values());
+        }
+        return perdu;
+    }
+    
+    
     private void debutTour(){
-        
         setTrAv();
-        AvTrActuel.DebutTour();
+        getAvTrActuel().DebutTour();
         for (VueAventurier vue : mesVuesAventuriers){
             if (vue != vueAvTrActuel){
                 vue.activer(false);
@@ -66,73 +119,73 @@ public class Controleur implements Observateur {
             }
         }
     }
-    public void TourDeJeu(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Aventurier getTourActuelAventurier(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public boolean partiePerdu(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Aventurier getAvTrActuel(){
+        return AvTrActuel;
     }
     
-    public void MonteeDesEaux(){
+    
+    public void MonteeDesEaux(CarteJoueur c){
+        grille.MonterNiveauDeau();
+        deckInnondation.ResetPioche();
+        deckTresor.Defausser(c);
+    }
+    public void faireDefausser(Aventurier av,int nbCartes){
+            //defausser des cartes via l'ihm
+            //Defausser(int nbCartes) avec nbCartes = getAvTrActuel().nbCarte()
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    public void faireDefausser(Aventurier av){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void checkFinTour(){
+        if(getAvTrActuel().getActionsRestantes() == 0 ){
+            if(getAvTrActuel() instanceof Ingenieur && ((Ingenieur) getAvTrActuel()).aAssecher()){
+                //ihm fonction uniquement assecher
+            }
+            finTour();
+        }
     }
+    
+    
     public void finTour(){
+        if(!partieGagne()){
+            piocher();
             addIndex();
             debutTour();
-            
+        }
+
     }
-    public void CheckNbCarte(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void CheckNbCarte(Aventurier av){
+        if( av.nbCarte() > 5){
+            faireDefausser(av, av.nbCarte()-5);
+        }
     }
-    public void CheckMonteeEau(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    private ArrayList<Aventurier> creationAventurier(int nbAventuriers){
-        ArrayList<Aventurier> mesAvs = new ArrayList<>();
-        mesAvs.add(new Ingenieur(grille));
-        mesAvs.add(new Messager(grille));
-        mesAvs.add(new Navigateur(grille));
-        mesAvs.add(new Explorateur(grille));
-        mesAvs.add(new Plongeur(grille));
-        mesAvs.add(new Pilote(grille));
-        System.out.println("Créé un ArrayList d'aventurier : "+ mesAvs);
-        System.out.println("Supprime "+(6-nbAventuriers)+" aventuriers de la liste pour avoir une taille de "+nbAventuriers+" Aventuriers");
+    
+    private void creationAventurier(int nbAventuriers){
+        mesAventuriers = new ArrayList<>();
+        mesAventuriers.add(new Ingenieur(grille));
+        mesAventuriers.add(new Messager(grille));
+        mesAventuriers.add(new Navigateur(grille));
+        mesAventuriers.add(new Explorateur(grille));
+        mesAventuriers.add(new Plongeur(grille));
+        mesAventuriers.add(new Pilote(grille));
         for (int i=0;i<(6-nbAventuriers);i++){
             int r1= (int) (Math.random() * (6-i));
-            System.out.println("Supprime "+ mesAvs.get(r1).getNomAventurier() + " ( n°"+ r1+ " de la liste)");
-            mesAvs.remove(mesAvs.get(r1));
+            mesAventuriers.remove(mesAventuriers.get(r1));
         }
-        System.out.println("La liste contient : "+ mesAvs);
-        
-        return mesAvs;
     }
-    private ArrayList<VueAventurier> creationVuesAventuriers( ArrayList<String> mesNoms){
-        ArrayList<VueAventurier> mesVues = new ArrayList<>();
-        System.out.println("Créé une liste de VueAventurier a partir celui des Aventuriers");
-        int taille = mesAventuriers.size();
+    private void creationVuesAventuriers( ArrayList<String> mesNoms){
+        mesVuesAventuriers = new ArrayList<>();
+        int taille = getMesAventuriers().size();
         for (int i =0;i<taille;i++){
-            mesVues.add(new VueAventurier(mesNoms.get(i),mesAventuriers.get(i).getNomAventurier(),mesAventuriers.get(i).getPion().getCouleur()));
-            System.out.println("Crée une VueAventurier avec pour parametre : ["+mesNoms.get(i)+"]"
-                                                                               + "["+ mesAventuriers.get(i).getNomAventurier()+"]"
-                                                                               + "["+ mesAventuriers.get(i).getPion().toString()+"]");
-            System.out.println(mesAventuriers.get(i).getMaPos());
-           
+            mesVuesAventuriers.add(new VueAventurier(mesNoms.get(i),getMesAventuriers().get(i).getNomAventurier(),getMesAventuriers().get(i).getPion().getCouleur()));
         }
-        System.out.println("Liste Finale : " + mesVues);
-        return mesVues;
     }
     private void creePion(){
         mesPions = new ArrayList<>();
         int i=0;
-        for (Aventurier av : mesAventuriers){
+        for (Aventurier av : getMesAventuriers()){
             mesPions.add(new VuePion(av.getPion()));
-            vueGrille.getVueTuile(av.getTuile().getCoords()).initVuePion(mesPions.get(i));
+            vueGrille.getVueTuile(av.getMaPos().getCoords()).initVuePion(mesPions.get(i));
             i++;
         }
         
@@ -143,22 +196,20 @@ public class Controleur implements Observateur {
         switch(msg.type){
             case DEBUTJEU:
                 index = 0;
-                System.out.println("------------Desactive L'accueil---------");
                 accueil.afficher(false);
-                System.out.println("------------Creation de la Grille-------");
                 grille= new Grille(msg.difficulte);
-                System.out.println("-----------Création de la VueGrille-----");
                 vueGrille = new VueGrille(grille);
-                System.out.println("----------Creations des Aventuriers-----");
-                mesAventuriers = creationAventurier(msg.nbJoueur);
-                System.out.println("----------Création des VuesAventuriers--");
-                mesVuesAventuriers = creationVuesAventuriers(msg.noms);
+                creationAventurier(msg.nbJoueur);
+                creationVuesAventuriers(msg.noms);
                 creePion();
-                System.out.println("------------Création de la VueJeu-------");
+        {
+            try {
                 jeu = new VueJeu(vueGrille,mesVuesAventuriers);
-                System.out.println("--------------Affiche la VueJeu---------");
+            } catch (IOException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
                 jeu.afficher(true);
-                System.out.println("-----------Initialise le tour Actuel de l'aventurier");
                 setTrAv();
                 debutTour();
                 //A enlever apres demo
@@ -166,53 +217,72 @@ public class Controleur implements Observateur {
                     av.addObservateur(this);
                      vueGrille.addObservateur(this);
                 }
-                grille.getTuile(2, 2).Inonder();
+                grille.getTuile(2, 2).Innonder();
                 vueGrille.getVueTuile(new int[] {2,2}).changeEtat(grille.getTuile(2, 2).getEtat());
-                grille.getTuile(4, 4).Inonder();
+                grille.getTuile(4, 4).Innonder();
                 vueGrille.getVueTuile(new int[] {4,4}).changeEtat(grille.getTuile(4, 4).getEtat());
-                 grille.getTuile(3, 4).Inonder();
+                 grille.getTuile(3, 4).Innonder();
                 vueGrille.getVueTuile(new int[] {3,4}).changeEtat(grille.getTuile(3, 4).getEtat());
-                 grille.getTuile(3, 3).Inonder();
+                 grille.getTuile(3, 3).Innonder();
                 vueGrille.getVueTuile(new int[] {3,3}).changeEtat(grille.getTuile(3, 3).getEtat());
+                break;
+                
+                
+            case ACTION:
+                
+                break;
         }
     }
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
-        if (msg.typeact==TypeAction.DEPLACER){
-                vueGrille.proposeCaseDEP(AvTrActuel.getDeplacement(grille));
-                /*for (Tuile tui :AvTrActuel.getDeplacement(grille)){
+        Tuile t;
+        switch(msg.typeact){
+            case DEPLACER:
+                vueGrille.proposeCaseDEP(getAvTrActuel().getDeplacement(grille));
+                /*for (Tuile tui :getAvTrActuel().getDeplacement(grille)){
                     System.out.println(tui.getCoords()[0] +"   "+ tui.getCoords()[1]);
                 }*/
-        }
-        else if(msg.typeact== TypeAction.CHOIX_TUILE_DEP){
-            Tuile t = grille.getTuile(msg.coord[0],msg.coord[1]);
-            AvTrActuel.deplacer(t);
-            mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
-            System.out.println(AvTrActuel.getTuile().getCoords()[0] + "\t" + AvTrActuel.getTuile().getCoords()[1]);
-            vueGrille.actualise();
-            if (AvTrActuel.getActionsRestantes()==0){
-                finTour();
-            }
-        }
-        else if(msg.typeact== TypeAction.CHOIX_TUILE_AS){
-            Tuile t = grille.getTuile(msg.coord[0],msg.coord[1]);
-            AvTrActuel.assecher(t);
-            mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
-            System.out.println(AvTrActuel.getTuile().getCoords()[0] + "\t" + AvTrActuel.getTuile().getCoords()[1]);
-            
-            if (AvTrActuel.getActionsRestantes()==0){
-                finTour();
-            }
-        }
-        else if (msg.typeact==TypeAction.ASSECHER){
-                vueGrille.proposeCaseAS(AvTrActuel.getAssechement(grille));
+                break;
                 
-        }
-        else if(msg.typeact== TypeAction.TERMINER_TOUR){
-            finTour();
+        
+            case CHOIX_TUILE_DEP:
+                t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                getAvTrActuel().deplacer(t);
+                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
+                System.out.println(getAvTrActuel().getMaPos().getCoords()[0] + "\t" + getAvTrActuel().getMaPos().getCoords()[1]);
+                vueGrille.actualise();
+                if (getAvTrActuel().getActionsRestantes()==0){
+                    finTour();
+                }
+                break;
+                
+                
+            case CHOIX_TUILE_AS:
+                t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                getAvTrActuel().assecher(t);
+                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
+                System.out.println(getAvTrActuel().getMaPos().getCoords()[0] + "\t" + getAvTrActuel().getMaPos().getCoords()[1]);
+
+                if (getAvTrActuel().getActionsRestantes()==0){
+                    finTour();
+                }
+                break;
+                
+                
+            case ASSECHER:
+                vueGrille.proposeCaseAS(getAvTrActuel().getAssechement(grille));
+                break;
+                
+                
+            case TERMINER_TOUR:
+                finTour();
+                break;
         }
     }
+    
+    
+
     
     public static void main(String[]args ){
         new Controleur();
