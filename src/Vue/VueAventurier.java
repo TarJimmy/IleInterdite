@@ -67,9 +67,13 @@ public class VueAventurier extends Observe {
         return principal;
     }
 
+    public String getNomAventurier() {
+        return nomAventurier;
+    }
+
     public VueAventurier(String nomJoueur, String nomAventurier, Color couleur){
         //A enelevr apres demo
-        nomAventurier = nomAventurier;
+        this.nomAventurier = nomAventurier;
         //le titre = nom du joueur 
         principal = new JPanel(new BorderLayout());
         principal.add(new JLabel(nomJoueur), BorderLayout.NORTH);

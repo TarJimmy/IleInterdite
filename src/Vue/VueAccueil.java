@@ -1,22 +1,25 @@
 package Vue;
 
+import Controleur.Message;
 import Controleur.TypeMessage;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import Controleur.Message;
+import java.io.IOException;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -37,23 +40,19 @@ public class VueAccueil extends Controleur.Observe{
     private ArrayList<String> mesNoms=new ArrayList<>();; //Utilisé pour que les joueurs se repères lors du jeu
     private final int NB_JOUEUR_MAX=4; //Constante du nb de joueur max sur une partie
     private int nbJoueur =0;//Modifier apres une action sur valider (GHcentre-DROIT)
-    private final Color VERT_FONCER = new Color(0, 220, 0);
+    private final Color VERT_FONCER = new Color(0, 180, 0);
     private final Color ROUGE_FONCER = new Color(240, 0, 0);
+    private final Color ORANGE_FONCER = new Color(255,69,0);
     private final Color COULEUR_PRINCIPAL = Color.white;
-    JRadioButton[] mesDif;
     private final int NB_DIFFICULTE =4;
-    private final String[] StrDif = {"Novice","Normal","Elite","Légendaire"};
-    public VueAccueil(){
+    JSlider slider;
+    JLabel choixDif;
+    JButton regle;
+    private final String[] stringDif = {"Novice","Normal","Elite","Extreme"};
+    private final Color[] ColorDif ={VERT_FONCER,ORANGE_FONCER,Color.MAGENTA,Color.BLACK};
+    public VueAccueil() throws IOException{
         //Configure Fenetre
-        window = new JFrame();
-        window.setTitle("Accueil");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLocationRelativeTo(null);
-        window.setLocation(300, 300);
-        window.setResizable(false);
-        window.setSize(680, 480);
-        window.setLayout(new GridLayout(1,2)); //Séparer par GAUCHE  et DROITE
-        window.setBackground(Color.black);
+        initWindow();
         //Ajout a l'avance pour un debbugage éfficae si nécessaire
         //GAUCHE
         JPanel GAUCHE = new JPanel(new GridLayout(2,1));
@@ -74,7 +73,7 @@ public class VueAccueil extends Controleur.Observe{
         GAUCHE.add(Gbas);
         
         //DROITE
-        JPanel DROIT = new JPanel(new FlowLayout());
+        PanelImage DROIT = new PanelImage("imageAccueil.jpg");
         
         window.add(GAUCHE);
         window.add(DROIT);
@@ -139,26 +138,23 @@ public class VueAccueil extends Controleur.Observe{
          Gbas.add(indicDifficultes);
          
          //GAUCHE -> Bas -> Reste
-         ButtonGroup group = new ButtonGroup();
-         mesDif = new JRadioButton[NB_DIFFICULTE];
-         for (int i = 0; i<NB_DIFFICULTE;i++){
-             mesDif[i]= new JRadioButton(StrDif[i]);
-             mesDif[i].setBackground(COULEUR_PRINCIPAL);
-             group.add(mesDif[i]);
-             Gbas.add(mesDif[i]);
-             
-         }
-         mesDif[0].setSelected(true);
-         
+        Gbas.add(monSlider());
+        JPanel GbasRegle = new JPanel();
+        GbasRegle.setBackground(Color.white);
+        regle = new JButton("Regle>>");
+
+        regle.setBackground(Color.white);
         
+        GbasRegle.add(regle);
+        regle.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                new VueRegles();
+            }
+            
+        });
         
-        
-        //Image à Droite
-        DROIT.setBackground(COULEUR_PRINCIPAL);
-        JLabel image = new JLabel();
-        DROIT.add(image,BorderLayout.CENTER);
-        image.setIcon(new ImageIcon("../image/im.jpg"));
-        
+        Gbas.add(GbasRegle);
         
         
         
@@ -269,19 +265,58 @@ public class VueAccueil extends Controleur.Observe{
         return NB_JOUEUR_MAX;
     }
     private int DonneEchelon(){
-        int i=0;
-        while (i<mesDif.length && !mesDif[i].isSelected()){
-            i++;
-        }
-        return i;
+        return slider.getValue();
     }
     
     public void afficher(boolean b){
             window.setVisible(b);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         VueAccueil a = new VueAccueil();
         a.afficher(true);
+    }
+    public JPanel monSlider(){
+        GridLayout g = new GridLayout(2,3);
+        g.setHgap(5);
+        JPanel pan = new JPanel();
+        JLabel gauche = new JLabel(stringDif[0]);
+        gauche.setForeground(ColorDif[0]);
+        gauche.setHorizontalAlignment(JLabel.RIGHT);
+        JLabel droite = new JLabel(stringDif[3]);
+        droite.setForeground(ColorDif[3]);
+        droite.setHorizontalAlignment(JLabel.LEFT);
+        slider =  new JSlider(SwingConstants.HORIZONTAL, 0, NB_DIFFICULTE-1, 0);
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent arg0) {
+                JSlider slid = (JSlider) arg0.getSource();
+                choixDif.setText(stringDif[slid.getValue()]);
+                choixDif.setForeground(ColorDif[slid.getValue()]);
+            }
+        });
+        choixDif = new JLabel(stringDif[0]);
+        choixDif.setForeground(ColorDif[0]);
+        choixDif.setHorizontalAlignment(JLabel.CENTER);
+        pan.add(gauche);
+        pan.add(slider);
+        pan.add(droite);
+        pan.add(new JPanel());
+        pan.add(choixDif);
+        pan.add(new JPanel());
+        return pan;
+    }
+
+
+    private void initWindow() {
+        window = new JFrame();
+        window.setTitle("Accueil");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setLocationRelativeTo(null);
+        window.setLocation(300, 300);
+        window.setResizable(false);
+        window.setSize(680, 480);
+        window.setLayout(new GridLayout(1,2)); //Séparer par GAUCHE  et DROITE
+        window.setBackground(Color.black);
     }
 }

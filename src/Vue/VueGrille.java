@@ -27,6 +27,7 @@ public class VueGrille extends Controleur.Observe {
             g.setHgap(10);
             g.setVgap(10);
             vueGrille = new JPanel(g);
+            vueGrille.setBackground(Color.white);
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             initGrille(grille);
         }
