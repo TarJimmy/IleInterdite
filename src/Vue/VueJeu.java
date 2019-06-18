@@ -14,6 +14,9 @@ import java.awt.PopupMenu;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -63,7 +66,7 @@ public class VueJeu extends Controleur.Observe {
                 str = rest + c;
                 label.setText(str);
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }catch(InterruptedException e){ e.printStackTrace();}
             }
         }
@@ -89,6 +92,7 @@ public class VueJeu extends Controleur.Observe {
     
     public VueJeu(VueGrille grille,ArrayList<VueAventurier> mesAvs) throws IOException {
         this.mesAvs = mesAvs;
+        
         initWindow();
         monteeDesEau = new MonteeDesEaux();
         Iterator it = this.mesAvs.iterator();
@@ -96,6 +100,7 @@ public class VueJeu extends Controleur.Observe {
         //Verifier s'il y a un navigateur
         while (it.hasNext()){
             VueAventurier vue = (VueAventurier) it.next();
+            vue.getPrincipal().setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
             if (vue.getNomAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;
             }
@@ -130,11 +135,12 @@ public class VueJeu extends Controleur.Observe {
         window.setSize(tk.getScreenSize().width,tk.getScreenSize().height);
         window.setLayout(new BorderLayout());
         window.setBackground(Color.white);
+        
     }
     private void initBas() throws IOException {
         //InitBas et ses objets
         JPanel bas = new JPanel(new BorderLayout());
-        bas.setPreferredSize(new Dimension(window.getWidth(),300));
+        bas.setPreferredSize(new Dimension(window.getWidth(),(window.getWidth()-2*window.getWidth()/7-window.getHeight())));//Longueur calculer pour avoir une grille carée
         window.add(bas,BorderLayout.SOUTH);
         this.btnBouger = new JButton("Bouger") ;
         this.btnAssecher = new JButton( "Assecher");
@@ -151,7 +157,7 @@ public class VueJeu extends Controleur.Observe {
         tresors.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(tresors,BorderLayout.WEST);
         //Tresors
-        
+        //tresors.add(new PanelImage())
         //Decks
         GridLayout gDecks = new GridLayout(1,2);
         gDecks.setHgap(50);

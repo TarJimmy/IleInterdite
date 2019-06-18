@@ -6,6 +6,7 @@ import Controleur.TypeAction;
 import Modele.Grille;
 import Modele.Tuile;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,6 +47,7 @@ public class VueGrille extends Controleur.Observe {
                     else{
                         vuesTuiles[x][y]= new VueTuile(tuiles[x][y]);
                         vueGrille.add(vuesTuiles[x][y]);
+                        vuesTuiles[x][y].setPreferredSize(new Dimension(vueGrille.getWidth()/6,vueGrille.getHeight()/6));
                     }
                 }
             }
@@ -135,7 +137,7 @@ public class VueGrille extends Controleur.Observe {
 
     public void actualise() {
         for (VueTuile tuile : vueModif){
-            tuile.setBackground(tuile.getEtat());
+            tuile.changeFond();
         }
     }
 }

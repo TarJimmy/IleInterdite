@@ -5,33 +5,43 @@ import Modele.Tuile;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+import Controleur.Utils.TuilesUtils;
+import java.awt.Graphics;
 
 public class VueTuile extends JButton {
-        private Color etat;
         private ArrayList<VuePion> mesPions;
         private JPanel mesVuePions;
+        private Image image;
+        private TuilesUtils tuile;
+        private boolean estCoulee;
     VueTuile (Tuile tuile){
+        estCoulee=false;
+        this.tuile = tuile.getNom();
         mesPions = new ArrayList<>();
         setLayout(new BorderLayout());
-        setEtat(Color.orange);
-        add(new JLabel(tuile.getNom().getNom()),BorderLayout.CENTER);
-        setBackground(etat);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         mesVuePions = new JPanel(new GridLayout(1,4));
         add(mesVuePions,BorderLayout.SOUTH);
+        setImage(this.tuile.getAssecher());
     }
-    VueTuile (){
-        setEtat(new Color(0,0,0,0));
-        setBackground(etat);
+     
+    public void setImage(String etat) {
+        try {
+            this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/Images/"+etat));
+        } catch (IOException ex) {
+            System.err.println("Erreur de lecture de "+etat);
+        }
     }
-    public Color getEtat() {
-        return etat;
-    }
+    
     public void initVuePion(VuePion vue){
         vue.setMaTuile(this);
     }
@@ -41,30 +51,34 @@ public class VueTuile extends JButton {
     public void supVuePion(VuePion vue){
         mesVuePions.remove(vue);
     }
-    public void changeFond(Color etat){
-        setBackground(etat);
+    public void changeFond(){
+        repaint();
     }
     public void changeEtat(Utils.EtatTuile etat){
         switch(etat){
             case COULEE:
-                setEtat(Color.BLACK);
+                estCoulee=true;
             case ASSECHEE:
-                setEtat(Color.ORANGE);
+                setImage(tuile.getAssecher());
             case INONDEE:
-                setEtat(Color.CYAN);
+                setImage(tuile.getInnonder());
         }
-        changeFond(this.etat);
+        changeFond();
     }
+    @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(!estCoulee){
+                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+            else {
+                setVisible(false);
+            } 
+        }
     
-
-    /**
-     *
-     * @param etat
-     */
-    public void setEtat(Color etat) {
-        this.etat = etat;
-    }
+    
+        @Override
     public String toString(){
-        return "Une Vue";
+        return tuile.getNom();
     }
 }

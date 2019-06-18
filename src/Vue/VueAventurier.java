@@ -79,7 +79,6 @@ public class VueAventurier extends Observe {
         principal.add(new JLabel(nomJoueur), BorderLayout.NORTH);
         mainPanel = new JPanel(new BorderLayout());
         principal.add(mainPanel,BorderLayout.CENTER);
-        
         mainPanel.setBackground(new Color(230, 230, 230));
         mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
 
