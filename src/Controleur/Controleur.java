@@ -15,24 +15,19 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
-
-
-
-
+/**
+ *
+ * @author tardyj
+ */
 public class Controleur implements Observateur {
-    private VueAccueil accueil;
-    private VueGrille vueGrille;
+    private final VueAccueil accueil;
     private VueJeu jeu;
-    private ArrayList<VueAventurier> mesVuesAventuriers;
     private ArrayList<Aventurier> mesAventuriers;
     private Grille grille;
     private DeckInnondation deckInnondation;
     private DeckTresor deckTresor;
     private Aventurier AvTrActuel;
     private int index;
-    private VueAventurier vueAvTrActuel;
     private ArrayList<VuePion> mesPions;
     
     
@@ -55,7 +50,7 @@ public class Controleur implements Observateur {
     //Actualise le tour de l'aventurier en fonction de l'index
     private void setTrAv() {
         this.AvTrActuel = getMesAventuriers().get(index);
-        this.vueAvTrActuel = mesVuesAventuriers.get(index);
+        jeu.setTrActuel(index);
     }
     private void addIndex(){
         index = (index+1)/getMesAventuriers().size();
@@ -93,11 +88,9 @@ public class Controleur implements Observateur {
         perdu = perdu || grille.getEchelonMonteEau() <= 10;
         if(!perdu){
             HashSet<Utils.tresor> tresors = new HashSet<>();
-            tresors.add(null);
             for(Tuile tui : grille.getTuilesDisponibles()){
                 tresors.add(tui.getTresor());
             }
-            tresors.remove(null);
             perdu = tresors.contains(Utils.tresor.values());
         }
         return perdu;
@@ -107,14 +100,6 @@ public class Controleur implements Observateur {
     private void debutTour(){
         setTrAv();
         getAvTrActuel().DebutTour();
-        for (VueAventurier vue : mesVuesAventuriers){
-            if (vue != vueAvTrActuel){
-                //vue.activer(false);
-            }
-            else{
-                //vue.activer(true);
-            }
-        }
     }
 
     public Aventurier getAvTrActuel(){
@@ -126,6 +111,7 @@ public class Controleur implements Observateur {
         grille.MonterNiveauDeau();
         deckInnondation.ResetPioche();
         deckTresor.Defausser(c);
+        //actualiser dans ihm
     }
     public void faireDefausser(Aventurier av,int nbCartes){
             //defausser des cartes via l'ihm
@@ -166,25 +152,9 @@ public class Controleur implements Observateur {
         mesAventuriers.add(new Explorateur(grille));
         mesAventuriers.add(new Plongeur(grille));
         mesAventuriers.add(new Pilote(grille));
-        for (int i=0;i<(6-nbAventuriers);i++){
-            int r1= (int) (Math.random() * (6-i));
-            mesAventuriers.remove(mesAventuriers.get(r1));
-        }
-    }
-    private void creationVuesAventuriers(ArrayList<String> mesNoms){
-        mesVuesAventuriers = new ArrayList<>();
-        int taille = getMesAventuriers().size();
-        for (int i =0;i<taille;i++){
-            mesVuesAventuriers.add(new VueAventurier(mesNoms.get(i),getMesAventuriers().get(i)));
-        }
-    }
-    private void creePion(){
-        mesPions = new ArrayList<>();
-        int i=0;
-        for (Aventurier av : getMesAventuriers()){
-            mesPions.add(new VuePion(av.getPion()));
-            vueGrille.getVueTuile(av.getMaPos().getCoords()).initVuePion(mesPions.get(i));
-            i++;
+        Utils.melangerAventuriers(mesAventuriers);
+        for (int i=0;i<6-nbAventuriers;i++){
+            mesAventuriers.remove(mesAventuriers.get(mesAventuriers.size()-1));
         }
     }
     private ArrayList<VueAventurier> translateAve_VueAvs(ArrayList<Aventurier> avs){
@@ -193,43 +163,33 @@ public class Controleur implements Observateur {
     private CarteJoueur translate_VueCarte_Carte(VueCarte vueCarte){
         return null;
     }
+
+    /**
+     *
+     * @param msg
+     */
     @Override
     public void traiterMessage(Message msg) {
+        System.out.println("Jy passe");
         switch(msg.type){
             case DEBUTJEU:
                 accueil.afficher(false);
                 grille= new Grille(msg.difficulte);
-                vueGrille = new VueGrille(grille);
                 creationAventurier(msg.nbJoueur);
-                creationVuesAventuriers(msg.noms);
-                creePion();
-        {
             try {
-                jeu = new VueJeu(vueGrille,mesVuesAventuriers);
+                System.out.println(msg.noms);
+                jeu = new VueJeu(grille,mesAventuriers,msg.noms);
             } catch (IOException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        
                 jeu.afficher(true);
-                debutTour();
-                //A enlever apres demo
-                for (VueAventurier av : mesVuesAventuriers){
-                    av.addObservateur(this);
-                    vueGrille.addObservateur(this);
-                }
                 jeu.addObservateur(this);
-                grille.getTuile(2, 2).Innonder();
-                vueGrille.getVueTuile(new int[] {2,2}).changeEtat(grille.getTuile(2, 2).getEtat());
-                grille.getTuile(4, 4).Innonder();
-                vueGrille.getVueTuile(new int[] {4,4}).changeEtat(grille.getTuile(4, 4).getEtat());
-                 grille.getTuile(3, 4).Innonder();
-                vueGrille.getVueTuile(new int[] {3,4}).changeEtat(grille.getTuile(3, 4).getEtat());
-                 grille.getTuile(3, 3).Innonder();
-                 grille.getTuile(3, 3).Innonder();
-                vueGrille.getVueTuile(new int[] {3,3}).changeEtat(grille.getTuile(3, 3).getEtat());
-                System.out.println(vueGrille.getVueTuile(new int[] {3,4}).getWidth());
-                System.out.println(vueGrille.getVueTuile(new int[] {3,4}).getHeight());
-                break;
+                debutTour();
+                
+
+                
+                
                 
                 
             case ACTION:
@@ -241,14 +201,15 @@ public class Controleur implements Observateur {
     @Override
     public void traiterMessageAction(MessageAction msg) {
         Tuile t;
+        int a;
         switch(msg.typeact){
             case DEPLACER:
-                int a=0;
-                vueGrille.faireChoixTuile(a, getAvTrActuel().getDeplacement(grille)); //a faire 
+                a = 1;
+                jeu.faireChoixTuile(a, getAvTrActuel().getDeplacement(grille)); //a faire 
                 break;
             case ASSECHER:
-            int b = 0;
-            vueGrille.faireChoixTuile(b,getAvTrActuel().getAssechement(grille));
+                a=2;
+                jeu.faireChoixTuile(a,getAvTrActuel().getAssechement(grille));
             break;
             case TERMINER_TOUR:
                 finTour();
@@ -257,26 +218,25 @@ public class Controleur implements Observateur {
                 break;
             case DONNERCARTE:
                 int c=0;
-                vueGrille.faireChoixVueAventuriers(translateAve_VueAvs(getAvTrActuel().getAvsDonsCarte(getMesAventuriers())));
+                //vueGrille.faireChoixVueAventuriers(translateAve_VueAvs(getAvTrActuel().getAvsDonsCarte(getMesAventuriers())));
                 break;
             case CHOIX_TUILE_DEP:
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().deplacer(t);
-                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(t.getCoords()));
-                vueGrille.actualise();
+                
+                jeu.actualise();
                 checkFinTour();
                 break;
             case CHOIX_TUILE_AS:
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().assecher(t);
-                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(t.getCoords()));
                 checkFinTour();
                 break;
             case CHOIX_AV_DONCARTE:
-                Aventurier receveur = getMesAventuriers().get(getMesVuesAventuriers().indexOf(msg.VueAv));
-                CarteJoueur carte = this.translate_VueCarte_Carte(msg.vueCarte);
+                /*Aventurier receveur = getMesAventuriers().get(getMesVuesAventuriers().indexOf(msg.VueAv));
+                
                 getAvTrActuel().DonnerCarte(carte, receveur);
-                CheckNbCarte(receveur);//finir
+                CheckNbCarte(receveur);//finir*/
                  break;
             
                 
@@ -284,9 +244,6 @@ public class Controleur implements Observateur {
         }
     }
 
-    public ArrayList<VueAventurier> getMesVuesAventuriers() {
-        return mesVuesAventuriers;
-    }
     
     
 
@@ -294,4 +251,6 @@ public class Controleur implements Observateur {
     public static void main(String[]args ) throws IOException{
         new Controleur();
     }
+
+    
 }

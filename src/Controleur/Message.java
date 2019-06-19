@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author tardy
  */
-public class Message {
+public class Message extends Object {
     public TypeMessage type;
     public int nbJoueur;
     public int difficulte;
