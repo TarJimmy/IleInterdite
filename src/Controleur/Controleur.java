@@ -37,7 +37,7 @@ public class Controleur implements Observateur {
     
     
     
-    Controleur(){
+    Controleur() throws IOException{
         accueil = new VueAccueil();
         accueil.addObservateur(this);
         accueil.afficher(true);
@@ -52,12 +52,10 @@ public class Controleur implements Observateur {
     public ArrayList<Aventurier> getMesAventuriers() {
         return mesAventuriers;
     }
-
+    //Actualise le tour de l'aventurier en fonction de l'index
     private void setTrAv() {
         this.AvTrActuel = getMesAventuriers().get(index);
-        System.out.println("Initialise aux tour de l'aventurier : "+ getAvTrActuel());
         this.vueAvTrActuel = mesVuesAventuriers.get(index);
-        System.out.println("Initialise aux tour de la VueAventurier :" + vueAvTrActuel);
     }
     private void addIndex(){
         index = (index+1)/getMesAventuriers().size();
@@ -79,7 +77,7 @@ public class Controleur implements Observateur {
         if(gagne){
             boolean helicoptere = false;
             for(Aventurier av : getMesAventuriers()){
-                gagne = gagne && av.getMaPos().getNom().equals(Utils.nomTuile.heliport);
+                gagne = gagne && av.getMaPos().getNom().equals(Utils.TuilesUtils.heliport);
                 if(!helicoptere){
                     for(CarteJoueur c : av.getCartesSpecial()){
                         helicoptere = helicoptere && c instanceof Helicoptere;
@@ -91,7 +89,7 @@ public class Controleur implements Observateur {
         return gagne;
     }
     public boolean partiePerdu(){
-        boolean perdu = !grille.getTuile(Utils.nomTuile.heliport).estDisponible();
+        boolean perdu = !grille.getTuile(Utils.TuilesUtils.heliport).estDisponible();
         perdu = perdu || grille.getEchelonMonteEau() <= 10;
         if(!perdu){
             HashSet<Utils.tresor> tresors = new HashSet<>();
@@ -111,11 +109,10 @@ public class Controleur implements Observateur {
         getAvTrActuel().DebutTour();
         for (VueAventurier vue : mesVuesAventuriers){
             if (vue != vueAvTrActuel){
-                vue.activer(false);
-                System.out.println("Desactive " + vue);
+                //vue.activer(false);
             }
             else{
-                vue.activer(true);
+                //vue.activer(true);
             }
         }
     }
@@ -140,6 +137,7 @@ public class Controleur implements Observateur {
         if(getAvTrActuel().getActionsRestantes() == 0 ){
             if(getAvTrActuel() instanceof Ingenieur && ((Ingenieur) getAvTrActuel()).aAssecher()){
                 //ihm fonction uniquement assecher
+               // VueJeu.IngenieurAssecherFT();
             }
             finTour();
         }
@@ -173,11 +171,11 @@ public class Controleur implements Observateur {
             mesAventuriers.remove(mesAventuriers.get(r1));
         }
     }
-    private void creationVuesAventuriers( ArrayList<String> mesNoms){
+    private void creationVuesAventuriers(ArrayList<String> mesNoms){
         mesVuesAventuriers = new ArrayList<>();
         int taille = getMesAventuriers().size();
         for (int i =0;i<taille;i++){
-            mesVuesAventuriers.add(new VueAventurier(mesNoms.get(i),getMesAventuriers().get(i).getNomAventurier(),getMesAventuriers().get(i).getPion().getCouleur()));
+            mesVuesAventuriers.add(new VueAventurier(mesNoms.get(i),getMesAventuriers().get(i)));
         }
     }
     private void creePion(){
@@ -188,14 +186,17 @@ public class Controleur implements Observateur {
             vueGrille.getVueTuile(av.getMaPos().getCoords()).initVuePion(mesPions.get(i));
             i++;
         }
-        
     }
-    
+    private ArrayList<VueAventurier> translateAve_VueAvs(ArrayList<Aventurier> avs){
+        return null;
+    }
+    private CarteJoueur translate_VueCarte_Carte(VueCarte vueCarte){
+        return null;
+    }
     @Override
     public void traiterMessage(Message msg) {
         switch(msg.type){
             case DEBUTJEU:
-                index = 0;
                 accueil.afficher(false);
                 grille= new Grille(msg.difficulte);
                 vueGrille = new VueGrille(grille);
@@ -210,13 +211,13 @@ public class Controleur implements Observateur {
             }
         }
                 jeu.afficher(true);
-                setTrAv();
                 debutTour();
                 //A enlever apres demo
                 for (VueAventurier av : mesVuesAventuriers){
                     av.addObservateur(this);
-                     vueGrille.addObservateur(this);
+                    vueGrille.addObservateur(this);
                 }
+                jeu.addObservateur(this);
                 grille.getTuile(2, 2).Innonder();
                 vueGrille.getVueTuile(new int[] {2,2}).changeEtat(grille.getTuile(2, 2).getEtat());
                 grille.getTuile(4, 4).Innonder();
@@ -224,7 +225,10 @@ public class Controleur implements Observateur {
                  grille.getTuile(3, 4).Innonder();
                 vueGrille.getVueTuile(new int[] {3,4}).changeEtat(grille.getTuile(3, 4).getEtat());
                  grille.getTuile(3, 3).Innonder();
+                 grille.getTuile(3, 3).Innonder();
                 vueGrille.getVueTuile(new int[] {3,3}).changeEtat(grille.getTuile(3, 3).getEtat());
+                System.out.println(vueGrille.getVueTuile(new int[] {3,4}).getWidth());
+                System.out.println(vueGrille.getVueTuile(new int[] {3,4}).getHeight());
                 break;
                 
                 
@@ -239,52 +243,55 @@ public class Controleur implements Observateur {
         Tuile t;
         switch(msg.typeact){
             case DEPLACER:
-                vueGrille.proposeCaseDEP(getAvTrActuel().getDeplacement(grille));
-                /*for (Tuile tui :getAvTrActuel().getDeplacement(grille)){
-                    System.out.println(tui.getCoords()[0] +"   "+ tui.getCoords()[1]);
-                }*/
+                int a=0;
+                vueGrille.faireChoixTuile(a, getAvTrActuel().getDeplacement(grille)); //a faire 
                 break;
-                
-        
-            case CHOIX_TUILE_DEP:
-                t = grille.getTuile(msg.coord[0],msg.coord[1]);
-                getAvTrActuel().deplacer(t);
-                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
-                System.out.println(getAvTrActuel().getMaPos().getCoords()[0] + "\t" + getAvTrActuel().getMaPos().getCoords()[1]);
-                vueGrille.actualise();
-                if (getAvTrActuel().getActionsRestantes()==0){
-                    finTour();
-                }
-                break;
-                
-                
-            case CHOIX_TUILE_AS:
-                t = grille.getTuile(msg.coord[0],msg.coord[1]);
-                getAvTrActuel().assecher(t);
-                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(new int[] {t.getCoords()[0],t.getCoords()[1]}));
-                System.out.println(getAvTrActuel().getMaPos().getCoords()[0] + "\t" + getAvTrActuel().getMaPos().getCoords()[1]);
-
-                if (getAvTrActuel().getActionsRestantes()==0){
-                    finTour();
-                }
-                break;
-                
-                
             case ASSECHER:
-                vueGrille.proposeCaseAS(getAvTrActuel().getAssechement(grille));
-                break;
-                
-                
+            int b = 0;
+            vueGrille.faireChoixTuile(b,getAvTrActuel().getAssechement(grille));
+            break;
             case TERMINER_TOUR:
                 finTour();
                 break;
+            case GAGNERTRESOR://A remplir
+                break;
+            case DONNERCARTE:
+                int c=0;
+                vueGrille.faireChoixVueAventuriers(translateAve_VueAvs(getAvTrActuel().getAvsDonsCarte(getMesAventuriers())));
+                break;
+            case CHOIX_TUILE_DEP:
+                t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                getAvTrActuel().deplacer(t);
+                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(t.getCoords()));
+                vueGrille.actualise();
+                checkFinTour();
+                break;
+            case CHOIX_TUILE_AS:
+                t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                getAvTrActuel().assecher(t);
+                mesPions.get(index).setMaTuile(vueGrille.getVueTuile(t.getCoords()));
+                checkFinTour();
+                break;
+            case CHOIX_AV_DONCARTE:
+                Aventurier receveur = getMesAventuriers().get(getMesVuesAventuriers().indexOf(msg.VueAv));
+                CarteJoueur carte = this.translate_VueCarte_Carte(msg.vueCarte);
+                getAvTrActuel().DonnerCarte(carte, receveur);
+                CheckNbCarte(receveur);//finir
+                 break;
+            
+                
+                
         }
+    }
+
+    public ArrayList<VueAventurier> getMesVuesAventuriers() {
+        return mesVuesAventuriers;
     }
     
     
 
     
-    public static void main(String[]args ){
+    public static void main(String[]args ) throws IOException{
         new Controleur();
     }
 }

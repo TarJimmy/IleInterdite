@@ -5,9 +5,10 @@
  */
 package Controleur;
 
-import Controleur.Message;
-import Controleur.TypeMessage;
 import Modele.Tuile;
+import Vue.VueAventurier;
+import Vue.VueCarte;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,6 +18,8 @@ public class MessageAction extends Message {
     public TypeAction typeact;
     public Tuile tui;
     public int[] coord;
+    public ArrayList<VueAventurier> VueAv;
+    public VueCarte vueCarte;
     public MessageAction(){
         super.type = TypeMessage.ACTION;
     }

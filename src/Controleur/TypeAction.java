@@ -11,11 +11,12 @@ package Controleur;
 */
     public enum TypeAction {
 	ASSECHER,
-	GAGNERCARTE,
+	GAGNERTRESOR,
 	DONNERCARTE,
 	DEPLACER,
         CHOIX_TUILE_DEP,
         CHOIX_TUILE_AS,
+        CHOIX_AV_DONCARTE,
         TERMINER_TOUR;
     }
 

@@ -131,6 +131,10 @@ public class Utils {
     public String getInnonder() {
         return innondee;
     }
+
+        public tresor getTresor() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
     /**
      * Permet de poser une question à laquelle l'utilisateur répond par oui ou non
