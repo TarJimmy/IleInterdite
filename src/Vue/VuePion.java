@@ -43,9 +43,9 @@ public class VuePion extends JPanel {
         
         Dimension dimension = getSize(); // Taille de la zone de dessin
         Graphics2D g2d = (Graphics2D) g;
-        int diametre = getWidth()<getHeight()?9*getWidth()/10 : 9*getHeight()/10; //Si width<height -> diametre = 90% taille Width Sinon diametre = 90% taille de Heigth
-        g2d.setColor(pion.getCouleur());
-        g2d.fillOval((getWidth()-diametre)/2,(getHeight()-diametre)/2,diametre, diametre); //Place un cercle en haut a gauche de taille diametre
-        
+        g.setColor(Color.red);//En rouge
+        g.fillArc(0,0,50,50,0,180);//Demi cercle plein
+        g.setColor(Color.black);//couleur noire
+        g.drawArc(0,0,50,50,180,180);//Demicercle vide
     }
 }
