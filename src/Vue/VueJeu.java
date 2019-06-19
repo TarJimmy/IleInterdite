@@ -1,53 +1,67 @@
 package Vue;
 
+import Controleur.Message;
 import Controleur.MessageAction;
+import Controleur.Observe;
+import Controleur.Observateur;
 import Controleur.TypeAction;
 import Modele.Grille;
-import Modele.Ingenieur;
+import Modele.Tuile;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.PopupMenu;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-public class VueJeu extends Controleur.Observe {
+public class VueJeu extends Observe implements Observateur {
 
     public static void IngenieurAssecherFT() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private ArrayList<VueAventurier> mesAvs;
+    private ArrayList<VueAventurier> mesVuesAvs;
+    private VueGrille vueGrille;
     private JButton btnBouger;
     private JButton btnAssecher;
     private JButton btnDonnerCarte;
     private JButton btnGagnerTresor;
     private JButton btnTerminerTour;
     private JButton DeplacerAllier;
-    public MonteeDesEaux getMonteeDesEau() {
-        return monteeDesEau;
-    }
+    private VueAventurier vueAvTrActuel;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
     private LabelInfo indications;
     private int Nb_Boutons;
+
+    public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
+               if(a!=3) {
+                   vueGrille.faireChoixTuile(a, deplacement);
+               }
+    }
+
+    public void actualise() {
+        vueGrille.actualise();
+        monteeDesEau.repaint();
+        for(VueAventurier av : mesVuesAvs){
+            actualise();
+        }
+    }
+
+ 
+
+    
+
+    
     private class LabelInfo extends JPanel implements Runnable {
         JLabel label;
         String str;
@@ -95,26 +109,20 @@ public class VueJeu extends Controleur.Observe {
         }
     }
     
-    public VueJeu(VueGrille grille,ArrayList<VueAventurier> mesAvs) throws IOException {
-        this.mesAvs = mesAvs;
-        
+    public VueJeu(Grille grille,ArrayList<Modele.Aventurier> mesAvs, ArrayList<String> mesNoms) throws IOException {
+        //Initialisation Composant
         initWindow();
+        
+        creationVuesAventuriers(mesNoms, mesAvs);
+        vueGrille = new VueGrille(grille,mesAvs);
+        vueGrille.addObservateur(this);
         monteeDesEau = new MonteeDesEaux();
-        Iterator it = this.mesAvs.iterator();
-        Nb_Boutons = 4;
-        //Verifier s'il y a un navigateur
-        while (it.hasNext()){
-            VueAventurier vue = (VueAventurier) it.next();
-            vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
-            if (vue.getNomAventurier().equals("Navigateur")){
-                Nb_Boutons +=1;
-            }
-        }
-        this.mesAvs = mesAvs;
-        initHaut(grille);
+        initHaut();
         initBas();
     }
-
+    public MonteeDesEaux getMonteeDesEau() {
+        return monteeDesEau;
+    }
     public void erreurTresor() {
             // TODO - implement vueJeu.erreurTresor
             throw new UnsupportedOperationException();
@@ -135,7 +143,7 @@ public class VueJeu extends Controleur.Observe {
     private void initWindow(){
         window = new JFrame();
         window.setResizable(false);
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Toolkit tk = Toolkit.getDefaultToolkit();
         window.setSize(tk.getScreenSize().width,tk.getScreenSize().height);
         window.setLayout(new BorderLayout());
@@ -196,6 +204,16 @@ public class VueJeu extends Controleur.Observe {
         JPanel BCCHaut = new JPanel(g);
         BCCHaut.setBackground(Color.white);
         BCcentre.add(BCCHaut);
+        //Verifier s'il y a un navigateur
+        Iterator it = this.mesVuesAvs.iterator();
+        Nb_Boutons = 4;
+        while (it.hasNext()){
+            VueAventurier vue = (VueAventurier) it.next();
+            vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
+            if (vue.getNomAventurier().equals("Navigateur")){
+                Nb_Boutons +=1;//Si oui mettre emplacement pour boutons deplacer allier
+            }
+        }
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
         for (int i =0;i<Nb_Boutons;i++){
             boutonUnitaire[i] = new JPanel();
@@ -234,18 +252,18 @@ public class VueJeu extends Controleur.Observe {
             }
         };
     }
-    private JPanel initHaut(VueGrille grille) {
+    private JPanel initHaut() {
         JPanel haut = new JPanel(new BorderLayout());
-        int taille = mesAvs.size();
+        int taille = mesVuesAvs.size();
         //VueAventurier
         JPanel mesVuesAvs = new JPanel(new GridLayout(4,1));
         mesVuesAvs.setBackground(Color.white);
         for (int i=0; i<taille;i++){
-            mesVuesAvs.add(mesAvs.get(i));
+            mesVuesAvs.add(this.mesVuesAvs.get(i));
         }
         haut.add(monteeDesEau,BorderLayout.WEST);
         haut.add(mesVuesAvs,BorderLayout.EAST);
-        haut.add(grille.getVueGrille(),BorderLayout.CENTER);
+        haut.add(vueGrille.getVueGrille(),BorderLayout.CENTER);
         window.add(haut,BorderLayout.CENTER);
         return haut;
     }
@@ -253,15 +271,38 @@ public class VueJeu extends Controleur.Observe {
     public void afficher(boolean b) {
         window.setVisible(b);
     }
-    
-    public static void main(String[]args) throws IOException{
-        Grille gr = new Grille(5);
-        VueGrille g = new VueGrille(gr);
-        ArrayList<VueAventurier> mesAvs = new ArrayList<>();
-        mesAvs.add(new VueAventurier("Jimmy", new Ingenieur(gr)));
-        mesAvs.add(new VueAventurier("Jimmy", new Ingenieur(gr)));
-        VueJeu v = new VueJeu(g,mesAvs);
-        v.afficher(true);
+
+    public ArrayList<VueAventurier> getMesAvs() {
+        return mesVuesAvs;
+    }
+
+    public VueGrille getVueGrille() {
+        return vueGrille;
+    }
+    private void creationVuesAventuriers(ArrayList<String> mesNoms,ArrayList<Modele.Aventurier> av){
+        mesVuesAvs = new ArrayList<>();
+        int taille = av.size();
+        for (int i =0;i<taille;i++){
+            mesVuesAvs.add(new VueAventurier(mesNoms.get(i), av.get(i)));
+        }
+    }
+    public void setTrActuel(int index) {
+        for (VueAventurier vue : mesVuesAvs){
+            if (vue==mesVuesAvs.get(index)){
+                //vue.activer(false);
+            }
+            else{
+                //vue.activer(true);
+            }
+        }
+    }
+    @Override 
+    public void traiterMessage(Message msg){
+        notifierMessage(msg);
+    }
+    @Override
+    public void traiterMessageAction(MessageAction msg){
+        notifierMessage(msg);
     }
     
 }

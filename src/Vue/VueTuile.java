@@ -1,5 +1,6 @@
 package Vue;
 
+import Controleur.TypeAction;
 import Controleur.Utils;
 import Modele.Tuile;
 import java.awt.BorderLayout;
@@ -16,14 +17,18 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import Controleur.Utils.TuilesUtils;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class VueTuile extends JButton {
+public final class VueTuile extends JButton {
         private ArrayList<VuePion> mesPions;
         private JPanel mesVuePions;
         private Image image;
         private TuilesUtils tuile;
         private boolean estCoulee;
+        private Color fond;
     VueTuile (Tuile tuile){
+        fond = null;
         estCoulee=false;
         this.tuile = tuile.getNom();
         mesPions = new ArrayList<>();
@@ -32,6 +37,44 @@ public class VueTuile extends JButton {
         mesVuePions = new JPanel(new GridLayout(1,4));
         add(mesVuePions,BorderLayout.SOUTH);
         setImage(this.tuile.getAssecher());
+    
+            addMouseListener(new MouseListener() {
+                                                        @Override
+                                                        public void mouseReleased(MouseEvent arg0) {
+                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                        }
+                                                        @Override
+                                                        public void mousePressed(MouseEvent arg0) {
+                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                        }
+                                                        @Override
+                                                        public void mouseExited(MouseEvent arg0) {
+                                                            VueTuile vue = (VueTuile) arg0.getSource();
+                                                            setImage(vue.getTuile().getAssecher());
+                                                            vue.changeFond();
+                                                        }
+                                                        @Override
+                                                        public void mouseEntered(MouseEvent arg0) {
+                                                           VueTuile vue = (VueTuile) arg0.getSource();
+                                                            setFond(Color.red);
+                                                            vue.changeFond();
+                                                        }
+                                                        @Override
+                                                        public void mouseClicked(MouseEvent arg0) {
+                                                        
+            }
+                                                    
+        });}
+
+    public TuilesUtils getTuile() {
+        return tuile;
+    }
+    public void setFond(Color fond) {
+        this.fond = fond;
+    }
+
+    public Color getFond() {
+        return fond;
     }
      
     public void setImage(String etat) {
@@ -70,6 +113,9 @@ public class VueTuile extends JButton {
             super.paintComponent(g);
             if(!estCoulee){
                 g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+                
+                    setBackground(fond);
+                
             }
             else {
                 setVisible(false);

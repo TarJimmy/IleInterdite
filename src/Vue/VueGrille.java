@@ -2,7 +2,9 @@ package Vue;
 
 import Controleur.Message;
 import Controleur.MessageAction;
+import Controleur.Observe;
 import Controleur.TypeAction;
+import Modele.Aventurier;
 import Modele.Grille;
 import Modele.Tuile;
 import java.awt.Color;
@@ -10,11 +12,13 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-public class VueGrille extends Controleur.Observe {
+public class VueGrille extends Observe {
 
 	/**
 	 * 
@@ -24,7 +28,8 @@ public class VueGrille extends Controleur.Observe {
         private VueTuile[][] vuesTuiles;
         private ArrayList<VueTuile> vueModif;
         private MessageAction msg;
-	public VueGrille (Grille grille){
+        private ArrayList<VuePion> mesPions;
+	public VueGrille (Grille grille,ArrayList<Aventurier> avs){
             GridLayout g =new GridLayout(6,6);
             g.setHgap(10);
             g.setVgap(10);
@@ -33,6 +38,7 @@ public class VueGrille extends Controleur.Observe {
             vueGrille.setBackground(Color.white);
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             initGrille(grille);
+            creePion(avs);
         }
         
         private void initGrille(Grille grille){
@@ -77,16 +83,7 @@ public class VueGrille extends Controleur.Observe {
         }
 
     
-        public static void main (String[] args){
-            JFrame f = new JFrame("Test");
-            f.setSize(1000,500);
-            System.out.println("cou");
-            Grille g = new Grille(2);
-            System.out.println("cou2");
-            VueGrille gr = new VueGrille(g);
-            f.add(gr.vueGrille);
-            f.setVisible(true);
-        }
+        
     public JPanel getVueGrille() {
         return vueGrille;
     }
@@ -97,65 +94,81 @@ public class VueGrille extends Controleur.Observe {
         }
     }
 
-    public void faireAction(int a, ArrayList<Tuile> deplacement) {
-        vueModif= new ArrayList<>();
-            ActionListener act = new ActionListener() {
-                                                    @Override
-                                                    public void actionPerformed(ActionEvent e) {
-                                                        switch(a){
-                                                            case 1 : 
-                                                               msg.typeact = TypeAction.CHOIX_TUILE_DEP; 
-                                                               break;
-                                                            case 2:
-                                                               msg.typeact = TypeAction.CHOIX_TUILE_AS; 
-                                                               break;
-                                                            case 3:
-                                                                msg.typeact = TypeAction.CHOIX_TUILE_DEP;
-                                                                break;
-                                                        }
-                                                        
-                                                        VueTuile vue = (VueTuile) e.getSource();
-                                                        //m.coord = getCoords(vue);
-                                                       // notifierMessageAction(m);
-                                                    }
-                                                    };
-               /* for (Tuile tui : //tuiles){
-                    int x = tui.getCoords()[0];
-                    int y = tui.getCoords()[1];
-                    vuesTuiles[x][y].setBackground(Color.gray);
-                    vuesTuiles[x][y].addActionListener(act);
-                    vueModif.add(vuesTuiles[x][y]);
-                }
-                */
-            }
+    
+    private void creePion(ArrayList<Aventurier> avs){
+        mesPions = new ArrayList<>();
+        int i=0;
+        System.out.println(avs);
+        System.out.println("heu");
+        for (Aventurier av : avs){
+            System.out.println(avs);
+            System.out.println("gfgdfs");
+            mesPions.add(new VuePion(av.getPion()));
+            getVueTuile(av.getMaPos().getCoords()).initVuePion(mesPions.get(i));
+            i++;
+        }
+    }
      private void choixAventurier(ArrayList<VueAventurier> vues){
         }
 
-    public void faireChoixTuile(int b, ArrayList<Tuile> assechement) {
+    public void faireChoixTuile( int a,ArrayList<Tuile> tuiles) {
+        vueModif= new ArrayList<>();
+            MouseListener act = new MouseListener() {
+                                                        @Override
+                                                        public void mouseReleased(MouseEvent arg0) {
+                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                        }
+                                                        @Override
+                                                        public void mousePressed(MouseEvent arg0) {
+                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                                        }
+                                                        @Override
+                                                        public void mouseExited(MouseEvent arg0) {
+                                                            VueTuile vue = (VueTuile) arg0.getSource();
+                                                            vue.setFond(null);
+                                                        }
+                                                        @Override
+                                                        public void mouseEntered(MouseEvent arg0) {
+                                                           VueTuile vue = (VueTuile) arg0.getSource();
+                                                           vue.setFond(Color.red);
+                                                        }
+                                                        @Override
+                                                        public void mouseClicked(MouseEvent arg0) {
+                                                            switch(a){
+                                                                case 1 : 
+                                                                   msg.typeact = TypeAction.CHOIX_TUILE_DEP; 
+                                                                   break;
+                                                                case 2:
+                                                                   msg.typeact = TypeAction.CHOIX_TUILE_AS; 
+                                                                   break;
+                                                                }
+                                                        VueTuile vue = (VueTuile) arg0.getSource();
+                                                        msg.coord = getCoords(vue);
+                                                        notifierMessageAction(msg);
+            }
+                                                    
+        };
+        for (Tuile tui : tuiles){
+            
+            int x = tui.getCoords()[0];
+            int y = tui.getCoords()[1];
+            vuesTuiles[x][y].setBackground(Color.gray);
+            vuesTuiles[x][y].addMouseListener(act);
+            vueModif.add(vuesTuiles[x][y]);
+        }
+    }
+
+    public void faireChoixVueAventuriers( ArrayList<VueAventurier> translateAve_VueAvs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void faireChoixVueAventuriers(int c, ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<VuePion> getMesPions() {
+        return mesPions;
     }
 
-    public void faireChoixVueAventuriers(ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
-   /* public void faireChoixVueAventuriers(ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void faireChoixVueAventuriers(ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void faireChoixVueAventuriers(ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-   */
+   
 
     
      private class choixAv extends JFrame{

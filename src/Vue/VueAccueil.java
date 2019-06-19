@@ -1,6 +1,7 @@
 package Vue;
 
 import Controleur.Message;
+import Controleur.Observe;
 import Controleur.TypeMessage;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.io.IOException;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JSlider;
@@ -36,7 +38,7 @@ import javax.swing.event.ChangeListener;
  /* - AddListener des boutons en bas du constructeur
     - Tout les objet sont intialiser seulement il ne peuvent pas être tous visibles,
     - C'est fait de cette manière pour optimisé le temps d'attente des interractions*/
-public class VueAccueil extends Controleur.Observe{
+public class VueAccueil extends Observe{
     private JFrame window;
     private JButton jouer; 
     private ArrayList<String> mesNoms=new ArrayList<>();; //Utilisé pour que les joueurs se repères lors du jeu

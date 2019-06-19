@@ -5,14 +5,22 @@
  */
 package Vue;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,8 +34,8 @@ public class VueRegles {
     private int i;
     private JFrame window;
     private PanelImage[] image;
-    private JButton plus;
-    private JButton moins;
+    private BoutonsPerso plus;
+    private BoutonsPerso moins;
     private JPanel center;
     private final CardLayout c1 = new CardLayout();
     VueRegles() throws IOException{
@@ -41,8 +49,8 @@ public class VueRegles {
         panelBoutons.setPreferredSize(new Dimension(window.getWidth(),100));
         window.add(panelBoutons,BorderLayout.NORTH);
         //Dimension et taille du textes des boutons
-        Dimension dim =new Dimension(200,80);
-        Font f = new Font(Font.SERIF,Font.BOLD,dim.height/2);
+        final Dimension dim =new Dimension(200,80);
+        final Font f = new Font(Font.SERIF,Font.BOLD,dim.height/4);
         //boutons mois et plus
         JPanel panelMoins = new JPanel();
         panelMoins.setBackground(Color.white);
@@ -50,9 +58,8 @@ public class VueRegles {
         JPanel panelPlus= new JPanel();
         panelPlus.setBackground(Color.white);
         panelBoutons.add(panelPlus );
-        plus = new JButton(">>");
+        plus = new BoutonsPerso("Suivant >>");
         plus.setFont(f);
-        plus.setBackground(Color.gray);
         plus.setPreferredSize(dim);
         plus.addActionListener(new ActionListener() {
             @Override
@@ -60,11 +67,9 @@ public class VueRegles {
                 c1.next(center);
             }
         });
-        moins = new JButton("<<");
-        moins.setBackground(Color.gray);
-        moins.setFont(f);
+        moins = new BoutonsPerso("<< Précedent");
         moins.setPreferredSize(dim);
-        
+        moins.setFont(f);
         moins.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,5 +93,53 @@ public class VueRegles {
        public static void main(String[] args) throws IOException{
            new VueRegles();
        }
-    
+    private class BoutonsPerso extends JButton implements MouseListener{
+        private boolean clique;
+        private final Color couleur = Color.lightGray;
+        public BoutonsPerso(String nom){
+            super(nom);
+        setBorderPainted(false);
+        setFocusable(false);
+        setBackground(couleur);
+    }
+    @Override
+    public void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        super.paintComponent(g);
+        g2.setColor(Color.BLACK);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setStroke(new BasicStroke(1.2f));
+        g2.draw(new RoundRectangle2D.Double(1, 1, (getWidth() - 3),
+            (getHeight() - 3), 12, 8));
+        g2.setStroke(new BasicStroke(1.5f));
+        g2.drawLine(4, getHeight() - 3, getWidth() - 4, getHeight() - 3);
+        g2.dispose();
+    } 
+
+        @Override
+        public void mouseClicked(MouseEvent arg0) {}
+
+        @Override
+        public void mousePressed(MouseEvent arg0) {
+            setBackground(Color.white);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent arg0) {
+            setBackground(couleur);
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent arg0) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void mouseExited(MouseEvent arg0) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        
+    }
 }
