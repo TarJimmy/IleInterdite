@@ -26,5 +26,8 @@ public class Messager extends Aventurier {
         return voisins;
     }
 
-    
+    @Override
+    public String getDescription() {
+        return "Donnez des cartes Trésor à un joueur n'importe où sur l'île pour 1 action par carte";
+    }
 }

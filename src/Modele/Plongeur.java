@@ -18,22 +18,22 @@ public class Plongeur extends Aventurier {
 
     @Override
     public ArrayList<Tuile> getDeplacement(Grille grille) {
-        ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),getCoordsProche());
+        //ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),getCoordsProche());
         ArrayList<Tuile> deplacements = new ArrayList<>();
         ArrayList<Tuile> mouilleesTraites = new ArrayList<>();
-        for(Tuile tui : collecTuiles){
+        /*for(Tuile tui : collecTuiles){
             if(checkDeplacement(tui)){
                 if(!deplacements.contains(tui)) {
                     deplacements.add(tui);
                 }
             }
-            if(tui.estMouillee()){
-                recurInnondee(tui,deplacements,mouilleesTraites,grille);
-            }
+            if(tui.estMouillee()){*/
+                recurInnondee(getMaPos(),deplacements,mouilleesTraites,grille);
+            /*}
         }
         if(deplacements.contains(getMaPos())){
             deplacements.remove(getMaPos());
-        }
+        }*/
         return deplacements;
     }
     
@@ -45,7 +45,6 @@ public class Plongeur extends Aventurier {
                 if(checkDeplacement(tui)){
                     if(!deplacements.contains(tui)) {
                         deplacements.add(tui);
-                        System.out.println("on ajoute " + tui.getCoords()[0] + " , " + tui.getCoords()[1]);
                     }
                 }
                 if(tui.estMouillee()){
@@ -65,6 +64,9 @@ public class Plongeur extends Aventurier {
     public String getNomAventurier() {
         return "Plongeur";
     }
-
+    @Override
+    public String getDescription() {
+        return "Passez par 1 ou plusieurs tuiles adjacentes innondées et/ou manquantes pour 1 action (vous devez terminer votre tour sur une tuile)";
+    }
     
 }

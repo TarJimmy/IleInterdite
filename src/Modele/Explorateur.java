@@ -41,5 +41,10 @@ public class Explorateur extends Aventurier {
         }
         return collecTuiles;
     }
+
+    @Override
+    public String getDescription() {
+        return "Déplacez-vous et/ou asséchez diagonalement";
+    }
     
 }

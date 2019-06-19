@@ -18,5 +18,8 @@ public class Navigateur extends Aventurier {
         return "Navigateur";
     }
     
-
+    @Override
+    public String getDescription() {
+        return "Déplacez un autre joueur d'1 ou 2 tuiles adjacentes pour 1 action";
+    }
 }

@@ -74,4 +74,9 @@ public class Ingenieur extends Aventurier {
      return "Ingénieur";
     }
 
+    @Override
+    public String getDescription() {
+        return "Asséchez 2 tuiles pour 1 action";
+    }
+    
 }
