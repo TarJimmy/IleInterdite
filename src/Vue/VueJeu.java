@@ -3,6 +3,7 @@ package Vue;
 import Controleur.MessageAction;
 import Controleur.TypeAction;
 import Modele.Grille;
+import Modele.Ingenieur;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,6 +29,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class VueJeu extends Controleur.Observe {
+
+    public static void IngenieurAssecherFT() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     private ArrayList<VueAventurier> mesAvs;
     private JButton btnBouger;
@@ -100,7 +105,7 @@ public class VueJeu extends Controleur.Observe {
         //Verifier s'il y a un navigateur
         while (it.hasNext()){
             VueAventurier vue = (VueAventurier) it.next();
-            vue.getPrincipal().setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
+            vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
             if (vue.getNomAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;
             }
@@ -236,7 +241,7 @@ public class VueJeu extends Controleur.Observe {
         JPanel mesVuesAvs = new JPanel(new GridLayout(4,1));
         mesVuesAvs.setBackground(Color.white);
         for (int i=0; i<taille;i++){
-            mesVuesAvs.add(mesAvs.get(i).getPrincipal());
+            mesVuesAvs.add(mesAvs.get(i));
         }
         haut.add(monteeDesEau,BorderLayout.WEST);
         haut.add(mesVuesAvs,BorderLayout.EAST);
@@ -250,10 +255,11 @@ public class VueJeu extends Controleur.Observe {
     }
     
     public static void main(String[]args) throws IOException{
-        VueGrille g = new VueGrille(new Grille(5));
+        Grille gr = new Grille(5);
+        VueGrille g = new VueGrille(gr);
         ArrayList<VueAventurier> mesAvs = new ArrayList<>();
-        mesAvs.add(new VueAventurier("Jimmy", "Ingenieur", Color.blue));
-        mesAvs.add(new VueAventurier("Jimmy", "Ingenieur", Color.blue));
+        mesAvs.add(new VueAventurier("Jimmy", new Ingenieur(gr)));
+        mesAvs.add(new VueAventurier("Jimmy", new Ingenieur(gr)));
         VueJeu v = new VueJeu(g,mesAvs);
         v.afficher(true);
     }
