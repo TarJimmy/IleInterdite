@@ -55,21 +55,34 @@ public abstract class Aventurier {
         actionsRestantes--;
     }
 
-
-    public boolean GagnerTresor(Utils.tresor tres) {
-            if(getTresorsRecuperer().contains(tres)){
-                int nbRetirés = 0;
-                Iterator it = getCartes().iterator();
-                while(it.hasNext()){
-                    CarteJoueur carte =(CarteJoueur) it.next();
-                    if(carte instanceof CarteTresor){
-                        if( ((CarteTresor) carte).getTresor() == tres)
-                        it.remove();
-                        nbRetirés++;
-                    }
+    
+    public Utils.tresor checkGagnerTresor(){
+        Utils.tresor tres = getMaPos().getTresor();
+        int nbCarteTresor = 0;
+        if(nbCarte() >= 4 && tres != null){
+            for(CarteJoueur carte : getCartes()){
+                if(carte instanceof CarteTresor && ((CarteTresor) carte ).getTresor() == tres){
+                    nbCarteTresor++;
                 }
             }
-            return true;
+        }
+        return (nbCarteTresor >=4)?tres:null;
+    }
+
+    public boolean GagnerTresor(Utils.tresor tres) {
+        if(getTresorsRecuperer().contains(tres)){
+            int nbRetirés = 0;
+            Iterator it = getCartes().iterator();
+            while(it.hasNext() && nbRetirés < 4){
+                CarteJoueur carte =(CarteJoueur) it.next();
+                if(carte instanceof CarteTresor){
+                    if( ((CarteTresor) carte).getTresor() == tres)
+                    it.remove();
+                    nbRetirés++;
+                }
+            }
+        }
+        return true;
     }
 
     public ArrayList<CarteJoueur> getCartes() {
@@ -215,7 +228,7 @@ public abstract class Aventurier {
         return voisins;
     }
     
-    
+    public abstract String getDescription();
     
     
 }
