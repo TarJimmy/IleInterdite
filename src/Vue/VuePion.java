@@ -46,6 +46,6 @@ public class VuePion extends JPanel {
         g.setColor(Color.red);//En rouge
         g.fillArc(0,0,50,50,0,180);//Demi cercle plein
         g.setColor(Color.black);//couleur noire
-        g.drawArc(0,0,50,50,180,180);//Demicercle vide
+        g.drawArc(0,0,50,50,0,180);//Demicercle vide
     }
 }
