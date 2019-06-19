@@ -5,7 +5,7 @@
  */
 package Modele;
 
-import Controleur.Utils.nomTuile;
+import Controleur.Utils.TuilesUtils;
 import Controleur.Utils.EtatTuile;
 import Controleur.Utils.tresor;
 
@@ -15,18 +15,18 @@ import Controleur.Utils.tresor;
  */
 public class Tuile {
     
-    private nomTuile nom;
+    private TuilesUtils nom;
     private EtatTuile etat;
     private int[] coords;
     private tresor tresor;
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
-    public Tuile(nomTuile nom) {
+    public Tuile(TuilesUtils nom) {
         this.setNom(nom);
         this.setEtat(EtatTuile.ASSECHEE);
     }
-    public Tuile(nomTuile nom, int[] coords) {
+    public Tuile(TuilesUtils nom, int[] coords) {
         this.setNom(nom);
         this.setEtat(EtatTuile.ASSECHEE);
         this.setCoords(coords);
@@ -35,7 +35,7 @@ public class Tuile {
 
     //GETTERS
     
-    public nomTuile getNom() {
+    public TuilesUtils getNom() {
         return nom;
     }
 
@@ -53,7 +53,7 @@ public class Tuile {
       
     //SETTERS
     
-    private void setNom(nomTuile nom) {
+    private void setNom(TuilesUtils nom) {
         this.nom = nom;
     }
 

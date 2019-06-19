@@ -10,7 +10,7 @@ public class Ingenieur extends Aventurier {
 
 
     public Ingenieur(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.porte_de_bronze));
+        super(grille.getTuile(Utils.TuilesUtils.porte_de_bronze));
         setPion(Pion.ROUGE);
     }
     public Ingenieur(Tuile maPos) {

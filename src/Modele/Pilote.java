@@ -9,7 +9,7 @@ public class Pilote extends Aventurier {
     private boolean aVoler;
 
     public Pilote(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.heliport));
+        super(grille.getTuile(Utils.TuilesUtils.heliport));
         setPion(Pion.BLEU);
     }
 

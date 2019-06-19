@@ -1,6 +1,5 @@
 package Modele;
 import Controleur.Utils;
-import Controleur.Utils.Pion;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -10,8 +9,8 @@ public class Explorateur extends Aventurier {
         super(maPos);
     }
     public Explorateur(Grille grille){
-        super(grille.getTuile(Utils.nomTuile.porte_de_cuivre));
-        setPion(Pion.VERT);
+        super(grille.getTuile(Utils.TuilesUtils.porte_de_cuivre));
+        setPion(Utils.Pion.VERT);
     }
     
     

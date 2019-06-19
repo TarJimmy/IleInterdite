@@ -9,7 +9,7 @@ public class Messager extends Aventurier {
         super.setPion(Controleur.Utils.Pion.GRIS);
     }
     public Messager(Grille grille){
-        super.setMaPos(grille.getTuile(Utils.nomTuile.porte_dargent));
+        super.setMaPos(grille.getTuile(Utils.TuilesUtils.porte_dargent));
         super.setPion(Controleur.Utils.Pion.GRIS);
     }
 

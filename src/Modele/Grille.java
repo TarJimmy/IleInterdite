@@ -1,7 +1,6 @@
 package Modele;
 
 import Controleur.Utils;
-import Controleur.Utils.nomTuile;
 import java.util.*;
 
 public final class Grille {
@@ -24,7 +23,7 @@ public final class Grille {
     
     
     
-    public Tuile getTuile(nomTuile nom){
+    public Tuile getTuile(Utils.TuilesUtils nom){
         Tuile tui = null;
         System.out.println(nom);
         for(int x=0;x<mesTuiles.length;x++){
@@ -51,7 +50,7 @@ public final class Grille {
                     //System.out.println("Ajoute NULL");
                 }
                 else{
-                    mesTuiles[x][y] = new Tuile(Utils.nomTuile.values()[i]);
+                    mesTuiles[x][y] = new Tuile(Utils.TuilesUtils.values()[i]);
                     //System.out.println("Ajoute " + mesTuiles[x][y]);
                     i++;
                 }
@@ -163,7 +162,7 @@ public final class Grille {
 //        System.out.println("la tuile est bien recuperer");
 //        
 //       ArrayList<Tuile> voisins = grille.getVoisins(depart,coords);
-            System.out.println(grille.getTuile(nomTuile.caverne_du_brasier));
+        //    System.out.println(grille.getTuile(nomTuile.caverne_du_brasier));
 //                
 //        //for(Tuile tui : voisins){
 //            int[] coord = depart.getCoords();
