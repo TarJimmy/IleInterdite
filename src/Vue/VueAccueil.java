@@ -48,7 +48,7 @@ public class VueAccueil extends Observe{
     private final Color ROUGE_FONCER = new Color(240, 0, 0);
     private final Color ORANGE_FONCER = new Color(255,69,0);
     private final Color COULEUR_PRINCIPAL = Color.white;
-    private final int NB_DIFFICULTE =4;
+    private final int NB_DIFFICULTE=4; //Doit etre egale aux nb d'éléments dans stringDif et ColorDif
     JSlider slider;
     JLabel choixDif;
     JButton regle;
@@ -73,7 +73,6 @@ public class VueAccueil extends Observe{
         GAUCHE.add(GHaut);
         //GAUCHE -> Bas
         JPanel Gbas = new JPanel(new GridLayout(NB_DIFFICULTE+1,1));
-        
         GAUCHE.add(Gbas);
         
         //DROITE
@@ -83,11 +82,11 @@ public class VueAccueil extends Observe{
         window.add(DROIT);
         // Fin Initialisation 
         //GAUCHE -> Haut -> Nord
-        GHnord.setBackground(COULEUR_PRINCIPAL);
-        jouer = new JButton("C'est Parti !");
-        jouer.setBackground(COULEUR_PRINCIPAL);
+        regle = new JButton("Regle>>");
+        regle.setBackground(Color.white);
         
-        GHnord.add(jouer);
+        
+        GHnord.add(regle);
         
        
         
@@ -101,6 +100,7 @@ public class VueAccueil extends Observe{
         //Bouton ajJoueur
         JButton ajJoueur = new JButton("Ajouter Joueur");
         ajJoueur.setBackground(COULEUR_PRINCIPAL);
+        ajJoueur.setFocusable(false);
         centreHG.add(ajJoueur);
         centreH.add(centreHG);
         //GAUCHE -> Centre -> Haut-> Droit
@@ -109,11 +109,12 @@ public class VueAccueil extends Observe{
         centreHD.setBackground(COULEUR_PRINCIPAL);
         JButton supJoueur = new JButton("Supprimer Joueur");
         supJoueur.setBackground(COULEUR_PRINCIPAL);
+        supJoueur.setFocusable(false);
         centreHD.add(supJoueur);
         centreH.add(centreHD);
         GHcentre.add(centreH);
         //GAUCHE -> Haut -> Centre -> Centre+Bas
-        //Label pour indiquer les limites a l'en tete
+        //Label pour indiquer les limites a l'en tete du nombre de joueur
         JLabel indicNbJoueur=new JLabel();
         indicNbJoueur.setVisible(false);
         indicNbJoueur.setBackground(COULEUR_PRINCIPAL);
@@ -140,16 +141,28 @@ public class VueAccueil extends Observe{
          Gbas.setBackground(COULEUR_PRINCIPAL);
          JLabel indicDifficultes = new JLabel("Choisir la difficulté :");
          Gbas.add(indicDifficultes);
-         
+         Gbas.add(monSlider());
+
          //GAUCHE -> Bas -> Reste
-        Gbas.add(monSlider());
         JPanel GbasRegle = new JPanel();
         GbasRegle.setBackground(Color.white);
-        regle = new JButton("Regle>>");
-
-        regle.setBackground(Color.white);
+        GHnord.setBackground(COULEUR_PRINCIPAL);
+        jouer = new JButton("C'est Parti !");
+        jouer.setBackground(COULEUR_PRINCIPAL);
+        jouer.setBorderPainted(false);
+        jouer.setFocusable(false);
+        GbasRegle.add(jouer);
         
-        GbasRegle.add(regle);
+        
+        Gbas.add(GbasRegle);
+        
+        
+        
+        
+        
+        
+        
+        //MouseListener ou ActionListener des boutons
         regle.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -161,16 +174,6 @@ public class VueAccueil extends Observe{
             }
             
         });
-        
-        Gbas.add(GbasRegle);
-        
-        
-        
-        
-        
-        
-        
-        //MouseListener de jouer
         jouer.addMouseListener(new MouseListener(){  @Override
                                                         public void mouseClicked(MouseEvent e){
                                                             mesNoms = new ArrayList<>();
@@ -287,7 +290,7 @@ public class VueAccueil extends Observe{
     public JPanel monSlider(){
         GridLayout g = new GridLayout(2,3);
         g.setHgap(5);
-        JPanel pan = new JPanel();
+        JPanel pan = new JPanel(g);
         JLabel gauche = new JLabel(stringDif[0]);
         gauche.setBackground(COULEUR_PRINCIPAL);
         gauche.setForeground(ColorDif[0]);
@@ -317,7 +320,6 @@ public class VueAccueil extends Observe{
         PanelVide.setBackground(COULEUR_PRINCIPAL);
         pan.add(PanelVide);
         pan.add(choixDif);
-        pan.add(PanelVide);
         pan.setBackground(COULEUR_PRINCIPAL);
         return pan;
     }

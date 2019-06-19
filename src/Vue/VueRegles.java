@@ -11,7 +11,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -41,7 +40,7 @@ public class VueRegles {
     VueRegles() throws IOException{
         window = new JFrame("Règle");
         window.setLayout(new BorderLayout());
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setSize(675,1000);
         window.setBackground(Color.white);
         
@@ -94,11 +93,9 @@ public class VueRegles {
            new VueRegles();
        }
     private class BoutonsPerso extends JButton implements MouseListener{
-        private boolean clique;
         private final Color couleur = Color.lightGray;
         public BoutonsPerso(String nom){
             super(nom);
-        setBorderPainted(false);
         setFocusable(false);
         setBackground(couleur);
     }
@@ -131,15 +128,9 @@ public class VueRegles {
         }
 
         @Override
-        public void mouseEntered(MouseEvent arg0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
+        public void mouseEntered(MouseEvent arg0) {}
 
         @Override
-        public void mouseExited(MouseEvent arg0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        
+        public void mouseExited(MouseEvent arg0) {}
     }
 }
