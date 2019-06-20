@@ -15,13 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import Controleur.Utils.TuilesUtils;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Array;
 
 public final class VueTuile extends JButton {
         private ArrayList<VuePion> mesPions;
-        private JPanel mesVuePions;
+        private JPanel mesVuesPions;
         private Image image;
         private TuilesUtils tuile;
         private boolean estCoulee;
@@ -30,36 +32,18 @@ public final class VueTuile extends JButton {
         fond = null;
         estCoulee=false;
         this.tuile = tuile.getNom();
-        mesPions = new ArrayList<>();
+        mesPions = new ArrayList<>(4);
         setLayout(new BorderLayout());
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
-        mesVuePions = new JPanel(new GridLayout(2,2));
-        add(mesVuePions,BorderLayout.CENTER);
+        mesVuesPions = new JPanel(new GridLayout(1,4));
+        add(mesVuesPions,BorderLayout.CENTER);
+        for(VuePion vue : mesPions){
+            mesVuesPions.add(vue);
+        }
         setImage(this.tuile.getAssecher());
         activer(false);
-            addMouseListener(new MouseListener() {
-                                                        @Override
-                                                        public void mouseReleased(MouseEvent arg0) {}
-                                                        @Override
-                                                        public void mousePressed(MouseEvent arg0) {}
-                                                        @Override
-                                                        public void mouseExited(MouseEvent arg0) {
-                                                            VueTuile vue = (VueTuile) arg0.getSource();
-                                                            setImage(vue.getTuile().getAssecher());
-                                                            vue.changeFond();
-                                                        }
-                                                        @Override
-                                                        public void mouseEntered(MouseEvent arg0) {
-                                                           VueTuile vue = (VueTuile) arg0.getSource();
-                                                            setFond(Color.red);
-                                                            vue.changeFond();
-                                                        }
-                                                        @Override
-                                                        public void mouseClicked(MouseEvent arg0) {
-                                                        
-            }
-                                                    
-        });}
+            
+    }
 
     public TuilesUtils getTuile() {
         return tuile;
@@ -82,12 +66,35 @@ public final class VueTuile extends JButton {
     
     public void initVuePion(VuePion vue){
         vue.setMaTuile(this);
+        mesVuesPions.add(vue);
     }
     public void addVuePion(VuePion vue){
-        mesVuePions.add(vue);
-    }
+            boolean b = false;
+            int i = 0;
+            VuePion[] vuesPions =(VuePion[])mesVuesPions.getComponents();
+            while (!b &&i< vuesPions.length){
+                if( vuesPions[i] instanceof VuePion){
+                    vuesPions[i] = vue;
+                    vuesPions[i].getMaTuile().supVuePion(vuesPions[i]);
+                    vuesPions[i].setMaTuile(this);
+                    mesVuesPions.add(vuesPions[i]);
+                    b=true;
+                }
+                i++;
+            }
+	}
+	
+
     public void supVuePion(VuePion vue){
-        mesVuePions.remove(vue);
+        if (vue.getMaTuile()==this){
+            boolean b = false;
+            int i = 0;
+            Component[] vuesPions =mesVuesPions.getComponents();
+            while (!b && vue!=vuesPions[i]){
+                i++;
+            }
+            vuesPions[i] = new JPanel();
+        }
     }
     public void changeFond(){
         repaint();

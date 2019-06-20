@@ -35,12 +35,12 @@ public class VueAventurier extends JPanel {
     private final JPanel panelAventurier;
     private final JPanel panelJScrool;
     Color couleur ;
-    private int[] coords;
     private JTextField position;
-    private JScrollPane pouvoir;
+    private final JScrollPane pouvoir;
     //A enlever apres demo
     private String nomJoueur;
     private VueCarte[] mesCartes;
+    private final int num; //numero de l'index de l'aventurier associer
     private final int NB_CARTE_MAX = 5;
     private JPanel panelCartes;
 	private void ajouterVueCarte(CarteUtils carte) throws IOException {
@@ -84,7 +84,7 @@ public class VueAventurier extends JPanel {
         return nomJoueur;
     }
 
-    public VueAventurier(String nomJoueur, Aventurier av) throws IOException{
+    public VueAventurier(String nomJoueur, Aventurier av, int num) throws IOException{
         this.nomJoueur = nomJoueur+" : "+av.toString();
         couleur = av.getPion().getCouleur();
         
@@ -93,7 +93,7 @@ public class VueAventurier extends JPanel {
         add (new JLabel(nomJoueur), BorderLayout.NORTH);
         setBackground(new Color(230, 230, 230));
         setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
-
+        this.num = num;
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
@@ -145,7 +145,7 @@ public class VueAventurier extends JPanel {
     public static void main(String[]args) throws IOException{
         JFrame j = new JFrame("Test");
         j.setSize(500,300);
-        VueAventurier av = new VueAventurier("Jimmy",new Messager(new Grille(5)));
+        VueAventurier av = new VueAventurier("Jimmy",new Messager(new Grille(5)),1);
         j.add(av);
         j.setVisible(true);
         

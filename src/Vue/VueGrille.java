@@ -30,7 +30,7 @@ public class VueGrille extends Observe {
         private ArrayList<VueTuile> vueModif;
         private MessageAction msg;
         private ArrayList<VuePion> mesPions;
-        
+        private MouseListener act;
         public static final int CHOIX_DEP=1;
         public static final int CHOIX_AS=2;
 	public VueGrille (Grille grille,ArrayList<Aventurier> avs){
@@ -43,6 +43,7 @@ public class VueGrille extends Observe {
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             initGrille(grille);
             creePion(avs);
+            vueModif = new ArrayList<>();
         }
         
         private void initGrille(Grille grille){
@@ -94,10 +95,11 @@ public class VueGrille extends Observe {
 
     public void actualise() {
         for (VueTuile tuile : vueModif){
+            tuile.removeMouseListener(act);
             tuile.activer(false);
             tuile.changeFond();
-            System.out.println("hey");
         }
+        vueModif.clear();
     }
 
     
@@ -114,8 +116,6 @@ public class VueGrille extends Observe {
         }
 
     public void faireChoixTuile( int a,ArrayList<Tuile> tuiles) {
-        vueModif= new ArrayList<>();
-            MouseListener act;
             act = new MouseListener() {
                 @Override
                 public void mouseReleased(MouseEvent arg0) {}
@@ -166,10 +166,8 @@ public class VueGrille extends Observe {
 
     public void deplacePion(Utils.Pion pion, Tuile t) {
         for (VuePion vuePion : mesPions){
-            System.out.println("J'y Passe");
             if (vuePion.getPion()==pion){
-                System.out.println(pion.getCouleur());
-                vuePion.setMaTuile(getVueTuile(t.getCoords()));
+                this.getVueTuile(t.getCoords()).addVuePion(vuePion);
             }
         }
     }

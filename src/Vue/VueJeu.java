@@ -6,6 +6,7 @@ import Controleur.Observe;
 import Controleur.Observateur;
 import Controleur.TypeAction;
 import Controleur.Utils;
+import Modele.Aventurier;
 import Modele.Grille;
 import Modele.Tuile;
 import java.awt.BorderLayout;
@@ -26,9 +27,6 @@ import javax.swing.JPanel;
 
 public class VueJeu extends Observe implements Observateur {
 
-    public static void IngenieurAssecherFT() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     private ArrayList<VueAventurier> mesVuesAvs;
     private VueGrille vueGrille;
@@ -41,7 +39,7 @@ public class VueJeu extends Observe implements Observateur {
     private VueAventurier vueAvTrActuel;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
-    private LabelInfo indications;
+    private JLabel indications;
     private int Nb_Boutons;
     private MessageAction msg;
     
@@ -51,6 +49,7 @@ public class VueJeu extends Observe implements Observateur {
                if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
                    vueGrille.faireChoixTuile(a, deplacement);
                }
+//Suivant sera pour choisir un aventurier
     }
 
     public void actualise() {
@@ -69,37 +68,15 @@ public class VueJeu extends Observe implements Observateur {
         return VueGrille.CHOIX_DEP;
     }
 
-    
-
-    
-    private class LabelInfo extends JPanel implements Runnable {
-        JLabel label;
-        String str;
-        public LabelInfo(String texte){
-            super();
-            add(new JLabel("Indications :"));
-            str=texte;
-            label = new JLabel(texte);
-            label.setFont(new java.awt.Font(Font.SANS_SERIF, Font.BOLD, 14));
-            label.setForeground(Color.MAGENTA);
-            add(label);
-            Thread t = new Thread(this);
-            t.start();
-          }
-
-          @Override
-          public void run(){
-            while(true){
-                char c = str.charAt(0);
-                String rest = str.substring(1);
-                str = rest + c;
-                label.setText(str);
-                try{
-                    Thread.sleep(500);
-                }catch(InterruptedException e){ e.printStackTrace();}
-            }
-        }
+    public void faireChoixAventuriers(ArrayList<Aventurier> avsDonsCarte) {
+       
     }
+
+    public void finDeplacement(Aventurier av,Tuile t) {
+        this.actualise();
+        deplacePion(av.getPion(),t);
+    }
+
     public class MonteeDesEaux extends PanelImage {
         private int niveauEau;
         private MonteeDesEaux() throws IOException { 
@@ -197,7 +174,7 @@ public class VueJeu extends Observe implements Observateur {
         decks.add(decksHaut, BorderLayout.NORTH);
         decks.add(decksBas,BorderLayout.CENTER);
         //panelBoutons
-        indications = new LabelInfo("Coucou je m'apelle jimmy ");
+        indications = new JLabel("Coucou je m'apelle jimmy ",JLabel.CENTER);
         indications.setPreferredSize(new Dimension(panelCentre.getWidth(),30));
         indications.setBackground(Color.white);
         panelCentre.add(indications,BorderLayout.NORTH);
@@ -294,7 +271,7 @@ public class VueJeu extends Observe implements Observateur {
         mesVuesAvs = new ArrayList<>();
         int taille = av.size();
         for (int i =0;i<taille;i++){
-            mesVuesAvs.add(new VueAventurier(mesNoms.get(i), av.get(i)));
+            mesVuesAvs.add(new VueAventurier(mesNoms.get(i), av.get(i),i));
         }
     }
     public void setTrActuel(int index) {

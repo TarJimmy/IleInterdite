@@ -33,11 +33,11 @@ public class VuePion extends JPanel {
     }
 
     public void setMaTuile(VueTuile maTuile) {
-        if (this.maTuile!=null){
-            this.maTuile.supVuePion(this);
-        }
         this.maTuile = maTuile;
-        maTuile.addVuePion(this);
+    }
+
+    public VueTuile getMaTuile() {
+        return maTuile;
     }
     
     /**
