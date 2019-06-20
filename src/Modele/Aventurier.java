@@ -20,6 +20,10 @@ public abstract class Aventurier {
     Utils.Pion pion;
     private static HashSet<Utils.tresor> tresorsRecuperer = new HashSet<>();
 
+    public static HashSet<Utils.tresor> getTresorsRecuperer() {
+        return tresorsRecuperer;
+    }
+
     /**
      * initialise un aventurier avec 3 actions, sans carte
      */
