@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import javax.swing.JPanel;
 
 /**
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 public class VuePion extends JPanel {
     private VueTuile maTuile;
     private Pion pion;
+    
     public VuePion(Pion pion){
         this.pion = pion;
         setBackground(Color.white);
@@ -39,13 +41,30 @@ public class VuePion extends JPanel {
      * @param g
      */
     @Override
+    @SuppressWarnings("empty-statement")
     public void paintComponent(Graphics g) {
         
         Dimension dimension = getSize(); // Taille de la zone de dessin
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.red);//En rouge
-        g.fillArc(0,0,50,50,0,180);//Demi cercle plein
-        g.setColor(Color.black);//couleur noire
-        g.drawArc(0,0,50,50,0,180);//Demicercle vide
-    }
-}
+        g.setColor(Color.BLACK);//Couleur du détour
+        
+        int taille;
+        taille = (int)Math.min(dimension.getWidth()*0.3,dimension.getHeight()*0.3);
+        int start;
+        start = (int)(dimension.getWidth()/2)-(taille/2);
+        int end;
+        end = (int)(dimension.getWidth()/2)+(taille/2);   
+        
+        g.drawOval(start, 0, taille, taille);
+        
+        int x[];
+        x = new int[] {start-(taille/2),end+(taille/2),(int)(dimension.getWidth()/2)};//contour du cercle
+        
+        int y[];
+        y = new int[] {(int)(dimension.getHeight()),(int)(dimension.getHeight()),taille/2};
+        
+        g.drawPolygon(x, y, 3);//contour du triangle
+        
+        g.setColor(pion.getCouleur());//couleur du pion
+        g.fillOval(start, 0, taille, taille);
+        g.fillPolygon(x, y, 3);
