@@ -18,7 +18,7 @@ public class MessageAction extends Message {
     public TypeAction typeact;
     public Tuile tui;
     public int[] coord;
-    public ArrayList<VueAventurier> VueAv;
+    public ArrayList<VueAventurier> vueAv;
     public VueCarte vueCarte;
     public MessageAction(){
         super.type = TypeMessage.ACTION;

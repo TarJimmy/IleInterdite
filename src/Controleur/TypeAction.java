@@ -17,6 +17,8 @@ package Controleur;
         CHOIX_TUILE_DEP,
         CHOIX_TUILE_AS,
         CHOIX_AV_DONCARTE,
+        CHOIX_CARTE_DONCARTE,
+        CHOIX_DONCARTE,
         TERMINER_TOUR;
     }
 

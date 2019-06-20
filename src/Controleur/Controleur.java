@@ -31,7 +31,6 @@ public class Controleur implements Observateur {
     private ArrayList<VuePion> mesPions;
     
     
-    
     Controleur() throws IOException{
         accueil = new VueAccueil();
         accueil.addObservateur(this);
@@ -120,7 +119,7 @@ public class Controleur implements Observateur {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void checkFinTour(){
-        if(getAvTrActuel().getActionsRestantes() == 0 ){
+        if(getAvTrActuel().getActionsRestantes() <= 0 ){
             if(getAvTrActuel() instanceof Ingenieur && ((Ingenieur) getAvTrActuel()).aAssecher()){
                 //ihm fonction uniquement assecher
                // VueJeu.IngenieurAssecherFT();
@@ -132,7 +131,7 @@ public class Controleur implements Observateur {
     
     public void finTour(){
         if(!partieGagne()){
-            piocher();
+//            piocher();
             addIndex();
             debutTour();
         }
@@ -157,27 +156,18 @@ public class Controleur implements Observateur {
             mesAventuriers.remove(mesAventuriers.get(mesAventuriers.size()-1));
         }
     }
-    private ArrayList<VueAventurier> translateAve_VueAvs(ArrayList<Aventurier> avs){
-        return null;
-    }
-    private CarteJoueur translate_VueCarte_Carte(VueCarte vueCarte){
-        return null;
-    }
-
     /**
      *
      * @param msg
      */
     @Override
     public void traiterMessage(Message msg) {
-        System.out.println("Jy passe");
         switch(msg.type){
             case DEBUTJEU:
                 accueil.afficher(false);
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
             try {
-                System.out.println(msg.noms);
                 jeu = new VueJeu(grille,mesAventuriers,msg.noms);
             } catch (IOException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -185,31 +175,25 @@ public class Controleur implements Observateur {
         
                 jeu.afficher(true);
                 jeu.addObservateur(this);
-                debutTour();
-                
-
-                
-                
-                
-                
+                debutTour(); 
             case ACTION:
                 
                 break;
         }
     }
+    public VueAventurier translateAve_VueAvs(){
+        
+    }
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
         Tuile t;
-        int a;
         switch(msg.typeact){
             case DEPLACER:
-                a = 1;
-                jeu.faireChoixTuile(a, getAvTrActuel().getDeplacement(grille)); //a faire 
+                jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille)); 
                 break;
             case ASSECHER:
-                a=2;
-                jeu.faireChoixTuile(a,getAvTrActuel().getAssechement(grille));
+                jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
             break;
             case TERMINER_TOUR:
                 finTour();
@@ -218,13 +202,16 @@ public class Controleur implements Observateur {
                 break;
             case DONNERCARTE:
                 int c=0;
-                //vueGrille.faireChoixVueAventuriers(translateAve_VueAvs(getAvTrActuel().getAvsDonsCarte(getMesAventuriers())));
+                jeu.faireChoixVueAventuriers(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()));
+                
                 break;
             case CHOIX_TUILE_DEP:
+                System.out.println(getAvTrActuel().getMaPos().getNom());
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().deplacer(t);
-                
                 jeu.actualise();
+                System.out.println(getAvTrActuel().getMaPos().getNom());
+                jeu.deplacePion(getAvTrActuel().getPion(),t);
                 checkFinTour();
                 break;
             case CHOIX_TUILE_AS:
@@ -232,15 +219,19 @@ public class Controleur implements Observateur {
                 getAvTrActuel().assecher(t);
                 checkFinTour();
                 break;
-            case CHOIX_AV_DONCARTE:
+            case CHOIX_DONCARTE:
                 /*Aventurier receveur = getMesAventuriers().get(getMesVuesAventuriers().indexOf(msg.VueAv));
                 
                 getAvTrActuel().DonnerCarte(carte, receveur);
                 CheckNbCarte(receveur);//finir*/
-                 break;
-            
                 
                 
+                
+                
+                
+                
+                
+                break;
         }
     }
 
@@ -254,3 +245,6 @@ public class Controleur implements Observateur {
 
     
 }
+
+
+

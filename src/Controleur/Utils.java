@@ -36,21 +36,25 @@ public class Utils {
     }
 
     public static enum Pion {
-        ROUGE("Rouge", new Color(255, 0, 0)),
-        VERT("Vert", new Color(0, 195, 0)),
-        BLEU("Bleu", new Color(55,194,198)),
-        ORANGE("Orange", new Color(255, 148, 0)),
-        VIOLET("Violet", new Color(204, 94, 255)),
-        JAUNE("Jaune", new Color(255, 255, 0)),  
-        GRIS("Blanc", Color.LIGHT_GRAY),
-        NOIR("Noir", Color.darkGray);
+        ROUGE("Rouge", new Color(255, 0, 0), new Color(176, 79, 79), new Color(255, 145, 145), new Color(226,166,166)),
+        VERT("Vert", new Color(0, 195, 0), new Color(79, 153, 79), new Color(145, 255, 145), new Color(166,226,166)),
+        BLEU("Bleu", new Color(55,194,198), new Color(100,153,154), new Color(175,221,221), new Color(202,219,219)),
+        ORANGE("Orange", new Color(255, 148, 0), new Color(176, 135, 79), new Color(255, 199, 127), new Color(246,198,135)),
+        VIOLET("Violet", new Color(204, 94, 255), new Color(146, 115, 176), new Color(211, 164, 234), new Color(202,176,214)),
+        JAUNE("Jaune", new Color(255, 255, 0), new Color(176, 176, 79), new Color(255, 255, 140), new Color(245,245,148)) ;    
+
         private final String libelle ;
         private final Color couleur ;
+        private final Color couleurGrisee ;
+        private final Color couleurSelectionTuileAssechee ;
+        private final Color couleurSelectionTuileInondee ;
 
-
-        Pion (String libelle, Color couleur) {
+        Pion (String libelle, Color couleur, Color couleurGrisee, Color couleurSelectionTuileAssechee, Color couleurSelectionTuileInondee) {
             this.libelle = libelle ;
             this.couleur = couleur ;
+            this.couleurGrisee = couleurGrisee ;
+            this.couleurSelectionTuileAssechee = couleurSelectionTuileAssechee ;
+            this.couleurSelectionTuileInondee = couleurSelectionTuileInondee ;
         }
 
         @Override
@@ -62,6 +66,19 @@ public class Utils {
             return this.couleur ;
         }
 
+        public Color getCouleurGrisee() {
+            return this.couleurGrisee ;
+        }
+
+        public Color getCouleurSelectionAssechee() {
+            return this.couleurSelectionTuileAssechee ;
+        }
+
+        public Color getCouleurSelectionInondee() {
+            return this.couleurSelectionTuileInondee ;
+        }
+
+
         static Pion getFromName(String name) {
             if (ROUGE.name().equals(name)) return ROUGE ;
             if (VERT.name().equals(name)) return VERT ;
@@ -71,6 +88,7 @@ public class Utils {
             if (JAUNE.name().equals(name)) return JAUNE ;
             return null ;
         }
+
     }
 
     public static ArrayList<Modele.Aventurier> melangerAventuriers(ArrayList<Modele.Aventurier> arrayList) {
@@ -85,6 +103,69 @@ public class Utils {
         CRISTAL_ARDENT,
         CALICE_ONDE;
     }
+    public enum CarteUtils {
+    calice("Calice","cartes/Calice.png"),
+    caverneDuBrasier("Caverne Du Brasier","cartes/CaverneDuBrasier.png"),
+    cristal("Cristal","cartes/Cristal.png"),
+    heliport("Héliport","cartes/Heliport.png"),
+    caverneDesOmbres("La Caverne Des Ombres","cartes/LaCaverneDesOmbres.png"),
+    foretPoupre("La Forêt Poupre","cartes/LaForetPoupre.png"),
+    portedOr("La Porte d'Or","cartes/LaPorteDOr.png"), 
+    porteDeBronze("La Porte de Bronze","cartes/LaPorteDeBronze.png"),
+    porteDeCuivre("La Porte de Cuivre","cartes/LaPortedeCuivre.png"),
+    porteDeFer("La Porte De Fer","cartes/LaPorteDeFer.png"),
+    portedArgent("La Porte d'Argent","cartes/LaPortedArgent.png"),
+    tourDeGuet("La Tour de Guet","cartes/LaTourDeGuet.png"),
+    jardinDesHurlements("Le jardin Des hurlements","cartes/LeJardinDesHurlements.png"),
+    jardinDesMurmures("Le jardin des Murmures","cartes/LeJardinDesMurmures.png"),
+    lagonPerdu("Le Lagon Perdu","cartes/LeLagonPerdu.png"),
+    maraisBrumeux("le Marais brumeux","cartes/LeMaraisBrumeux.png"),
+    palaisDeCorail("Le Palais De Corail","cartes/LePalaisDeCorail.png"),
+    pontDesAbimes("Le Pont des Abimes","cartes/LePontdesAbimes.png"),
+    rocherFantome("Le Rocher Fantome","cartes/LeRocherFantome.png"),
+    templeDeLaLune("Le Temple de la Lune","cartes/LeTempleDeLaLune.png"),
+    templeDusoleil("Le Temple du Soleil","cartes/LeTempleDuSoleil.png"),
+    valDuCrepuscule("Le Val du Crépuscule","cartes/LeValDuCrepuscule.png"),
+    dunesDelIllusion("Les Dunes de L'Illusion","cartes/LesDunesDeLIllusion.png"),
+    falaisesDelOublie("Les Falaises de L'Oublie","cartes/LesFalaisesDeLOublie.png"),
+    monteeDesEaux("Montée des eaux","cartes/MonteeDesEaux.png"),
+    observatoire("Observatoire","cartes/Observatoire.png"),
+    pierre("Pierre","cartes/Pierre.png"),
+    zephyr("Zéphyr","cartes/Zephyr.png"),
+    sacsDeSable("Sacs de Sable","cartes/SacsDeSable.png");
+    
+    
+    
+    private String nom;
+    private String chemin;
+    
+    CarteUtils(String nom,String chemin){
+        this.nom = nom;
+        this.chemin = chemin;
+    }
+    //getteurs et setteurs
+    //
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getChemin() {
+        return chemin;
+    }
+
+    public void setChemin(String chemin) {
+        this.chemin = chemin;
+    }
+    //
+    
+    public ImageIcon getImage(){
+        return new ImageIcon(getClass().getResource(CarteUtils.this.getChemin()));
+    }
+}
     public enum TuilesUtils {
     pont_des_abimes("Le Pont des Abimes","TuilesAssechees/LePontDesAbimes.png","TuilesInondees/LePontDesAbimes_Inonde.png"),
     heliport("Héliport","TuilesAssechees/Heliport.png","TuilesInondees/Heliport_Inonde.png"),
