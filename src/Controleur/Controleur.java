@@ -52,7 +52,7 @@ public class Controleur implements Observateur {
         jeu.setTrActuel(index);
     }
     private void addIndex(){
-        index = (index+1)/getMesAventuriers().size();
+        index = (index+1)%getMesAventuriers().size();
     }
     public void piocher (){
         for (int i = 0; i < 2; i++) {
@@ -181,9 +181,6 @@ public class Controleur implements Observateur {
                 break;
         }
     }
-    public VueAventurier translateAve_VueAvs(){
-        
-    }
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
@@ -202,7 +199,7 @@ public class Controleur implements Observateur {
                 break;
             case DONNERCARTE:
                 int c=0;
-                jeu.faireChoixVueAventuriers(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()));
+                jeu.faireChoixAventuriers(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()));
                 
                 break;
             case CHOIX_TUILE_DEP:
@@ -210,8 +207,7 @@ public class Controleur implements Observateur {
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().deplacer(t);
                 jeu.actualise();
-                System.out.println(getAvTrActuel().getMaPos().getNom());
-                jeu.deplacePion(getAvTrActuel().getPion(),t);
+                jeu.deplacePion(getAvTrActuel().getPion(), t);
                 checkFinTour();
                 break;
             case CHOIX_TUILE_AS:
