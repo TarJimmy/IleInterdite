@@ -16,10 +16,34 @@ import javax.imageio.ImageIO;
  */
 import javax.swing.JPanel;
 public class PanelImage extends JPanel{
-        private java.awt.Image image;
+        protected java.awt.Image image;
         private String nomIm;
+        private boolean vide;
         public PanelImage(String nom) throws IOException { 
-            setDoubleBuffered(true); 
+            vide=false;
+            setImage(nom);
+        
+    }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(vide==false){
+                        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        }
+
+    public String getNomIm() {
+        return nomIm;
+    }
+    public void toogleVide(){
+        vide = !vide;
+    }
+
+    public boolean isVide() {
+        return vide;
+    }
+    protected void setImage(String nom){
+        setDoubleBuffered(true); 
             setNomIm(nom);
             setBackground(Color.white);
         try {
@@ -27,16 +51,10 @@ public class PanelImage extends JPanel{
         } catch (IOException ex) {
             System.err.println("Erreur de lecture de "+nom);
         }
-        
-    }
+    }     
 
     public void setNomIm(String nomIm) {
         this.nomIm = nomIm;
     }
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-        }
 }
 
