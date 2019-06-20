@@ -68,3 +68,5 @@ public class VuePion extends JPanel {
         g.setColor(pion.getCouleur());//couleur du pion
         g.fillOval(start, 0, taille, taille);
         g.fillPolygon(x, y, 3);
+    }
+}
