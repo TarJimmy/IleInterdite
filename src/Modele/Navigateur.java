@@ -1,6 +1,7 @@
 package Modele;
 
 import Controleur.Utils;
+import java.util.ArrayList;
 
 
 public class Navigateur extends Aventurier {
@@ -9,7 +10,7 @@ public class Navigateur extends Aventurier {
         super.setPion(Controleur.Utils.Pion.JAUNE);
     }
     public Navigateur(Grille grille){
-        super.setMaPos(grille.getTuile(Utils.TuilesUtils.porte_dor));
+        super(grille.getTuile(Utils.TuilesUtils.porte_dor));
         super.setPion(Controleur.Utils.Pion.JAUNE);
     }
 
@@ -20,6 +21,14 @@ public class Navigateur extends Aventurier {
     
     @Override
     public String getDescription() {
-        return "Déplacez un autre joueur d'1 ou \n2 tuiles adjacentes pour 1 action";
+        return "Déplacez un autre joueur d'1 ou 2 tuiles adjacentes pour 1 action";
     }
+
+    @Override
+    public ArrayList<Tuile> getDeplacementNav(Grille grille) {
+        return getDeplacement(grille);
+    }
+    
+    
+    
 }

@@ -15,25 +15,25 @@ public class DeckTresor implements Deck {
         pioche = new ArrayList<>();
         defausse = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            getDefausse().add(new CarteTresor(Controleur.Utils.tresor.CALICE_ONDE));
-            getDefausse().add(new CarteTresor(Controleur.Utils.tresor.CRISTAL_ARDENT));
-            getDefausse().add(new CarteTresor(Controleur.Utils.tresor.PIERRE_SACREE));
-            getDefausse().add(new CarteTresor(Controleur.Utils.tresor.STATUE_ZEPHYR));
+            getPioche().add(new CarteTresor(Controleur.Utils.tresor.CALICE_ONDE));
+            getPioche().add(new CarteTresor(Controleur.Utils.tresor.CRISTAL_ARDENT));
+            getPioche().add(new CarteTresor(Controleur.Utils.tresor.PIERRE_SACREE));
+            getPioche().add(new CarteTresor(Controleur.Utils.tresor.STATUE_ZEPHYR));
         }
         for (int i = 0; i < 3; i++) {
-            getDefausse().add(new CarteMonteeEau());
-            getDefausse().add(new Helicoptere());
+            getPioche().add(new CarteMonteeEau());
+            getPioche().add(new Helicoptere());
         }
         for (int i = 0; i < 2; i++) {
-            getDefausse().add(new SacDeSable());
+            getPioche().add(new SacDeSable());
         }
-        ResetPioche();
+        Melanger();
     }
     
     
     @Override
     public void Melanger() {
-        Collections.shuffle(getDefausse());
+        Collections.shuffle(getPioche());
     }
 
     public ArrayList<CarteJoueur> getPioche() {
@@ -60,9 +60,9 @@ public class DeckTresor implements Deck {
 
     @Override
     public void ResetPioche() {
-        Melanger();
         getPioche().addAll(getDefausse());
         getDefausse().clear();
+        Melanger();
     }
 
 }

@@ -22,31 +22,49 @@ public class Tuile {
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
+
+    /**
+     * Cree une tuile assechee
+     * @param nom
+     */
     public Tuile(TuilesUtils nom) {
         this.setNom(nom);
         this.setEtat(EtatTuile.ASSECHEE);
     }
-    public Tuile(TuilesUtils nom, int[] coords) {
-        this.setNom(nom);
-        this.setEtat(EtatTuile.ASSECHEE);
-        this.setCoords(coords);
-    }
+
     
 
     //GETTERS
     
+    /**
+     *
+     * @return
+     */
+        
     public TuilesUtils getNom() {
         return nom;
     }
 
+    /**
+     *
+     * @return
+     */
     public EtatTuile getEtat() {
         return etat;
     }
 
+    /**
+     *
+     * @return
+     */
     public int[] getCoords() {
         return coords;
     }
 
+    /**
+     *
+     * @return
+     */
     public tresor getTresor() {
         return tresor;
     }
@@ -61,58 +79,71 @@ public class Tuile {
         this.etat = etat;
     }
     
+    /**
+     *
+     * @param Coords
+     */
     public void setCoords(int[] Coords) {
         this.coords = Coords;
     }
 
+    /**
+     * Met à jour le tresor
+     * @param tresor
+     */
     public void setTresor(tresor tresor) {
         this.tresor = tresor;
     }
     
     //methodes
     
+    /**
+     *
+     * @return vrai si la tuile est mouillee (pas assechée)
+     */
+        
     public boolean estMouillee(){
         return this.etat != EtatTuile.ASSECHEE;
-            
     }
     
+    /**
+     *
+     * @return vrai si la tuile est disponible (pas coulée)
+     */
     public boolean estDisponible(){
         return this.etat != EtatTuile.COULEE;
-            
     }
     
+    /**
+     * Innonde la tuile
+     */
     public void Innonder(){
         
          switch (etat) {
             case ASSECHEE:
                 etat = EtatTuile.INONDEE;
-                System.out.println("La tuile est devenue innondee");
                 break;
             case INONDEE:
                 etat = EtatTuile.COULEE;
-                System.out.println("La tuile est devenue coulee");
                 break;
             default:
-                System.out.println("La tuile est déjà coulée");
                 break;
         }
     }
     
+    /**
+     * Asseche la tuile
+     */
     public void Assecher(){
-         switch (etat) {
-            case INONDEE:
+         if (etat == EtatTuile.INONDEE){
                 etat = EtatTuile.ASSECHEE;
-                System.out.println("La tuile est devenue assechée");
-                break;
-            case ASSECHEE:
-                System.out.println("La tuile est déjà asséchée");
-                break;
-            default:
-                System.out.println("La tuile est coulée et ne peut être asseché");
-                break;
         }
     }
     
+    /**
+     *
+     * @return Vrai si la tuile est innondée
+     */
     public boolean isInnondee(){
         return this.etat == EtatTuile.INONDEE;
     }

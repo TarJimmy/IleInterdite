@@ -9,7 +9,7 @@ public class Messager extends Aventurier {
         super.setPion(Controleur.Utils.Pion.GRIS);
     }
     public Messager(Grille grille){
-        super.setMaPos(grille.getTuile(Utils.TuilesUtils.porte_dargent));
+        super(grille.getTuile(Utils.TuilesUtils.porte_dargent));
         super.setPion(Controleur.Utils.Pion.GRIS);
     }
 
@@ -28,6 +28,6 @@ public class Messager extends Aventurier {
 
     @Override
     public String getDescription() {
-        return "Donnez des cartes Trésor à un \njoueur n'importe où sur \nl'île pour 1 action par carte";
+        return "Donnez des cartes Trésor à un joueur n'importe où sur l'île pour 1 action par carte";
     }
 }

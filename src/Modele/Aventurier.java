@@ -4,58 +4,102 @@ import Controleur.Utils;
 
 import java.util.*;
 
+/**
+ *
+ * @author Gholbin
+ */
 public abstract class Aventurier {
 
     private Tuile maPos;
     ArrayList<CarteJoueur> mesCartes;
+
+    /**
+     * 
+     */
     protected int actionsRestantes;
     Utils.Pion pion;
     private static HashSet<Utils.tresor> tresorsRecuperer = new HashSet<>();
+
+    /**
+     * initialise un aventurier avec 3 actions, sans carte
+     */
     public Aventurier() {
         setActionsRestantes(3);
         mesCartes = new ArrayList<>();
     }
 
+    /**
+     * Met à jour la tuile où il se situe
+     * @param maPos
+     */
     public Aventurier(Tuile maPos) {
         this.maPos = maPos;
     }
     
-
+    /**
+     *  
+     * @return le pion
+     */
     public Utils.Pion getPion() {
         return pion;
     }
     
+    /**
+     * Met à jour le pion
+     * @param pion
+     */
     protected void setPion(Utils.Pion pion){
         this.pion = pion;
     }
     
+    /**
+     * Deplace le joueur sans lui couter de point d'action (Helicoptere, Navigateur,...)
+     * @param tuile
+     */
     public void deplaceHorsTour(Tuile tuile){
         setMaPos(tuile);
     }
     
+    /**
+     * Deplace le joueur, cela lui coûte un point d'action
+     * @param tuile
+     */
     public void deplacer(Tuile tuile) {
         setMaPos(tuile);
         actionsRestantes--;
     }
+
+    /**
+     * 
+     * @return Le nom de l'aventurier (Pilote, Nvaigateur,...)
+     */
     public abstract String getNomAventurier();
     
-    public static HashSet<Utils.tresor> getTresorsRecuperer() {
-        return tresorsRecuperer;
-    }
 
-
+    /**
+     * 
+     * @param tuile
+     */
     public void assecher(Tuile tuile) {
         tuile.Assecher();
         actionsRestantes--;
     }
 
+    /**
+     *
+     * @param carte
+     * @param av
+     */
     public void DonnerCarte(CarteJoueur carte, Aventurier av) {
         av.AddCarte(carte);
         SupprimerCarte(carte);
         actionsRestantes--;
     }
 
-    
+    /**
+     *
+     * @return le tresor que l'aventurier peut recuperer, null s'il n'y en a pas
+     */
     public Utils.tresor checkGagnerTresor(){
         Utils.tresor tres = getMaPos().getTresor();
         int nbCarteTresor = 0;
@@ -69,8 +113,12 @@ public abstract class Aventurier {
         return (nbCarteTresor >=4)?tres:null;
     }
 
-    public boolean GagnerTresor(Utils.tresor tres) {
-        if(getTresorsRecuperer().contains(tres)){
+    /**
+     * Retire les cartes tresor ayant le tresor tres
+     * @param tres
+     * 
+     */
+    public void GagnerTresor(Utils.tresor tres) {
             int nbRetirés = 0;
             Iterator it = getCartes().iterator();
             while(it.hasNext() && nbRetirés < 4){
@@ -81,17 +129,29 @@ public abstract class Aventurier {
                     nbRetirés++;
                 }
             }
-        }
-        return true;
     }
 
+    /**
+     *
+     * @return toutes les cartes
+     */
     public ArrayList<CarteJoueur> getCartes() {
         return mesCartes;
     }
     
+    /**
+     *
+     * @param avs
+     * @return Les aventuriers à portée pour un don de carte
+     */
     public ArrayList<Aventurier> getAvsDonsCarte(ArrayList<Aventurier> avs){
         return getAvsHelicoptere(avs);
     }
+
+    /**
+     *
+     * @return Les cartes qu'il peut donner
+     */
     public ArrayList<CarteJoueur> getCartesDonnables(){
         ArrayList<CarteJoueur> donnables = new ArrayList<>();
         for(CarteJoueur c : getCartes()){
@@ -101,29 +161,55 @@ public abstract class Aventurier {
         }
         return donnables;
     }
+
+    /**
+     *
+     * @return Les cartes special qu'il possède
+     */
     public ArrayList<CarteJoueur> getCartesSpecial(){
         ArrayList<CarteJoueur> speciales = getCartes();
         speciales.removeAll(getCartesDonnables());
         return speciales;
     }
     
-    
-
+    /**
+     * Retire carte de la main du joueur
+     * @param carte
+     */
     public void SupprimerCarte(CarteJoueur carte) {
         getCartes().remove(carte);
     }
 
+    /** 
+     * Ajoute la carte à la main du joueur
+     * @param carte
+     */
     public void AddCarte(CarteJoueur carte) {
         getCartes().add(carte);
     }
 
+    /**
+     *
+     * @return le nombre de cartes que possède le joueur
+     */
     public int nbCarte() {
         return getCartes().size();
     }
 
+    /**
+     *
+     * @param tuile
+     * @return Vrai si le joueur peut aller sur la tuile
+     */
     public boolean checkDeplacement(Tuile tuile) {
         return tuile.estDisponible();
     }
+
+    /**
+     *
+     * @param grille
+     * @return Les tuiles où le navigateur peut deplacer le joueur
+     */
     public ArrayList<Tuile> getDeplacementNav(Grille grille){
         ArrayList<Tuile> collecTuiles1 = grille.getVoisins(getMaPos(),getCoordsProche());
         ArrayList<Tuile> collecTuiles2 = new ArrayList<>();
@@ -149,7 +235,11 @@ public abstract class Aventurier {
         return collecTuiles2;
     }
     
-    
+    /**
+     *
+     * @param grille
+     * @return Les tuiles où le joueur peut aller
+     */
     public ArrayList<Tuile> getDeplacement(Grille grille) {
         ArrayList<Tuile> collecTuiles = grille.getVoisins(getMaPos(),getCoordsProche());
         Iterator it = collecTuiles.iterator();
@@ -160,11 +250,17 @@ public abstract class Aventurier {
         return collecTuiles;
     }
 
+    /**
+     * Reinitialise les actions pour le debut du tour
+     */
     public void DebutTour() {
         setActionsRestantes(3);
     }
 
-
+    /**
+     *
+     * @return Les coordonnées relatives à portée du joueur
+     */
     public ArrayList<int[]> getCoordsProche() {
         ArrayList<int[]> coords = new ArrayList<>();
         int d;
@@ -179,9 +275,11 @@ public abstract class Aventurier {
         return coords;
     }
      
-
-
-
+    /**
+     *
+     * @param grille
+     * @return Les tuiles assechables à portée du joueur
+     */
     public ArrayList<Tuile> getAssechement(Grille grille) {
         ArrayList<int[]> coords = getCoordsProche();
         coords.add(new int[] {0,0});
@@ -194,19 +292,35 @@ public abstract class Aventurier {
         return collecTuiles;
     }
 
-
+    /**
+     *
+     * @param tui
+     * @return Vrai si la tuile est assechable
+     */
     public boolean checkAssechement(Tuile tui) {
         return tui.isInnondee();
     }
 
+    /**
+     *
+     * @return La position du joueur
+     */
     public Tuile getMaPos() {
         return maPos;
     }
 
-    public void setMaPos(Tuile maPos) { //Doit etre changer en private apres demo
+    /**
+     * Met à jour la position du joueur
+     * @param maPos
+     */
+    private void setMaPos(Tuile maPos) {
         this.maPos = maPos;
     }
 
+    /**
+     *
+     * @return Le nombre d'actions restantes
+     */
     public int getActionsRestantes() {
         return actionsRestantes;
     }
@@ -214,10 +328,16 @@ public abstract class Aventurier {
     private void setActionsRestantes(int actionsRestantes) {
         this.actionsRestantes = actionsRestantes;
     }
+    @Override
     public String toString(){
         return getNomAventurier();
     }
     
+    /**
+     *
+     * @param avs
+     * @return renvoie les Aventurier avec qui il peut partir en helicoptere 
+     */
     public ArrayList<Aventurier> getAvsHelicoptere(ArrayList<Aventurier> avs){
         ArrayList<Aventurier> voisins = new ArrayList<>();
         for(Aventurier av : avs){
@@ -228,6 +348,10 @@ public abstract class Aventurier {
         return voisins;
     }
     
+    /**
+     *
+     * @return renvoie la description des pouvoirs de l'aventurier
+     */
     public abstract String getDescription();
     
     

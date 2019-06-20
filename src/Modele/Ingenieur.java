@@ -46,9 +46,9 @@ public class Ingenieur extends Aventurier {
     }
 
     @Override
-    public boolean GagnerTresor(tresor tres) {
+    public void GagnerTresor(tresor tres) {
         setaAssecher(false);
-        return super.GagnerTresor(tres);
+        super.GagnerTresor(tres);
     }
     
     @Override

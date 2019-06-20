@@ -3,26 +3,52 @@ package Modele;
 import Controleur.Utils;
 import java.util.*;
 
+/**
+ *
+ * @author Gholbin
+ */
 public final class Grille {
 
-    public static Tuile[][] mesTuiles;
+    /**
+     * contient toutes les tuiles de la grille
+     */
+    public Tuile[][] mesTuiles;
+    
+    
+    /**
+    * echelon de montee d'eau, va de 1 à 10
+    */
     private int EchelonMonteEau;
  
+    /**
+     * crée une grille et l'initialise
+     * @param echelon
+     */
     public Grille(int echelon){
         this.EchelonMonteEau=echelon;
         initTableau();
     }
+
+    /**
+     *Monte le niveau d'eau (echelon)
+     */
     public void MonterNiveauDeau(){
         EchelonMonteEau++;
     }
 
+    /**
+     *
+     * @return le niveau d'eau (de 1 à 10)
+     */
     public int getEchelonMonteEau() {
         return EchelonMonteEau;
     }
     
-    
-    
-    
+    /**
+     *
+     * @param nom
+     * @return la tuile qui s'appelle nom
+     */
     public Tuile getTuile(Utils.TuilesUtils nom){
         Tuile tui = null;
         System.out.println(nom);
@@ -84,28 +110,22 @@ public final class Grille {
         
     }
 
-        
-              
-    
 
-
-
-
-    public boolean partieGagner() {
-        return false;
-            // TODO - implement Grille.partieFini
-            
-    }
 
     /**
      * 
-     * @param Tuile
- * @return 
+    * @return un tableau de 6 par 6 de Tuile
      */
     public Tuile[][] getMesTuiles() {
             return mesTuiles;
     }
     
+    /**
+     *
+     * @param depart
+     * @param coords
+     * @return renvoie les tuiles aux coordonnées relatives coords par rapport à depart
+     */
     public ArrayList<Tuile> getVoisins(Tuile depart, ArrayList<int[]> coords) {
             ArrayList<Tuile> voisins = new ArrayList<>();
             int x,y;
@@ -124,7 +144,9 @@ public final class Grille {
 
     /**
      * 
-     * @param coords
+     * @param x de 0 à 5
+     * @param y de 0 à 5
+     * @return la tuile au coordonnées x et y si elle existe null sinon
      */
 
 
@@ -136,6 +158,10 @@ public final class Grille {
         }
     }
 
+    /**
+     *
+     * @return toutes les tuiles disponibles
+     */
     public ArrayList<Tuile> getTuilesDisponibles() {
         ArrayList<Tuile> tuilesDispos = new ArrayList<>();
         for (Tuile[] mesTuile : mesTuiles) {
@@ -149,36 +175,5 @@ public final class Grille {
         }
         return tuilesDispos;
     }
-    
-    public static void main(String[]args){
-        Grille grille = new Grille(2);
-        Ingenieur ing = new Ingenieur(grille);
-        System.out.println(ing.getDeplacement(grille));
-//        ArrayList<int[]> coords = new ArrayList<>();
-//        coords.add(new int[] {0,1});
-//        coords.add(new int[] {1,0});
-//        System.out.println("on peut bien ajouter des valeur dans ce vecteur");
-//        Tuile depart = grille.getTuile(3,3);
-//        System.out.println("la tuile est bien recuperer");
-//        
-//       ArrayList<Tuile> voisins = grille.getVoisins(depart,coords);
-        //    System.out.println(grille.getTuile(nomTuile.caverne_du_brasier));
-//                
-//        //for(Tuile tui : voisins){
-//            int[] coord = depart.getCoords();
-//            System.out.println("les coordonnees sont : x = " + coord[0] + " y = " + coord[1]);
-//        //}
-//        for (int x=0;x<grille.mesTuiles.length;x++){
-//            for(int y=0;y<grille.mesTuiles[x].length;y++){
-//               if(grille.mesTuiles[x][y] != null){
-//                    System.out.println(grille.mesTuiles[x][y].getNom());
-//               }else{
-//                   System.out.println("NULL");
-//               }
-//            }
-//        } 
-//        System.out.println("coucou");
 
-                
-    }
 }
