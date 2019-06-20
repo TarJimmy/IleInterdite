@@ -20,7 +20,11 @@ import javax.swing.JPanel;
 
 public class VuePion extends JPanel {
     private VueTuile maTuile;
-    private Pion pion;
+    private final Pion pion;
+
+    public Pion getPion() {
+        return pion;
+    }
     
     public VuePion(Pion pion){
         this.pion = pion;

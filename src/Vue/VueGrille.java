@@ -4,6 +4,7 @@ import Controleur.Message;
 import Controleur.MessageAction;
 import Controleur.Observe;
 import Controleur.TypeAction;
+import Controleur.Utils;
 import Modele.Aventurier;
 import Modele.Grille;
 import Modele.Tuile;
@@ -29,6 +30,9 @@ public class VueGrille extends Observe {
         private ArrayList<VueTuile> vueModif;
         private MessageAction msg;
         private ArrayList<VuePion> mesPions;
+        
+        public static final int CHOIX_DEP=1;
+        public static final int CHOIX_AS=2;
 	public VueGrille (Grille grille,ArrayList<Aventurier> avs){
             GridLayout g =new GridLayout(6,6);
             g.setHgap(10);
@@ -90,7 +94,9 @@ public class VueGrille extends Observe {
 
     public void actualise() {
         for (VueTuile tuile : vueModif){
+            tuile.activer(false);
             tuile.changeFond();
+            System.out.println("hey");
         }
     }
 
@@ -98,11 +104,7 @@ public class VueGrille extends Observe {
     private void creePion(ArrayList<Aventurier> avs){
         mesPions = new ArrayList<>();
         int i=0;
-        System.out.println(avs);
-        System.out.println("heu");
         for (Aventurier av : avs){
-            System.out.println(avs);
-            System.out.println("gfgdfs");
             mesPions.add(new VuePion(av.getPion()));
             getVueTuile(av.getMaPos().getCoords()).initVuePion(mesPions.get(i));
             i++;
@@ -113,46 +115,42 @@ public class VueGrille extends Observe {
 
     public void faireChoixTuile( int a,ArrayList<Tuile> tuiles) {
         vueModif= new ArrayList<>();
-            MouseListener act = new MouseListener() {
-                                                        @Override
-                                                        public void mouseReleased(MouseEvent arg0) {
-                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                                        }
-                                                        @Override
-                                                        public void mousePressed(MouseEvent arg0) {
-                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                                        }
-                                                        @Override
-                                                        public void mouseExited(MouseEvent arg0) {
-                                                            VueTuile vue = (VueTuile) arg0.getSource();
-                                                            vue.setFond(null);
-                                                        }
-                                                        @Override
-                                                        public void mouseEntered(MouseEvent arg0) {
-                                                           VueTuile vue = (VueTuile) arg0.getSource();
-                                                           vue.setFond(Color.red);
-                                                        }
-                                                        @Override
-                                                        public void mouseClicked(MouseEvent arg0) {
-                                                            switch(a){
-                                                                case 1 : 
-                                                                   msg.typeact = TypeAction.CHOIX_TUILE_DEP; 
-                                                                   break;
-                                                                case 2:
-                                                                   msg.typeact = TypeAction.CHOIX_TUILE_AS; 
-                                                                   break;
-                                                                }
-                                                        VueTuile vue = (VueTuile) arg0.getSource();
-                                                        msg.coord = getCoords(vue);
-                                                        notifierMessageAction(msg);
-            }
-                                                    
-        };
+            MouseListener act;
+            act = new MouseListener() {
+                @Override
+                public void mouseReleased(MouseEvent arg0) {}
+                @Override
+                public void mousePressed(MouseEvent arg0) {}
+                @Override
+                public void mouseExited(MouseEvent arg0) {
+                    VueTuile vue = (VueTuile) arg0.getSource();
+                    vue.setBackground(Color.red);
+                }
+                @Override
+                public void mouseEntered(MouseEvent arg0) {
+                    VueTuile vue = (VueTuile) arg0.getSource();
+                    vue.setBackground(Color.green);
+                }
+                @Override
+                public void mouseClicked(MouseEvent arg0) {
+                    switch(a){
+                        case CHOIX_DEP :
+                            msg.typeact = TypeAction.CHOIX_TUILE_DEP;
+                            break;
+                        case CHOIX_AS :
+                            msg.typeact = TypeAction.CHOIX_TUILE_AS;
+                            break;
+                    }
+                    VueTuile vue = (VueTuile) arg0.getSource();
+                    msg.coord = getCoords(vue);
+                    notifierMessageAction(msg);
+                }
+                
+            };
         for (Tuile tui : tuiles){
-            
             int x = tui.getCoords()[0];
             int y = tui.getCoords()[1];
-            vuesTuiles[x][y].setBackground(Color.gray);
+            vuesTuiles[x][y].activer(true);
             vuesTuiles[x][y].addMouseListener(act);
             vueModif.add(vuesTuiles[x][y]);
         }
@@ -164,6 +162,16 @@ public class VueGrille extends Observe {
 
     public ArrayList<VuePion> getMesPions() {
         return mesPions;
+    }
+
+    public void deplacePion(Utils.Pion pion, Tuile t) {
+        for (VuePion vuePion : mesPions){
+            System.out.println("J'y Passe");
+            if (vuePion.getPion()==pion){
+                System.out.println(pion.getCouleur());
+                vuePion.setMaTuile(getVueTuile(t.getCoords()));
+            }
+        }
     }
 
     

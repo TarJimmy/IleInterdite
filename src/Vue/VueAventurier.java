@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
 
-public class VueAventurier extends JPanel implements Observateur {
+public class VueAventurier extends JPanel {
 
 	/**
 	 * 
@@ -41,9 +41,9 @@ public class VueAventurier extends JPanel implements Observateur {
     //A enlever apres demo
     private String nomJoueur;
     private VueCarte[] mesCartes;
-    private final int NB_CARTE_MAX = 4;
+    private final int NB_CARTE_MAX = 5;
     private JPanel panelCartes;
-	public void ajouterVueCarte(CarteUtils carte) throws IOException {
+	private void ajouterVueCarte(CarteUtils carte) throws IOException {
             boolean b = false;
             int i = 0;
             while (!b &&i<NB_CARTE_MAX ){
@@ -66,7 +66,7 @@ public class VueAventurier extends JPanel implements Observateur {
 	 * 
 	 * @param carte
 	 */
-	public void SupprimerVueCarte(CarteUtils carte) throws IOException {
+	private void SupprimerVueCarte(CarteUtils carte) throws IOException {
             boolean b = false;
             int i = 0;
             while (!b &&i<NB_CARTE_MAX ){
@@ -131,19 +131,12 @@ public class VueAventurier extends JPanel implements Observateur {
         panelCartes =new JPanel(g);
         panelCartes.setBackground(Color.white);
         mesCartes = new VueCarte[NB_CARTE_MAX];
-        //A enlever apres test
-        mesCartes[0] = new VueCarte(Utils.CarteUtils.calice);
-        mesCartes[1] = new VueCarte(Utils.CarteUtils.calice);
-        mesCartes[2] = new VueCarte(Utils.CarteUtils.caverneDesOmbres);
-        mesCartes[3] = new VueCarte(Utils.CarteUtils.zephyr);
         for (int i =0; i <mesCartes.length;i++){
+            mesCartes[i] = new VueCarte(Utils.CarteUtils.calice);
+            mesCartes[i].toogleVide();
             panelCartes.add(mesCartes[i]);
         }
         panelCentre.add(panelCartes,BorderLayout.CENTER);
-        SupprimerVueCarte(CarteUtils.calice);
-        SupprimerVueCarte(Utils.CarteUtils.zephyr);
-        ajouterVueCarte(CarteUtils.cristal);
-        ajouterVueCarte(CarteUtils.calice);
     }
     public void setPosition(String pos) {
         this.position.setText(pos);
@@ -160,16 +153,15 @@ public class VueAventurier extends JPanel implements Observateur {
     }
 
    
-
-    @Override
-    public void traiterMessage(Message msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modifierVueCarte(boolean b,CarteUtils carte) throws IOException{
+        if(b){
+            ajouterVueCarte(carte);
+        }
+        else{
+            SupprimerVueCarte(carte);
+        }
     }
-
-    @Override
-    public void traiterMessageAction(MessageAction msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     
 }

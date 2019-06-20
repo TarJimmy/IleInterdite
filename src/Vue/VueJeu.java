@@ -5,6 +5,7 @@ import Controleur.MessageAction;
 import Controleur.Observe;
 import Controleur.Observateur;
 import Controleur.TypeAction;
+import Controleur.Utils;
 import Modele.Grille;
 import Modele.Tuile;
 import java.awt.BorderLayout;
@@ -42,9 +43,12 @@ public class VueJeu extends Observe implements Observateur {
     private MonteeDesEaux monteeDesEau;
     private LabelInfo indications;
     private int Nb_Boutons;
-
+    private MessageAction msg;
+    
+    
+    
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
-               if(a!=3) {
+               if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
                    vueGrille.faireChoixTuile(a, deplacement);
                }
     }
@@ -52,12 +56,18 @@ public class VueJeu extends Observe implements Observateur {
     public void actualise() {
         vueGrille.actualise();
         monteeDesEau.repaint();
-        for(VueAventurier av : mesVuesAvs){
-            actualise();
-        }
+        
     }
 
- 
+    public void deplacePion(Utils.Pion pion, Tuile t) {
+        vueGrille.deplacePion(pion,t);
+    }
+    public int getCHOIX_AS(){
+        return VueGrille.CHOIX_AS;
+    }
+    public int getCHOIX_DEP(){
+        return VueGrille.CHOIX_DEP;
+    }
 
     
 
@@ -160,7 +170,6 @@ public class VueJeu extends Observe implements Observateur {
         this.btnDonnerCarte = new JButton("Donner Carte") ;
         this.btnGagnerTresor = new JButton("GagnerTresor");
         this.btnTerminerTour = new JButton("Terminer Tour") ;
-        
         JPanel decks = new JPanel(new BorderLayout());
         decks.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(decks,BorderLayout.EAST);
@@ -256,7 +265,9 @@ public class VueJeu extends Observe implements Observateur {
         JPanel haut = new JPanel(new BorderLayout());
         int taille = mesVuesAvs.size();
         //VueAventurier
-        JPanel mesVuesAvs = new JPanel(new GridLayout(4,1));
+        GridLayout g = new GridLayout(4,1);
+        g.setVgap(20);
+        JPanel mesVuesAvs = new JPanel(g);
         mesVuesAvs.setBackground(Color.white);
         for (int i=0; i<taille;i++){
             mesVuesAvs.add(this.mesVuesAvs.get(i));
@@ -279,7 +290,7 @@ public class VueJeu extends Observe implements Observateur {
     public VueGrille getVueGrille() {
         return vueGrille;
     }
-    private void creationVuesAventuriers(ArrayList<String> mesNoms,ArrayList<Modele.Aventurier> av){
+    private void creationVuesAventuriers(ArrayList<String> mesNoms,ArrayList<Modele.Aventurier> av) throws IOException{
         mesVuesAvs = new ArrayList<>();
         int taille = av.size();
         for (int i =0;i<taille;i++){
@@ -302,7 +313,16 @@ public class VueJeu extends Observe implements Observateur {
     }
     @Override
     public void traiterMessageAction(MessageAction msg){
-        notifierMessage(msg);
+        if(msg.typeact == TypeAction.CHOIX_AV_DONCARTE){
+            //choix carte
+        }else{
+            if(msg.typeact == TypeAction.CHOIX_CARTE_DONCARTE){
+                this.msg.vueCarte = msg.vueCarte;
+                this.msg.typeact = TypeAction.CHOIX_DONCARTE;
+            }
+            notifierMessageAction(msg);
+        }
+
     }
     
 }

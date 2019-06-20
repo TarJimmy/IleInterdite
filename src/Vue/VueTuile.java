@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import Controleur.Utils.TuilesUtils;
@@ -34,19 +33,15 @@ public final class VueTuile extends JButton {
         mesPions = new ArrayList<>();
         setLayout(new BorderLayout());
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
-        mesVuePions = new JPanel(new GridLayout(1,4));
-        add(mesVuePions,BorderLayout.SOUTH);
+        mesVuePions = new JPanel(new GridLayout(2,2));
+        add(mesVuePions,BorderLayout.CENTER);
         setImage(this.tuile.getAssecher());
-    
+        activer(false);
             addMouseListener(new MouseListener() {
                                                         @Override
-                                                        public void mouseReleased(MouseEvent arg0) {
-                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                                        }
+                                                        public void mouseReleased(MouseEvent arg0) {}
                                                         @Override
-                                                        public void mousePressed(MouseEvent arg0) {
-                                                            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                                        }
+                                                        public void mousePressed(MouseEvent arg0) {}
                                                         @Override
                                                         public void mouseExited(MouseEvent arg0) {
                                                             VueTuile vue = (VueTuile) arg0.getSource();
@@ -112,9 +107,9 @@ public final class VueTuile extends JButton {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if(!estCoulee){
-                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-                
-                    setBackground(fond);
+                //g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+                g.setColor(Color.white);
+                g.drawRect(0, 0, this.getWidth(), this.getHeight());
                 
             }
             else {
@@ -127,4 +122,16 @@ public final class VueTuile extends JButton {
     public String toString(){
         return tuile.getNom();
     }
+
+    public void activer(boolean b) {
+        setEnabled(b);
+        if (b){
+            setBackground(Color.red);
+        }
+        else{
+            setBackground(Color.white);
+        }
+    }
+
+    
 }
