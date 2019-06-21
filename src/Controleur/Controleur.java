@@ -51,7 +51,7 @@ public class Controleur implements Observateur {
     //Actualise le tour de l'aventurier en fonction de l'index
     private void setTrAv() {
         this.AvTrActuel = getMesAventuriers().get(index);
-        jeu.setTrActuel(index);
+        jeu.setTrActuel(getAvTrActuel());
     }
     private void addIndex(){
         index = (index+1)%getMesAventuriers().size();
@@ -173,7 +173,7 @@ public class Controleur implements Observateur {
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
             try {
-                jeu = new VueJeu(grille,mesAventuriers,msg.noms);
+                jeu = new VueJeu(grille,mesAventuriers,msg.noms,msg.difficulte);
             } catch (IOException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -189,21 +189,36 @@ public class Controleur implements Observateur {
         }
     }
 
-
     @Override
     public void traiterMessageAction(MessageAction msg) {
         Tuile t;
         switch(msg.typeact){
             case DEPLACER:
-                jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille)); 
+                if(getAvTrActuel().getDeplacement(grille).size()>0){
+                    jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille)); 
+                }
+                else{
+                    jeu.erreur_deplacer();
+                }
                 break;
             case ASSECHER:
-                jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
+                if (getAvTrActuel().getAssechement(grille).size()>0){
+                    jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
+                }
+                else {
+                    jeu.erreur_assecher();
+                }
             break;
             case TERMINER_TOUR:
                 finTour();
                 break;
-            case GAGNERTRESOR://A remplir
+            case GAGNERTRESOR:
+                if (getAvTrActuel().checkGagnerTresor()!=null){
+                    System.out.println("hello toi");
+                }
+                else{
+                    jeu.erreurTresor();
+                }
                 break;
             case DONNERCARTE:
                 jeu.faireChoixAventurier(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()), VueJeu.DON_CARTE);
@@ -217,9 +232,9 @@ public class Controleur implements Observateur {
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().deplacer(t);
                 jeu.actualise();
-                System.out.println(getAvTrActuel().getMaPos().getNom());
-                jeu.deplacePion(getAvTrActuel().getPion(),t);
+                jeu.deplacePion(getAvTrActuel().getPion(), t);
                 checkFinTour();
+                jeu.indic_Passif(this.getAvTrActuel());
                 break;
             case CHOIX_TUILE_AS:
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);

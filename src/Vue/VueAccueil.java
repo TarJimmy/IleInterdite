@@ -40,7 +40,7 @@ import javax.swing.event.ChangeListener;
     - C'est fait de cette manière pour optimisé le temps d'attente des interractions*/
 public class VueAccueil extends Observe{
     private JFrame window;
-    private JButton jouer; 
+    private final JButton jouer; 
     private ArrayList<String> mesNoms=new ArrayList<>();; //Utilisé pour que les joueurs se repères lors du jeu
     private final int NB_JOUEUR_MAX=4; //Constante du nb de joueur max sur une partie
     private int nbJoueur =0;//Modifier apres une action sur valider (GHcentre-DROIT)
@@ -82,10 +82,9 @@ public class VueAccueil extends Observe{
         window.add(DROIT);
         // Fin Initialisation 
         //GAUCHE -> Haut -> Nord
-        regle = new JButton("Regle>>");
+        regle = new JButton("Regle >>");
+        regle.setBackground(Color.gray);
         regle.setBackground(Color.white);
-        
-        
         GHnord.add(regle);
         
        
@@ -149,7 +148,7 @@ public class VueAccueil extends Observe{
         GHnord.setBackground(COULEUR_PRINCIPAL);
         jouer = new JButton("C'est Parti !");
         jouer.setBackground(COULEUR_PRINCIPAL);
-        jouer.setBorderPainted(false);
+        jouer.setBorderPainted(true);
         jouer.setFocusable(false);
         GbasRegle.add(jouer);
         

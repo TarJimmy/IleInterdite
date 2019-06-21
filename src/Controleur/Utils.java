@@ -37,7 +37,7 @@ public class Utils {
 
     public static enum Pion {
         ROUGE("Rouge", new Color(255, 0, 0), new Color(176, 79, 79), new Color(255, 145, 145), new Color(226,166,166)),
-        VERT("Vert", new Color(0, 195, 0), new Color(79, 153, 79), new Color(145, 255, 145), new Color(166,226,166)),
+        VERT("Vert", new Color(0, 230, 0), new Color(79, 153, 79), new Color(145, 255, 145), new Color(166,226,166)),
         BLEU("Bleu", new Color(55,194,198), new Color(100,153,154), new Color(175,221,221), new Color(202,219,219)),
         ORANGE("Orange", new Color(255, 148, 0), new Color(176, 135, 79), new Color(255, 199, 127), new Color(246,198,135)),
         VIOLET("Violet", new Color(204, 94, 255), new Color(146, 115, 176), new Color(211, 164, 234), new Color(202,176,214)),
@@ -98,10 +98,38 @@ public class Utils {
         return arrayList ;
     }
     public enum tresor {
-        PIERRE_SACREE,
-        STATUE_ZEPHYR,
-        CRISTAL_ARDENT,
-        CALICE_ONDE;
+        PIERRE_SACREE("Pierre Sacree","Tresor/pierre.png"),
+        STATUE_ZEPHYR("Zéphyr","Tresor/zephyr.png"),
+        CRISTAL_ARDENT("Cristal","Tresor/cristal.png"),
+        CALICE_ONDE("Calice","Tresor/calice.png");
+        
+        private String nom;
+        private String chemin;
+        tresor(String nom,String chemin){
+        this.nom = nom;
+        this.chemin = chemin;
+        }
+    //getteurs et setteurs
+    //
+        public String getNom() {
+            return nom;
+        }
+
+        public void setNom(String nom) {
+            this.nom = nom;
+        }
+
+        public String getChemin() {
+            return chemin;
+        }
+
+        public void setChemin(String chemin) {
+            this.chemin = chemin;
+        }
+            @Override
+        public String toString(){
+            return getNom();
+        }
     }
     public enum CarteUtils {
     calice("Calice","cartes/Calice.png"),

@@ -23,9 +23,7 @@ public class VuePion extends JPanel {
     private VueTuile maTuile;
     private final Pion pion;
 
-    public Pion getPion() {
-        return pion;
-    }
+    
     
     public VuePion(Pion pion){
         this.pion = pion;
@@ -34,11 +32,17 @@ public class VuePion extends JPanel {
     }
 
     public void setMaTuile(VueTuile maTuile) {
+         
         if (this.maTuile!=null){
             this.maTuile.supVuePion(this);
         }
         this.maTuile = maTuile;
         maTuile.addVuePion(this);
+    }
+    
+
+    public VueTuile getMaTuile() {
+        return maTuile;
     }
     
     /**
@@ -75,16 +79,11 @@ public class VuePion extends JPanel {
         g.fillPolygon(x, y, 3);
     }
     
-    public static void main(String[]args ){
-        JFrame window = new JFrame();
-        window.setSize(300,300);
-        window.setVisible(true);
-        
-        
-        window.add(new VuePion(Controleur.Utils.Pion.BLEU));
-        
-        
-        
+    public Pion getPion() {
+        return pion;
     }
-    
+    @Override
+    public String toString(){
+        return this.getPion().toString();
+    }
 }

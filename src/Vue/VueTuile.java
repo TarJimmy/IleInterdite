@@ -15,13 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import Controleur.Utils.TuilesUtils;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Array;
 
 public final class VueTuile extends JButton {
         private ArrayList<VuePion> mesPions;
-        private JPanel mesVuePions;
+        private JPanel mesVuesPions;
         private Image image;
         private TuilesUtils tuile;
         private boolean estCoulee;
@@ -34,33 +36,14 @@ public final class VueTuile extends JButton {
         mesPions = new ArrayList<>();
         setLayout(new BorderLayout());
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
-        mesVuePions = new JPanel(new GridLayout(2,2));
-        add(mesVuePions,BorderLayout.CENTER);
+        mesVuesPions = new JPanel(new GridLayout(2,2));
+        add(mesVuesPions,BorderLayout.CENTER);
+        for (int i =0;i<5;i++){
+            mesVuesPions.add(new JPanel());
+        }
         setImage(this.tuile.getAssecher());
         activer(false);
-            /*addMouseListener(new MouseListener() {
-                                                        @Override
-                                                        public void mouseReleased(MouseEvent arg0) {}
-                                                        @Override
-                                                        public void mousePressed(MouseEvent arg0) {}
-                                                        @Override
-                                                        public void mouseExited(MouseEvent arg0) {
-                                                            VueTuile vue = (VueTuile) arg0.getSource();
-                                                            setImage(vue.getTuile().getAssecher());
-                                                            vue.changeFond();
-                                                        }
-                                                        @Override
-                                                        public void mouseEntered(MouseEvent arg0) {
-                                                           VueTuile vue = (VueTuile) arg0.getSource();
-                                                            setFond(Color.red);
-                                                            vue.changeFond();
-                                                        }
-                                                        @Override
-                                                        public void mouseClicked(MouseEvent arg0) {
-                                                        
-            }
-                                                    
-        });*/
+            
     }
 
     public TuilesUtils getTuile() {
@@ -86,11 +69,14 @@ public final class VueTuile extends JButton {
         vue.setMaTuile(this);
     }
     public void addVuePion(VuePion vue){
-        mesVuePions.add(vue);
+        mesVuesPions.add(vue);
     }
+
+
     public void supVuePion(VuePion vue){
-        mesVuePions.remove(vue);
+        this.remove(vue);
     }
+    
     public void changeFond(){
         repaint();
     }
