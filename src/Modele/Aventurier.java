@@ -38,6 +38,7 @@ public abstract class Aventurier {
      */
     public Aventurier(Tuile maPos) {
         this.maPos = maPos;
+        mesCartes = new ArrayList<>();
     }
     
     /**
@@ -122,17 +123,20 @@ public abstract class Aventurier {
      * @param tres
      * 
      */
-    public void GagnerTresor(Utils.tresor tres) {
-            int nbRetirés = 0;
-            Iterator it = getCartes().iterator();
-            while(it.hasNext() && nbRetirés < 4){
-                CarteJoueur carte =(CarteJoueur) it.next();
-                if(carte instanceof CarteTresor){
-                    if( ((CarteTresor) carte).getTresor() == tres)
+    public ArrayList<CarteJoueur> GagnerTresor(Utils.tresor tres) {
+        ArrayList<CarteJoueur> cartes = new ArrayList<>();
+        Iterator it = getCartes().iterator();
+        while(it.hasNext() && cartes.size() < 4){
+            CarteJoueur carte =(CarteJoueur) it.next();
+            if(carte instanceof CarteTresor){
+                if(((CarteTresor) carte).getTresor() == tres){
+                    cartes.add(carte);
                     it.remove();
-                    nbRetirés++;
                 }
             }
+        }
+        actionsRestantes--;
+        return cartes;
     }
 
     /**

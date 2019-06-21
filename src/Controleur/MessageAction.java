@@ -22,6 +22,7 @@ public class MessageAction extends Message {
     public VueCarte vueCarte;
     public MessageAction(){
         super.type = TypeMessage.ACTION;
+        vueAv = new ArrayList<>();
     }
 
 }

@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -73,4 +74,17 @@ public class VuePion extends JPanel {
         g.fillOval(start, 0, taille, taille);
         g.fillPolygon(x, y, 3);
     }
+    
+    public static void main(String[]args ){
+        JFrame window = new JFrame();
+        window.setSize(300,300);
+        window.setVisible(true);
+        
+        
+        window.add(new VuePion(Controleur.Utils.Pion.BLEU));
+        
+        
+        
+    }
+    
 }

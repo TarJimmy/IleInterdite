@@ -9,23 +9,32 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import Controleur.*;
+import static Vue.VueJeu.DON_CARTE;
+
 
 /**
  *
  * @author Gholbin
  */
-public class VueChoixCarte{
+public class VueChoixCarte extends Observe{
         private JFrame window;
         private ArrayList<VueCarte> vueCartes;
         private JPanel panelCarte,panelDesc;
         private JLabel desc;
         private MouseListener listener;
-
-        public VueChoixCarte(ArrayList<VueCarte> vueCartes) {
+        
+        private MessageAction msg;
+        
+        
+        public VueChoixCarte(ArrayList<VueCarte> vueCartes,int etat) {
+            
+            msg = new MessageAction();
             this.vueCartes = vueCartes;
             window = new JFrame("Choix d'une carte");
             window.setSize(vueCartes.size()*200,300);
@@ -38,14 +47,14 @@ public class VueChoixCarte{
             panelCarte.setLayout(g);
             
             listener = new MouseListener(){
-
                 @Override
                 public void mouseClicked(MouseEvent e) {}
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    System.out.println("vous avez choisi le : " 
-                            + ((VueCarte)e.getSource()).getCarte().getNom());
+                    msg.vueCarte = ((VueCarte) e.getSource());
+                    msg.typeact = TypeAction.CHOIX_CARTE;
+                    notifierMessageAction(msg);
                 }
 
                 @Override
@@ -67,12 +76,28 @@ public class VueChoixCarte{
             
             panelDesc = new JPanel();
             
-            desc = new JLabel("Choisissez une carte a defausser");
+            desc = new JLabel("Choisissez une carte à" + ((etat == DON_CARTE)?"donner":"defausser"));
             panelDesc.add(desc);
             
             window.add(panelDesc,BorderLayout.SOUTH);
 
             
             window.setVisible(true);
+            window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
+        
+            public static void main(String[] args) throws IOException {
+                ArrayList<VueCarte> array = new ArrayList<>();
+                array.add(new VueCarte(Utils.CarteUtils.calice));
+                array.add(new VueCarte(Utils.CarteUtils.pierre));
+                array.add(new VueCarte(Utils.CarteUtils.cristal));
+                array.add(new VueCarte(Utils.CarteUtils.caverneDesOmbres));
+                
+                
+                
+                new VueChoixCarte(array,10);
+                
+                
+                
+            }
     }

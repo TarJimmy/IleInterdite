@@ -7,11 +7,13 @@
 package Controleur;
 
 
+import Controleur.Utils.tresor;
 import Modele.*;
 import Vue.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +31,7 @@ public class Controleur implements Observateur {
     private Aventurier AvTrActuel;
     private int index;
     private ArrayList<VuePion> mesPions;
-    
+    private boolean aPiocher;
     
     Controleur() throws IOException{
         accueil = new VueAccueil();
@@ -52,7 +54,7 @@ public class Controleur implements Observateur {
         jeu.setTrActuel(index);
     }
     private void addIndex(){
-        index = (index+1)/getMesAventuriers().size();
+        index = (index+1)%getMesAventuriers().size();
     }
     public void piocher (){
         for (int i = 0; i < 2; i++) {
@@ -63,6 +65,7 @@ public class Controleur implements Observateur {
                 getAvTrActuel().AddCarte(carte);
             }
         }
+        aPiocher = true;
         CheckNbCarte(getAvTrActuel());
     }
     public boolean partieGagne(){
@@ -97,6 +100,7 @@ public class Controleur implements Observateur {
     
     
     private void debutTour(){
+        aPiocher = false;
         setTrAv();
         getAvTrActuel().DebutTour();
     }
@@ -134,6 +138,7 @@ public class Controleur implements Observateur {
 //            piocher();
             addIndex();
             debutTour();
+            
         }
 
     }
@@ -172,18 +177,18 @@ public class Controleur implements Observateur {
             } catch (IOException ex) {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+                
                 jeu.afficher(true);
                 jeu.addObservateur(this);
-                debutTour(); 
+                debutTour();
+                getAvTrActuel().AddCarte(new CarteTresor(tresor.CALICE_ONDE));
+                getAvTrActuel().AddCarte(new CarteTresor(tresor.CRISTAL_ARDENT));
             case ACTION:
                 
                 break;
         }
     }
-    public VueAventurier translateAve_VueAvs(){
-        
-    }
+
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
@@ -201,10 +206,12 @@ public class Controleur implements Observateur {
             case GAGNERTRESOR://A remplir
                 break;
             case DONNERCARTE:
-                int c=0;
-                jeu.faireChoixVueAventuriers(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()));
-                
+                jeu.faireChoixAventurier(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()), VueJeu.DON_CARTE);
                 break;
+            case CHOIX_INTER_DONCARTE:
+                jeu.faireChoixCarte(VueJeu.DON_CARTE, getAvTrActuel().getCartesDonnables());
+                break;
+            
             case CHOIX_TUILE_DEP:
                 System.out.println(getAvTrActuel().getMaPos().getNom());
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
@@ -218,9 +225,38 @@ public class Controleur implements Observateur {
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().assecher(t);
                 checkFinTour();
+                System.out.println(t.getEtat());
                 break;
             case CHOIX_DONCARTE:
-                /*Aventurier receveur = getMesAventuriers().get(getMesVuesAventuriers().indexOf(msg.VueAv));
+                System.out.println(jeu.getMesAvs().indexOf(msg.vueAv));
+                Aventurier receveur = getMesAventuriers().get(jeu.getMesAvs().indexOf(msg.vueAv));
+                CarteJoueur carte = null;
+                
+                
+                Utils.tresor tres = null;
+                switch(msg.vueCarte.getCarte()){
+                case calice:
+                    tres = tresor.CALICE_ONDE;
+                    break;
+                case pierre:
+                    tres = tresor.PIERRE_SACREE;
+                    break;
+                case zephyr:
+                    tres = tresor.STATUE_ZEPHYR;
+                    break;
+                case cristal:
+                    tres = tresor.CRISTAL_ARDENT;
+                    break;
+                }
+                
+                Iterator it = getAvTrActuel().getCartesDonnables().iterator();
+                
+                while(carte == null && it.hasNext()){
+                    CarteTresor ca = (CarteTresor) it.next();
+                    if(ca.getTresor() == tres){
+                        carte = ca;
+                    }
+                }
                 
                 getAvTrActuel().DonnerCarte(carte, receveur);
                 CheckNbCarte(receveur);//finir*/

@@ -5,6 +5,7 @@ import Controleur.MessageAction;
 import Controleur.Observateur;
 import Controleur.Utils;
 import Controleur.Utils.CarteUtils;
+import Controleur.Utils.Pion;
 import Modele.Aventurier;
 import Modele.CarteJoueur;
 import Modele.Grille;
@@ -34,13 +35,13 @@ public class VueAventurier extends JPanel {
     private final JPanel panelCentre ;
     private final JPanel panelAventurier;
     private final JPanel panelJScrool;
-    Color couleur ;
-    private int[] coords;
+    private Pion pion ;
     private JTextField position;
-    private JScrollPane pouvoir;
+    private final JScrollPane pouvoir;
     //A enlever apres demo
     private String nomJoueur;
     private VueCarte[] mesCartes;
+    private final int num; //numero de l'index de l'aventurier associer
     private final int NB_CARTE_MAX = 5;
     private JPanel panelCartes;
 	private void ajouterVueCarte(CarteUtils carte) throws IOException {
@@ -84,20 +85,21 @@ public class VueAventurier extends JPanel {
         return nomJoueur;
     }
 
-    public VueAventurier(String nomJoueur, Aventurier av) throws IOException{
+    public VueAventurier(String nomJoueur, Aventurier av, int num) throws IOException{
         this.nomJoueur = nomJoueur+" : "+av.toString();
-        couleur = av.getPion().getCouleur();
+        pion = av.getPion();
         
         //le titre = nom du joueur 
         setLayout(new BorderLayout());
         add (new JLabel(nomJoueur), BorderLayout.NORTH);
         setBackground(new Color(230, 230, 230));
-        setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
+        setBorder(BorderFactory.createLineBorder(getPion().getCouleur(), 2)) ;
 
+        this.num = num;
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
-        panelAventurier.setBackground(couleur);
+        panelAventurier.setBackground(getPion().getCouleur());
         panelAventurier.add(new JLabel(this.nomJoueur,JLabel.CENTER));
         add(panelAventurier, BorderLayout.NORTH);
         
@@ -106,7 +108,7 @@ public class VueAventurier extends JPanel {
         GridLayout b = new GridLayout(2,1);
         this.panelCentre = new JPanel(b);
         this.panelCentre.setOpaque(false);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, couleur));
+        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, getPion().getCouleur()));
         add(this.panelCentre, BorderLayout.CENTER);
         // CENTRE : DescrptionPouvoir
         String[] mesTextes = av.getDescription().split("\n");
@@ -137,19 +139,21 @@ public class VueAventurier extends JPanel {
             panelCartes.add(mesCartes[i]);
         }
         panelCentre.add(panelCartes,BorderLayout.CENTER);
+        activer(false);
     }
     public void setPosition(String pos) {
         this.position.setText(pos);
     }
     
-    public static void main(String[]args) throws IOException{
-        JFrame j = new JFrame("Test");
-        j.setSize(500,300);
-        VueAventurier av = new VueAventurier("Jimmy",new Messager(new Grille(5)));
-        j.add(av);
-        j.setVisible(true);
+    public void activer(boolean b){
+        Color couleur = (b)? pion.getCouleur():pion.getCouleurGrisee();
+        setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
+        panelAventurier.setBackground(couleur);
+        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, (couleur)));
+    }
         
-        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public Pion getPion() {
+        return pion;
     }
 
    
@@ -161,9 +165,9 @@ public class VueAventurier extends JPanel {
             SupprimerVueCarte(carte);
         }
     }
-    
 
     
+
 }
         
 

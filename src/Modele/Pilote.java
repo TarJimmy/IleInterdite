@@ -50,7 +50,7 @@ public class Pilote extends Aventurier {
     public void deplacer(Tuile tuile) {
         int[] depart = getMaPos().getCoords();
         int[] arrivee = tuile.getCoords();
-        int d =  Math.abs(depart[0]- arrivee[0]) + (depart[1]- arrivee[1]);
+        int d =  Math.abs(depart[0]- arrivee[0]) + Math.abs(depart[1]- arrivee[1]);
         if(d!=1){
             setaVoler(true);
         }

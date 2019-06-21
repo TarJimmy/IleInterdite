@@ -6,7 +6,8 @@ import Controleur.Observe;
 import Controleur.Observateur;
 import Controleur.TypeAction;
 import Controleur.Utils;
-import Modele.Grille;
+import Controleur.Utils.*;
+import Modele.*;
 import Modele.Tuile;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,8 +18,12 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,15 +49,76 @@ public class VueJeu extends Observe implements Observateur {
     private LabelInfo indications;
     private int Nb_Boutons;
     private MessageAction msg;
+    private VueChoixCarte vChoixCarte;
+    private ArrayList<VueAventurier> vueAvsModif;
+    private MouseListener choixAvListener;
     
+    
+    
+    public static final int DEFAUSSER = 10;
+    public static final int DON_CARTE = 11;
+    public static final int HELICOPTERE = 12;
     
     
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
-               if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
-                   vueGrille.faireChoixTuile(a, deplacement);
-               }
+        if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
+            vueGrille.faireChoixTuile(a, deplacement);
+        }
     }
-
+    
+    
+    public void faireChoixAventurier(ArrayList<Aventurier> avs,int etat){
+        vueAvsModif = new ArrayList<>();
+        for(Aventurier av : avs){
+            for(VueAventurier vueAv : getMesAvs()){
+                if(av.getPion().getCouleur() == vueAv.getColor()){
+                    vueAvsModif.add(vueAv);
+                }
+            }
+        }
+        for(VueAventurier vueAv: getVueAvsModif()){
+            vueAv.addMouseListener(choixAvListener);
+        }
+    }
+    public void faireChoixCarte(int etat,ArrayList<Modele.CarteJoueur> carteJ){
+        ArrayList<VueCarte> vCarte;
+        vCarte = new ArrayList<>();
+        for(Modele.CarteJoueur c : carteJ){
+            CarteUtils carteU = null;
+            switch(((CarteTresor) c).getTresor()){
+                case CALICE_ONDE:
+                    carteU = CarteUtils.calice;
+                    break;
+                case PIERRE_SACREE:
+                    carteU = CarteUtils.pierre;
+                    break;
+                case STATUE_ZEPHYR:
+                    carteU = CarteUtils.zephyr;
+                    break;
+                case CRISTAL_ARDENT:
+                    carteU = CarteUtils.cristal;
+                    break;
+            }
+            if(c instanceof CarteSpecial){
+                if(c instanceof Helicoptere){
+                    carteU = CarteUtils.helicoptere;
+                }else if(c instanceof SacDeSable){
+                    carteU = CarteUtils.sacsDeSable;
+                }
+            }
+            try {
+                vCarte.add(new VueCarte(carteU));
+            } catch (IOException ex) {
+                Logger.getLogger(VueJeu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+            
+        String desc = "Choisissez une carte à" + ((etat == DON_CARTE)?"donner":"defausser");
+        vChoixCarte = new VueChoixCarte(vCarte,etat);
+        vChoixCarte.addObservateur(this);
+    }
+    
     public void actualise() {
         vueGrille.actualise();
         monteeDesEau.repaint();
@@ -122,7 +188,34 @@ public class VueJeu extends Observe implements Observateur {
     public VueJeu(Grille grille,ArrayList<Modele.Aventurier> mesAvs, ArrayList<String> mesNoms) throws IOException {
         //Initialisation Composant
         initWindow();
+        vueAvsModif = new ArrayList<>();
+        choixAvListener  = new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                msg.vueAv.add((VueAventurier) e.getSource());
+                msg.typeact = TypeAction.CHOIX_INTER_DONCARTE;
+                notifierMessageAction(msg);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        };
         
+        msg = new MessageAction();
         creationVuesAventuriers(mesNoms, mesAvs);
         vueGrille = new VueGrille(grille,mesAvs);
         vueGrille.addObservateur(this);
@@ -249,7 +342,7 @@ public class VueJeu extends Observe implements Observateur {
         btnBouger.addActionListener(creeActionListener(TypeAction.DEPLACER));
         btnAssecher.addActionListener(creeActionListener(TypeAction.ASSECHER));
         btnTerminerTour.addActionListener(creeActionListener(TypeAction.TERMINER_TOUR));
-        
+        btnDonnerCarte.addActionListener(creeActionListener(TypeAction.DONNERCARTE));
     }
     private ActionListener creeActionListener(TypeAction type){
         return new ActionListener(){
@@ -313,16 +406,22 @@ public class VueJeu extends Observe implements Observateur {
     }
     @Override
     public void traiterMessageAction(MessageAction msg){
-        if(msg.typeact == TypeAction.CHOIX_AV_DONCARTE){
-            //choix carte
-        }else{
-            if(msg.typeact == TypeAction.CHOIX_CARTE_DONCARTE){
-                this.msg.vueCarte = msg.vueCarte;
+        switch(msg.typeact){
+            case CHOIX_INTER_DONCARTE:
                 this.msg.typeact = TypeAction.CHOIX_DONCARTE;
-            }
-            notifierMessageAction(msg);
+                break;
+            case CHOIX_CARTE:
+                if(this.msg.typeact == TypeAction.CHOIX_INTER_DONCARTE){
+                    msg.typeact = TypeAction.CHOIX_DONCARTE;
+                }else {
+                    msg.typeact = TypeAction.CHOIX_DEFAUSSER;
+                }
         }
+        notifierMessageAction(msg);
+    }
 
+    public ArrayList<VueAventurier> getVueAvsModif() {
+        return vueAvsModif;
     }
     
 }

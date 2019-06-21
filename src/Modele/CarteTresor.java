@@ -12,7 +12,7 @@ public class CarteTresor extends CarteJoueur {
     
     
     
-    tresor getTresor() {
+    public tresor getTresor() {
         return this.tresor;    
     }
 

@@ -9,11 +9,11 @@ import java.util.Iterator;
 public class Plongeur extends Aventurier {
 
     public Plongeur() {
-        super.setPion(Controleur.Utils.Pion.NOIR);
+        super.setPion(Controleur.Utils.Pion.VIOLET);
     }
     public Plongeur(Grille grille){
         super(grille.getTuile(Utils.TuilesUtils.porte_de_fer));
-        setPion(Pion.NOIR);
+        setPion(Pion.VIOLET);
     }
 
     @Override

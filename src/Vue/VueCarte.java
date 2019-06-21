@@ -25,7 +25,7 @@ public class VueCarte extends PanelImage {
         super.setImage(this.carte.getChemin());
     }
     
-       public static void main(String[]ntmMalo) throws IOException{
+    public static void main(String[] args) throws IOException{
         JFrame j = new JFrame("Test");
         j.setSize(200, 400);
         j.add(new VueCarte(CarteUtils.calice));

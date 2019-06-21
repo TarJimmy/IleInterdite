@@ -43,6 +43,7 @@ public class VueGrille extends Observe {
             vueGrille.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             initGrille(grille);
             creePion(avs);
+            vueModif = new ArrayList<>();
         }
         
         private void initGrille(Grille grille){
@@ -65,12 +66,7 @@ public class VueGrille extends Observe {
             }
         }
         public VueTuile getVueTuile(int[] coords){
-            if(vuesTuiles[coords[0]][coords[1]]!= null){
-                return vuesTuiles[coords[0]][coords[1]];
-            }
-            else{
-                return null;
-            }
+            return vuesTuiles[coords[0]][coords[1]];
         }
         
         
@@ -93,11 +89,12 @@ public class VueGrille extends Observe {
     }
 
     public void actualise() {
-        for (VueTuile tuile : vueModif){
-            tuile.activer(false);
-            tuile.changeFond();
-            System.out.println("hey");
+        for (VueTuile vtuile : vueModif){
+            vtuile.activer(false);
+            vtuile.changeFond();
+            vtuile.removeMouseListener(vtuile.getMouseListeners()[0]);
         }
+        vueModif.clear();
     }
 
     
@@ -114,7 +111,7 @@ public class VueGrille extends Observe {
         }
 
     public void faireChoixTuile( int a,ArrayList<Tuile> tuiles) {
-        vueModif= new ArrayList<>();
+        vueModif.clear();
             MouseListener act;
             act = new MouseListener() {
                 @Override
@@ -179,9 +176,9 @@ public class VueGrille extends Observe {
    
 
     
-     private class choixAv extends JFrame{
-         
-     }
+    private class choixAv extends JFrame{
+
+    }
     }
        
 

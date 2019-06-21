@@ -132,7 +132,8 @@ public class Utils {
     observatoire("Observatoire","cartes/Observatoire.png"),
     pierre("Pierre","cartes/Pierre.png"),
     zephyr("Zéphyr","cartes/Zephyr.png"),
-    sacsDeSable("Sacs de Sable","cartes/SacsDeSable.png");
+    sacsDeSable("Sacs de Sable","cartes/SacsDeSable.png"),
+    helicoptere("Helicoptere","cartes/Helicoptere.png");
     
     
     

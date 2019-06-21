@@ -17,9 +17,11 @@ public class Explorateur extends Aventurier {
     @Override
     public ArrayList<int[]> getCoordsProche() {
         ArrayList<int[]> coords = new ArrayList<>();
-        for (int x = -1;x <=2;x++){
-            for (int y = -1;y <=2;y++){
-                coords.add((x != 0 && y != 0)? new int[] {x,y}:null);
+        for (int x = -1;x <=1;x++){
+            for (int y = -1;y <=1;y++){
+                if(!(x == 0 && y == 0)){
+                    coords.add(new int[] {x,y});
+                }
             }
         }
         return coords;

@@ -16,9 +16,10 @@ package Controleur;
 	DEPLACER,
         CHOIX_TUILE_DEP,
         CHOIX_TUILE_AS,
-        CHOIX_AV_DONCARTE,
-        CHOIX_CARTE_DONCARTE,
+        CHOIX_INTER_DONCARTE,
+        CHOIX_CARTE,
         CHOIX_DONCARTE,
+        CHOIX_DEFAUSSER,
         TERMINER_TOUR;
     }
 

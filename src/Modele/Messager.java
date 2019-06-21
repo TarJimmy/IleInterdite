@@ -6,11 +6,11 @@ import java.util.ArrayList;
 public class Messager extends Aventurier {
 
     public Messager() {
-        super.setPion(Controleur.Utils.Pion.GRIS);
+        super.setPion(Controleur.Utils.Pion.ORANGE);
     }
     public Messager(Grille grille){
         super(grille.getTuile(Utils.TuilesUtils.porte_dargent));
-        super.setPion(Controleur.Utils.Pion.GRIS);
+        super.setPion(Controleur.Utils.Pion.ORANGE);
     }
 
     @Override

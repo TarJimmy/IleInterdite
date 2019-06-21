@@ -3,6 +3,7 @@ package Modele;
 import Controleur.Utils;
 import Controleur.Utils.tresor;
 import Controleur.Utils.Pion;
+import java.util.ArrayList;
 
 public class Ingenieur extends Aventurier {
 
@@ -46,9 +47,9 @@ public class Ingenieur extends Aventurier {
     }
 
     @Override
-    public void GagnerTresor(tresor tres) {
+    public ArrayList<CarteJoueur> GagnerTresor(tresor tres) {
         setaAssecher(false);
-        super.GagnerTresor(tres);
+        return super.GagnerTresor(tres);
     }
     
     @Override

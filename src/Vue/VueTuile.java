@@ -26,6 +26,7 @@ public final class VueTuile extends JButton {
         private TuilesUtils tuile;
         private boolean estCoulee;
         private Color fond;
+
     VueTuile (Tuile tuile){
         fond = null;
         estCoulee=false;
@@ -37,7 +38,7 @@ public final class VueTuile extends JButton {
         add(mesVuePions,BorderLayout.CENTER);
         setImage(this.tuile.getAssecher());
         activer(false);
-            addMouseListener(new MouseListener() {
+            /*addMouseListener(new MouseListener() {
                                                         @Override
                                                         public void mouseReleased(MouseEvent arg0) {}
                                                         @Override
@@ -59,7 +60,8 @@ public final class VueTuile extends JButton {
                                                         
             }
                                                     
-        });}
+        });*/
+    }
 
     public TuilesUtils getTuile() {
         return tuile;
@@ -98,7 +100,7 @@ public final class VueTuile extends JButton {
                 estCoulee=true;
             case ASSECHEE:
                 setImage(tuile.getAssecher());
-            case INONDEE:
+            case INNONDEE:
                 setImage(tuile.getInnonder());
         }
         changeFond();
@@ -107,9 +109,9 @@ public final class VueTuile extends JButton {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if(!estCoulee){
-                //g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 g.setColor(Color.white);
-                g.drawRect(0, 0, this.getWidth(), this.getHeight());
+                //g.drawRect(0, 0, this.getWidth(), this.getHeight());
                 
             }
             else {
