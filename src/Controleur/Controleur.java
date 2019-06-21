@@ -181,8 +181,10 @@ public class Controleur implements Observateur {
                 jeu.afficher(true);
                 jeu.addObservateur(this);
                 debutTour();
-                getAvTrActuel().AddCarte(new CarteTresor(tresor.CALICE_ONDE));
-                getAvTrActuel().AddCarte(new CarteTresor(tresor.CRISTAL_ARDENT));
+                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.calice));
+                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.pierre));
+                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.cristal));
+                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.helicoptere));
             case ACTION:
                 
                 break;
@@ -214,7 +216,7 @@ public class Controleur implements Observateur {
                 break;
             case GAGNERTRESOR:
                 if (getAvTrActuel().checkGagnerTresor()!=null){
-                    System.out.println("hello toi");
+                    //TO-DO
                 }
                 else{
                     jeu.erreurTresor();
@@ -228,7 +230,6 @@ public class Controleur implements Observateur {
                 break;
             
             case CHOIX_TUILE_DEP:
-                System.out.println(getAvTrActuel().getMaPos().getNom());
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().deplacer(t);
                 jeu.actualise();
@@ -239,30 +240,18 @@ public class Controleur implements Observateur {
             case CHOIX_TUILE_AS:
                 t = grille.getTuile(msg.coord[0],msg.coord[1]);
                 getAvTrActuel().assecher(t);
+                jeu.actualise();
+                jeu.indic_Passif(getAvTrActuel());
                 checkFinTour();
-                System.out.println(t.getEtat());
                 break;
             case CHOIX_DONCARTE:
-                System.out.println(jeu.getMesAvs().indexOf(msg.vueAv));
-                Aventurier receveur = getMesAventuriers().get(jeu.getMesAvs().indexOf(msg.vueAv));
+                System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
+                Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                 CarteJoueur carte = null;
                 
                 
                 Utils.tresor tres = null;
-                switch(msg.vueCarte.getCarte()){
-                case calice:
-                    tres = tresor.CALICE_ONDE;
-                    break;
-                case pierre:
-                    tres = tresor.PIERRE_SACREE;
-                    break;
-                case zephyr:
-                    tres = tresor.STATUE_ZEPHYR;
-                    break;
-                case cristal:
-                    tres = tresor.CRISTAL_ARDENT;
-                    break;
-                }
+                
                 
                 Iterator it = getAvTrActuel().getCartesDonnables().iterator();
                 
