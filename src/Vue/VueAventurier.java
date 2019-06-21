@@ -166,6 +166,10 @@ public class VueAventurier extends JPanel {
         }
     }
 
+    public VueCarte[] getMesCartes() {
+        return mesCartes;
+    }
+
     
 
 }

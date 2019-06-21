@@ -65,12 +65,54 @@ public class VueJeu extends Observe implements Observateur {
 //Suivant sera pour choisir un aventurier
     }
     
+    public Aventurier translate_VueAv_Av(VueAventurier va,ArrayList<Aventurier> avs){
+        Aventurier aventurier = null;
+        for(Aventurier av : avs){
+            if (av.getPion() == va.getPion()) {
+                aventurier = av;
+            }
+        }
+        return aventurier;
+    }
+    
+    public VueAventurier translate_Av_VueAv(Aventurier av){
+        VueAventurier vueAv = null;
+        for(VueAventurier vAv : getMesVuesAvs()){
+            if (vAv.getPion() == av.getPion()) {
+                vueAv = vAv;
+            }
+        }
+        return vueAv;
+    }
+    
+    
+    public VueCarte translate_Ca_VueCa(CarteJoueur c,Aventurier av){
+        VueAventurier VueAv = translate_Av_VueAv(av);
+        VueCarte vueCarte = null;
+        for(VueCarte vCa : VueAv.getMesCartes()){
+            if(vCa.getCarte() == c.getCarte()){
+                vueCarte = vCa;
+            }
+        }
+        return vueCarte;
+    }
+    
+    public CarteJoueur translate_VueCa_Ca(VueCarte vueCa,ArrayList<CarteJoueur> caJoueur){
+        CarteJoueur caJ = null;
+        
+        for(CarteJoueur ca : caJoueur){
+            if(ca.getCarte() == vueCa.getCarte()){
+                caJ = ca;
+            }
+        }
+        return caJ;
+    }
     
     public void faireChoixAventurier(ArrayList<Aventurier> avs,int etat){
         vueAvsModif = new ArrayList<>();
         for(Aventurier av : avs){
-            for(VueAventurier vueAv : getMesAvs()){
-                if(av.getPion().getCouleur() == vueAv.getColor()){
+            for(VueAventurier vueAv : getMesVuesAvs()){
+                if(av.getPion() == vueAv.getPion()){
                     vueAvsModif.add(vueAv);
                 }
             }
@@ -113,7 +155,7 @@ public class VueJeu extends Observe implements Observateur {
         }
         
             
-        String desc = "Choisissez une carte à" + ((etat == DON_CARTE)?"donner":"defausser");
+        String desc = "Choisissez une carte à " + ((etat == DON_CARTE)?"donner":"defausser");
         vChoixCarte = new VueChoixCarte(vCarte,etat);
         vChoixCarte.addObservateur(this);
     }
@@ -387,7 +429,7 @@ public class VueJeu extends Observe implements Observateur {
         window.setVisible(b);
     }
 
-    public ArrayList<VueAventurier> getMesAvs() {
+    public ArrayList<VueAventurier> getMesVuesAvs() {
         return mesVuesAvs;
     }
 

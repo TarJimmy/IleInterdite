@@ -86,7 +86,7 @@ public final class VueTuile extends JButton {
                 estCoulee=true;
             case ASSECHEE:
                 setImage(tuile.getAssecher());
-            case INNONDEE:
+            case INONDEE:
                 setImage(tuile.getInnonder());
         }
         changeFond();
