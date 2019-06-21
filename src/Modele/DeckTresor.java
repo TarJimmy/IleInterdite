@@ -15,10 +15,10 @@ public class DeckTresor implements Deck {
         pioche = new ArrayList<>();
         defausse = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            getPioche().add(new CarteTresor(Controleur.Utils.tresor.CALICE_ONDE));
-            getPioche().add(new CarteTresor(Controleur.Utils.tresor.CRISTAL_ARDENT));
-            getPioche().add(new CarteTresor(Controleur.Utils.tresor.PIERRE_SACREE));
-            getPioche().add(new CarteTresor(Controleur.Utils.tresor.STATUE_ZEPHYR));
+            getPioche().add(new CarteTresor(Controleur.Utils.CarteUtils.calice));
+            getPioche().add(new CarteTresor(Controleur.Utils.CarteUtils.cristal));
+            getPioche().add(new CarteTresor(Controleur.Utils.CarteUtils.pierre));
+            getPioche().add(new CarteTresor(Controleur.Utils.CarteUtils.zephyr));
         }
         for (int i = 0; i < 3; i++) {
             getPioche().add(new CarteMonteeEau());

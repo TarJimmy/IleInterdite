@@ -5,11 +5,21 @@
  */
 package Modele;
 
-import Controleur.Utils;
+import Controleur.Utils.CarteUtils;
 
 /**
  *
  * @author tardy
  */
 public abstract class CarteJoueur {
+    public final CarteUtils carte;
+
+    public CarteUtils getCarte() {
+        return carte;
+    }
+    CarteJoueur(CarteUtils carte){
+        this.carte = carte;
+    }
+    
+    
 }

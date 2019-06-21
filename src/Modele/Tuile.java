@@ -29,7 +29,7 @@ public class Tuile {
      */
     public Tuile(TuilesUtils nom) {
         this.setNom(nom);
-        this.setEtat(EtatTuile.INNONDEE);
+        this.setEtat(EtatTuile.INONDEE);
     }
 
     
@@ -121,9 +121,9 @@ public class Tuile {
         
          switch (etat) {
             case ASSECHEE:
-                etat = EtatTuile.INNONDEE;
+                etat = EtatTuile.INONDEE;
                 break;
-            case INNONDEE:
+            case INONDEE:
                 etat = EtatTuile.COULEE;
                 break;
             default:
@@ -135,7 +135,7 @@ public class Tuile {
      * Asseche la tuile
      */
     public void Assecher(){
-         if (etat == EtatTuile.INNONDEE){
+         if (etat == EtatTuile.INONDEE){
                 etat = EtatTuile.ASSECHEE;
         }
          System.out.println("hello moi");
@@ -146,7 +146,7 @@ public class Tuile {
      * @return Vrai si la tuile est innondée
      */
     public boolean isInnondee(){
-        return this.etat == EtatTuile.INNONDEE;
+        return this.etat == EtatTuile.INONDEE;
     }
     @Override
     public String toString(){

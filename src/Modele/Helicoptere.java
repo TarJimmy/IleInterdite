@@ -5,6 +5,12 @@
  */
 package Modele;
 
+import Controleur.Utils.CarteUtils;
+
 public class Helicoptere extends CarteSpecial{
+
+    public Helicoptere() {
+        super(CarteUtils.helicoptere);
+    }
     
 }

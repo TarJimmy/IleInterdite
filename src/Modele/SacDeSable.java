@@ -5,5 +5,13 @@
  */
 package Modele;
 
+import Controleur.Utils.CarteUtils;
+
 public class SacDeSable extends CarteSpecial{
+    
+
+    public SacDeSable() {
+        super(CarteUtils.sacsDeSable);
+    }
+    
 }
