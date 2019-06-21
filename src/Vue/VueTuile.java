@@ -32,13 +32,13 @@ public final class VueTuile extends JButton {
         fond = null;
         estCoulee=false;
         this.tuile = tuile.getNom();
-        mesPions = new ArrayList<>(4);
+        mesPions = new ArrayList<>();
         setLayout(new BorderLayout());
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
-        mesVuesPions = new JPanel(new GridLayout(1,4));
+        mesVuesPions = new JPanel(new GridLayout(2,2));
         add(mesVuesPions,BorderLayout.CENTER);
-        for(VuePion vue : mesPions){
-            mesVuesPions.add(vue);
+        for (int i =0;i<5;i++){
+            mesVuesPions.add(new JPanel());
         }
         setImage(this.tuile.getAssecher());
         activer(false);
@@ -66,36 +66,16 @@ public final class VueTuile extends JButton {
     
     public void initVuePion(VuePion vue){
         vue.setMaTuile(this);
-        mesVuesPions.add(vue);
     }
     public void addVuePion(VuePion vue){
-            boolean b = false;
-            int i = 0;
-            VuePion[] vuesPions =(VuePion[])mesVuesPions.getComponents();
-            while (!b &&i< vuesPions.length){
-                if( vuesPions[i] instanceof VuePion){
-                    vuesPions[i] = vue;
-                    vuesPions[i].getMaTuile().supVuePion(vuesPions[i]);
-                    vuesPions[i].setMaTuile(this);
-                    mesVuesPions.add(vuesPions[i]);
-                    b=true;
-                }
-                i++;
-            }
-	}
-	
+        mesVuesPions.add(vue);
+    }
+
 
     public void supVuePion(VuePion vue){
-        if (vue.getMaTuile()==this){
-            boolean b = false;
-            int i = 0;
-            Component[] vuesPions =mesVuesPions.getComponents();
-            while (!b && vue!=vuesPions[i]){
-                i++;
-            }
-            vuesPions[i] = new JPanel();
-        }
+        this.remove(vue);
     }
+    
     public void changeFond(){
         repaint();
     }

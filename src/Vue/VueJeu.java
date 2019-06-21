@@ -6,7 +6,9 @@ import Controleur.Observe;
 import Controleur.Observateur;
 import Controleur.TypeAction;
 import Controleur.Utils;
+import Controleur.Utils.tresor;
 import Modele.Aventurier;
+import Modele.CarteJoueur;
 import Modele.Grille;
 import Modele.Tuile;
 import java.awt.BorderLayout;
@@ -36,17 +38,17 @@ public class VueJeu extends Observe implements Observateur {
     private JButton btnGagnerTresor;
     private JButton btnTerminerTour;
     private JButton DeplacerAllier;
-    private VueAventurier vueAvTrActuel;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
     private JLabel indications;
     private int Nb_Boutons;
     private MessageAction msg;
-    
+    private final String debIndic = "Indications : ";
     
     
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
                if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
+                   this.indications.setText(debIndic + "Choississez une Tuile parmis celle proposé pour faire l'action choisie.");
                    vueGrille.faireChoixTuile(a, deplacement);
                }
 //Suivant sera pour choisir un aventurier
@@ -77,33 +79,41 @@ public class VueJeu extends Observe implements Observateur {
         deplacePion(av.getPion(),t);
     }
 
+    public void indic_Passif(Aventurier av ) {
+        indications.setText(debIndic+" Il vous reste "+av.getActionsRestantes()+" actions restantes");
+    }
+
     public class MonteeDesEaux extends PanelImage {
         private int niveauEau;
-        private MonteeDesEaux() throws IOException { 
+        private MonteeDesEaux(int niveau) throws IOException { 
             super("Niveau.png");
+            setNiveauEau(niveau);
             this.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
         }
 
-        public void setNiveauEau(int niveauEau) {
+        private void setNiveauEau(int niveauEau) {
             this.niveauEau = niveauEau;
+        }
+        public void addNiveau(){
+            niveauEau++;
             repaint();
         }
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Color.black);
-            g.fillRect(15, getHeight()-(niveauEau)*60-130, 130, 10);
+            g.setColor(Color.yellow);
+            g.fillRect(getWidth()/15, getHeight()-(niveauEau)*((9/10)*getHeight()/100)-(18*getHeight()/100), 2*getWidth()/4, 10);
         }
     }
     
-    public VueJeu(Grille grille,ArrayList<Modele.Aventurier> mesAvs, ArrayList<String> mesNoms) throws IOException {
+    public VueJeu(Grille grille,ArrayList<Modele.Aventurier> mesAvs, ArrayList<String> mesNoms, int niveauDeau) throws IOException {
         //Initialisation Composant
         initWindow();
         
         creationVuesAventuriers(mesNoms, mesAvs);
         vueGrille = new VueGrille(grille,mesAvs);
         vueGrille.addObservateur(this);
-        monteeDesEau = new MonteeDesEaux();
+        monteeDesEau = new MonteeDesEaux(niveauDeau);
         initHaut();
         initBas();
     }
@@ -111,8 +121,7 @@ public class VueJeu extends Observe implements Observateur {
         return monteeDesEau;
     }
     public void erreurTresor() {
-            // TODO - implement vueJeu.erreurTresor
-            throw new UnsupportedOperationException();
+            indications.setText(debIndic+"Tu n' pas assez de carte trésor ou tu n'est pas sur une tuile qui donne de trésor");   
     }
 
     public void PartieGagner() {
@@ -139,7 +148,7 @@ public class VueJeu extends Observe implements Observateur {
     }
     private void initBas() throws IOException {
         //InitBas et ses objets
-        JPanel bas = new JPanel(new BorderLayout());
+        JPanel bas = new JPanel(new GridLayout(1,3));
         bas.setPreferredSize(new Dimension(window.getWidth(),(window.getWidth()-2*window.getWidth()/7-window.getHeight())));//Longueur calculer pour avoir une grille carée
         window.add(bas,BorderLayout.SOUTH);
         this.btnBouger = new JButton("Bouger") ;
@@ -149,20 +158,23 @@ public class VueJeu extends Observe implements Observateur {
         this.btnTerminerTour = new JButton("Terminer Tour") ;
         JPanel decks = new JPanel(new BorderLayout());
         decks.setPreferredSize(new Dimension(300,bas.getHeight()));
-        bas.add(decks,BorderLayout.EAST);
+        bas.add(decks);
         JPanel panelCentre = new JPanel(new BorderLayout());
-        bas.add(panelCentre,BorderLayout.CENTER);
+        bas.add(panelCentre);
         JPanel tresors = new JPanel(new GridLayout(1,4));
         tresors.setPreferredSize(new Dimension(300,bas.getHeight()));
-        bas.add(tresors,BorderLayout.WEST);
+        bas.add(tresors);
         //Tresors
-        //tresors.add(new PanelImage())
+        tresors.add(new PanelImage(tresor.STATUE_ZEPHYR.getChemin()));
+        tresors.add(new PanelImage((tresor.CALICE_ONDE.getChemin())));
+        tresors.add(new PanelImage((tresor.PIERRE_SACREE.getChemin())));
+        tresors.add(new PanelImage((tresor.CRISTAL_ARDENT.getChemin())));
         //Decks
         GridLayout gDecks = new GridLayout(1,2);
         gDecks.setHgap(50);
         gDecks.setVgap(100);
-        JLabel pioche = new JLabel("Pioche");
-        JLabel defausse = new JLabel("Défausse");
+        JLabel pioche = new JLabel("Pioche",JLabel.CENTER);
+        JLabel defausse = new JLabel("Défausse",JLabel.CENTER);
         JPanel decksHaut = new JPanel(gDecks);
         decksHaut.setBackground(Color.white);
         decksHaut.add(pioche);
@@ -174,7 +186,7 @@ public class VueJeu extends Observe implements Observateur {
         decks.add(decksHaut, BorderLayout.NORTH);
         decks.add(decksBas,BorderLayout.CENTER);
         //panelBoutons
-        indications = new JLabel("Coucou je m'apelle jimmy ",JLabel.CENTER);
+        indications = new JLabel("Bonne Chance ! ",JLabel.CENTER);
         indications.setPreferredSize(new Dimension(panelCentre.getWidth(),30));
         indications.setBackground(Color.white);
         panelCentre.add(indications,BorderLayout.NORTH);
@@ -226,7 +238,14 @@ public class VueJeu extends Observe implements Observateur {
         btnBouger.addActionListener(creeActionListener(TypeAction.DEPLACER));
         btnAssecher.addActionListener(creeActionListener(TypeAction.ASSECHER));
         btnTerminerTour.addActionListener(creeActionListener(TypeAction.TERMINER_TOUR));
-        
+        btnGagnerTresor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MessageAction msg = new MessageAction();
+                msg.typeact = TypeAction.GAGNERTRESOR;
+                notifierMessageAction(msg);
+            }
+        });
     }
     private ActionListener creeActionListener(TypeAction type){
         return new ActionListener(){
@@ -237,6 +256,22 @@ public class VueJeu extends Observe implements Observateur {
                 notifierMessageAction(msg);
             }
         };
+    }
+    public void ajoutCarte(Aventurier av,CarteJoueur carte){
+        int i = 0;
+        boolean b=false;
+        while (i<mesVuesAvs.size() && !b){
+            if (mesVuesAvs.get(i).getPion()==av.getPion()){
+                //translateVue
+            }
+        }
+        
+    }
+    public void erreur_deplacer(){
+        this.indications.setText(debIndic+"Il n'y a aucune tuile pour vous deplacer");
+    }
+    public void erreur_assecher(){
+        this.indications.setText(debIndic+"Il n'y a aucune tuile a assecher présente");
     }
     private JPanel initHaut() {
         JPanel haut = new JPanel(new BorderLayout());
@@ -274,13 +309,13 @@ public class VueJeu extends Observe implements Observateur {
             mesVuesAvs.add(new VueAventurier(mesNoms.get(i), av.get(i),i));
         }
     }
-    public void setTrActuel(int index) {
+    public void setTrActuel(Aventurier av) {
         for (VueAventurier vue : mesVuesAvs){
-            if (vue==mesVuesAvs.get(index)){
-                //vue.activer(false);
+            if (vue.getPion()==av.getPion()){
+                vue.activer(true);
             }
             else{
-                //vue.activer(true);
+                vue.activer(false);
             }
         }
     }

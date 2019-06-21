@@ -97,7 +97,6 @@ public class VueGrille extends Observe {
         for (VueTuile tuile : vueModif){
             tuile.removeMouseListener(act);
             tuile.activer(false);
-            tuile.changeFond();
         }
         vueModif.clear();
     }
@@ -167,6 +166,8 @@ public class VueGrille extends Observe {
     public void deplacePion(Utils.Pion pion, Tuile t) {
         for (VuePion vuePion : mesPions){
             if (vuePion.getPion()==pion){
+                System.out.println(this.getVueTuile(t.getCoords()));
+                System.out.println(vuePion);
                 this.getVueTuile(t.getCoords()).addVuePion(vuePion);
             }
         }

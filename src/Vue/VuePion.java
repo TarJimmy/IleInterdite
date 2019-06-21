@@ -22,9 +22,7 @@ public class VuePion extends JPanel {
     private VueTuile maTuile;
     private final Pion pion;
 
-    public Pion getPion() {
-        return pion;
-    }
+    
     
     public VuePion(Pion pion){
         this.pion = pion;
@@ -33,8 +31,14 @@ public class VuePion extends JPanel {
     }
 
     public void setMaTuile(VueTuile maTuile) {
+         
+        if (this.maTuile!=null){
+            this.maTuile.supVuePion(this);
+        }
         this.maTuile = maTuile;
+        maTuile.addVuePion(this);
     }
+    
 
     public VueTuile getMaTuile() {
         return maTuile;
@@ -72,5 +76,13 @@ public class VuePion extends JPanel {
         g.setColor(pion.getCouleur());//couleur du pion
         g.fillOval(start, 0, taille, taille);
         g.fillPolygon(x, y, 3);
+    }
+    
+    public Pion getPion() {
+        return pion;
+    }
+    @Override
+    public String toString(){
+        return this.getPion().toString();
     }
 }
