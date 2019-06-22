@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import Controleur.*;
 import static Vue.VueJeu.DON_CARTE;
+import java.awt.Color;
 
 
 /**
@@ -61,10 +62,16 @@ public class VueChoixCarte extends Observe{
                 public void mouseReleased(MouseEvent e) {}
 
                 @Override
-                public void mouseEntered(MouseEvent e) {}
+                public void mouseEntered(MouseEvent e) {
+                VueCarte vue = (VueCarte)e.getSource();
+                vue.setBackground(Color.black);
+                }
 
                 @Override
-                public void mouseExited(MouseEvent e) {}
+                public void mouseExited(MouseEvent e) {
+                VueCarte vue = (VueCarte)e.getSource();
+                vue.setBackground(Color.white);
+                }
                 
             };
             

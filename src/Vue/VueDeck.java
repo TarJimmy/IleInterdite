@@ -1,5 +1,6 @@
 package Vue;
 
+import Controleur.Utils;
 import java.awt.Dimension;
 import java.io.IOException;
 import javax.swing.ImageIcon;
@@ -12,9 +13,12 @@ import javax.swing.JPanel;
  * @author beaufima
  */
 public class VueDeck extends PanelImage{
-    
-    VueDeck() throws IOException{
-        super("cartes/FondRouge.png");
+    public static String DECK_INONDATION =Utils.CarteUtils.deckInnondation.getChemin();
+    public static String DECK_TRESOR =Utils.CarteUtils.deckTresor.getChemin();
+    VueDeck(String choix) throws IOException{
+        super(choix);
     }
+   
+   
     
 }

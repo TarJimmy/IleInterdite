@@ -39,11 +39,12 @@ public class VueAventurier extends JPanel {
     private JTextField position;
     private final JScrollPane pouvoir;
     //A enlever apres demo
-    private String nomJoueur;
+    private String titre;
     private VueCarte[] mesCartes;
     private final int num; //numero de l'index de l'aventurier associer
     private final int NB_CARTE_MAX = 5;
     private JPanel panelCartes;
+    private String typeAventurier;
 	private void ajouterVueCarte(CarteUtils carte) throws IOException {
             boolean b = false;
             int i = 0;
@@ -82,11 +83,12 @@ public class VueAventurier extends JPanel {
 
 
     public String getNomAventurier() {
-        return nomJoueur;
+        return titre;
     }
 
     public VueAventurier(String nomJoueur, Aventurier av, int num) throws IOException{
-        this.nomJoueur = nomJoueur+" : "+av.toString();
+        typeAventurier = av.toString();
+        this.titre = nomJoueur+" : "+typeAventurier;
         pion = av.getPion();
         
         //le titre = nom du joueur 
@@ -100,7 +102,7 @@ public class VueAventurier extends JPanel {
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
         this.panelAventurier = new JPanel();
         panelAventurier.setBackground(getPion().getCouleur());
-        panelAventurier.add(new JLabel(this.nomJoueur,JLabel.CENTER));
+        panelAventurier.add(new JLabel(this.titre,JLabel.CENTER));
         add(panelAventurier, BorderLayout.NORTH);
         
         // =================================================================================
@@ -156,8 +158,16 @@ public class VueAventurier extends JPanel {
         return pion;
     }
 
-   
-    public void modifierVueCarte(boolean b,CarteUtils carte) throws IOException{
+    /**
+     *
+     * @param b
+     * @param carte
+     * @throws IOException
+     * si b=true ->Ajoute une carte
+     * si b=false -> Supprime une carte
+     */
+    public void modifierMesVuesCarte(boolean b,CarteUtils carte) throws IOException{
+        
         if(b){
             ajouterVueCarte(carte);
         }
@@ -168,6 +178,10 @@ public class VueAventurier extends JPanel {
 
     public VueCarte[] getMesCartes() {
         return mesCartes;
+    }
+
+    public String getTypeAventurier() {
+        return typeAventurier;
     }
 
     

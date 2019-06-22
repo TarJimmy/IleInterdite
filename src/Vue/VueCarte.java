@@ -31,6 +31,4 @@ public class VueCarte extends PanelImage {
         j.add(new VueCarte(CarteUtils.calice));
         j.setVisible(true);
     }
-
-    
 }

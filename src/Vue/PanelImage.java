@@ -20,6 +20,7 @@ public class PanelImage extends JPanel{
         private String nomIm;
         private boolean vide;
         public PanelImage(String nom) throws IOException { 
+            super();
             vide=false;
             setImage(nom);
         
@@ -44,8 +45,8 @@ public class PanelImage extends JPanel{
     }
     protected void setImage(String nom){
         setDoubleBuffered(true); 
-            setNomIm(nom);
-            setBackground(Color.white);
+        setNomIm(nom);
+        setBackground(Color.white);
         try {
             this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/Images/"+nomIm));
         } catch (IOException ex) {

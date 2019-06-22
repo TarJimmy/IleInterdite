@@ -1,6 +1,5 @@
 package Vue;
 
-import Controleur.TypeAction;
 import Controleur.Utils;
 import Modele.Tuile;
 import java.awt.BorderLayout;
@@ -9,57 +8,50 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import Controleur.Utils.TuilesUtils;
-import java.awt.Component;
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.Array;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
-public final class VueTuile extends JButton {
-        private ArrayList<VuePion> mesPions;
-        private JPanel mesVuesPions;
+public final class VueTuile extends PanelImage {
         private Image image;
-        private TuilesUtils tuile;
+        private final TuilesUtils tuile;
         private boolean estCoulee;
-        private Color fond;
+    private boolean activer;
 
-    VueTuile (Tuile tuile){
-        fond = null;
+    VueTuile (Tuile tuile) throws IOException{
+        super(tuile.getNom().getAssecher());
+        setDoubleBuffered(true); 
         estCoulee=false;
         this.tuile = tuile.getNom();
-        mesPions = new ArrayList<>();
-        setLayout(new BorderLayout());
+        GridLayout g= new GridLayout(2,2);
+        g.setHgap(20);
+        g.setVgap(20);
+        setLayout(g);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
-        mesVuesPions = new JPanel(new GridLayout(2,2));
-        add(mesVuesPions,BorderLayout.CENTER);
-        for (int i =0;i<5;i++){
-            mesVuesPions.add(new JPanel());
-        }
+        setBorder(new BevelBorder(BevelBorder.RAISED,Color.BLUE,Color.BLACK,Color.BLUE,Color.BLACK));
         setImage(this.tuile.getAssecher());
         activer(false);
-            
+        
     }
 
     public TuilesUtils getTuile() {
         return tuile;
     }
-    public void setFond(Color fond) {
-        this.fond = fond;
-    }
-
-    public Color getFond() {
-        return fond;
-    }
      
+        @Override
     public void setImage(String etat) {
         try {
             this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/Images/"+etat));
+            repaint();
         } catch (IOException ex) {
             System.err.println("Erreur de lecture de "+etat);
         }
@@ -69,7 +61,7 @@ public final class VueTuile extends JButton {
         vue.setMaTuile(this);
     }
     public void addVuePion(VuePion vue){
-        mesVuesPions.add(vue);
+        add(vue);
     }
 
 
@@ -77,9 +69,6 @@ public final class VueTuile extends JButton {
         this.remove(vue);
     }
     
-    public void changeFond(){
-        repaint();
-    }
     public void changeEtat(Utils.EtatTuile etat){
         switch(etat){
             case COULEE:
@@ -89,21 +78,25 @@ public final class VueTuile extends JButton {
             case INONDEE:
                 setImage(tuile.getInnonder());
         }
-        changeFond();
+        repaint();
     }
-    @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
+        @Override
+        protected void paintComponent(Graphics g1) {
+             Graphics2D g = (Graphics2D) g1;
             if(!estCoulee){
                 g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-                g.setColor(Color.white);
-                //g.drawRect(0, 0, this.getWidth(), this.getHeight());
+                if (activer){
+                    g.setStroke(new BasicStroke(10));
+                
+                }
+                //g.setStroke(new BasicStroke(4));
                 
             }
             else {
                 setVisible(false);
             } 
         }
+
     
     
         @Override
@@ -112,14 +105,18 @@ public final class VueTuile extends JButton {
     }
 
     public void activer(boolean b) {
+        activer=b;
+        repaint();
         setEnabled(b);
-        if (b){
-            setBackground(Color.red);
-        }
-        else{
-            setBackground(Color.white);
-        }
+        
     }
-
+    public static void main(String[]args) throws IOException{
+        JFrame j = new JFrame("test");
+        j.setLocationRelativeTo(null);
+        j.setSize(500, 500);
+        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        j.add(new VueTuile(new Tuile(TuilesUtils.heliport)));
+        j.setVisible(true);
+    }
     
 }

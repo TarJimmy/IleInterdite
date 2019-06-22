@@ -5,6 +5,7 @@ import Controleur.Observe;
 import Controleur.TypeMessage;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,6 +55,7 @@ public class VueAccueil extends Observe{
     JButton regle;
     private final String[] stringDif = {"Novice","Normal","Elite","Extreme"};
     private final Color[] ColorDif ={VERT_FONCER,ORANGE_FONCER,Color.MAGENTA,Color.BLACK};
+    private final Font fontGeneral = new Font(Font.SERIF,Font.TYPE1_FONT,14);
     public VueAccueil() throws IOException{
         //Configure Fenetre
         initWindow();
@@ -84,6 +86,7 @@ public class VueAccueil extends Observe{
         //GAUCHE -> Haut -> Nord
         regle = new JButton("Regle >>");
         regle.setBackground(Color.gray);
+        regle.setFont(fontGeneral);
         regle.setBackground(Color.white);
         GHnord.add(regle);
         
@@ -117,6 +120,7 @@ public class VueAccueil extends Observe{
         JLabel indicNbJoueur=new JLabel();
         indicNbJoueur.setVisible(false);
         indicNbJoueur.setBackground(COULEUR_PRINCIPAL);
+        indicNbJoueur.setFont(fontGeneral);
         indicNbJoueur.setHorizontalAlignment(JLabel.CENTER);
         GHcentre.add(indicNbJoueur);
         //Reste de GAUCHE -> Haut -> Centre -> Centre+Bas
@@ -139,21 +143,23 @@ public class VueAccueil extends Observe{
          //GAUCHE -> Bas -> En tete
          Gbas.setBackground(COULEUR_PRINCIPAL);
          JLabel indicDifficultes = new JLabel("Choisir la difficulté :");
+         indicDifficultes.setFont(fontGeneral);
          Gbas.add(indicDifficultes);
          Gbas.add(monSlider());
 
          //GAUCHE -> Bas -> Reste
-        JPanel GbasRegle = new JPanel();
-        GbasRegle.setBackground(Color.white);
+        JPanel GbasJouer = new JPanel();
+        GbasJouer.setBackground(Color.white);
         GHnord.setBackground(COULEUR_PRINCIPAL);
         jouer = new JButton("C'est Parti !");
         jouer.setBackground(COULEUR_PRINCIPAL);
+        jouer.setFont(fontGeneral);
         jouer.setBorderPainted(true);
         jouer.setFocusable(false);
-        GbasRegle.add(jouer);
+        GbasJouer.add(jouer);
         
         
-        Gbas.add(GbasRegle);
+        Gbas.add(GbasJouer);
         
         
         
@@ -291,12 +297,14 @@ public class VueAccueil extends Observe{
         g.setHgap(5);
         JPanel pan = new JPanel(g);
         JLabel gauche = new JLabel(stringDif[0]);
+        gauche.setFont(fontGeneral);
         gauche.setBackground(COULEUR_PRINCIPAL);
         gauche.setForeground(ColorDif[0]);
         gauche.setHorizontalAlignment(JLabel.RIGHT);
         JLabel droite = new JLabel(stringDif[3]);
         droite.setBackground(COULEUR_PRINCIPAL);
         droite.setForeground(ColorDif[3]);
+        droite.setFont(fontGeneral);
         droite.setHorizontalAlignment(JLabel.LEFT);
         slider =  new JSlider(SwingConstants.HORIZONTAL, 0, NB_DIFFICULTE-1, 0);
         slider.setBackground(COULEUR_PRINCIPAL);
@@ -306,12 +314,14 @@ public class VueAccueil extends Observe{
                 JSlider slid = (JSlider) arg0.getSource();
                 choixDif.setText(stringDif[slid.getValue()]);
                 choixDif.setForeground(ColorDif[slid.getValue()]);
+                choixDif.setFont(fontGeneral);
             }
         });
         choixDif = new JLabel(stringDif[0]);
         choixDif.setForeground(ColorDif[0]);
         choixDif.setHorizontalAlignment(JLabel.CENTER);
         choixDif.setBackground(COULEUR_PRINCIPAL);
+        choixDif.setFont(fontGeneral);
         pan.add(gauche);
         pan.add(slider);
         pan.add(droite);

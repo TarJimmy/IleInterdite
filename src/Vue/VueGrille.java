@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -33,7 +34,7 @@ public class VueGrille extends Observe {
         private MouseListener act;
         public static final int CHOIX_DEP=1;
         public static final int CHOIX_AS=2;
-	public VueGrille (Grille grille,ArrayList<Aventurier> avs){
+	public VueGrille (Grille grille,ArrayList<Aventurier> avs) throws IOException{
             GridLayout g =new GridLayout(6,6);
             g.setHgap(10);
             g.setVgap(10);
@@ -46,7 +47,7 @@ public class VueGrille extends Observe {
             vueModif = new ArrayList<>();
         }
         
-        private void initGrille(Grille grille){
+        private void initGrille(Grille grille) throws IOException{
             vuesTuiles = new VueTuile[6][6];
             Tuile[][] tuiles = grille.getMesTuiles();
             for (int x=0;x<tuiles.length;x++){
@@ -161,9 +162,10 @@ public class VueGrille extends Observe {
     public void deplacePion(Utils.Pion pion, Tuile t) {
         for (VuePion vuePion : mesPions){
             if (vuePion.getPion()==pion){
-                System.out.println(this.getVueTuile(t.getCoords()));
+                System.out.println();
+                System.out.println("nb pion = " +this.getVueTuile(t.getCoords()).getComponents().length);
                 System.out.println(vuePion);
-                this.getVueTuile(t.getCoords()).addVuePion(vuePion);
+                vuePion.setMaTuile(this.getVueTuile(t.getCoords()));
             }
         }
     }

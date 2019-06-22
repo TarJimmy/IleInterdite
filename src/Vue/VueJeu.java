@@ -12,6 +12,7 @@ import Modele.Tuile;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -24,10 +25,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class VueJeu extends Observe implements Observateur {
 
@@ -39,7 +42,7 @@ public class VueJeu extends Observe implements Observateur {
     private JButton btnDonnerCarte;
     private JButton btnGagnerTresor;
     private JButton btnTerminerTour;
-    private JButton DeplacerAllier;
+    private JButton btnDeplacerAllier;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
     private JLabel indications;
@@ -48,15 +51,23 @@ public class VueJeu extends Observe implements Observateur {
     private VueChoixCarte vChoixCarte;
     private ArrayList<VueAventurier> vueAvsModif;
     private MouseListener choixAvListener;
-    
-    
-    
+    private final PanelImage ZEPHYR =  new PanelImage(tresor.STATUE_ZEPHYR.getChemin());
+    private final PanelImage CALICE =  new PanelImage(tresor.CALICE_ONDE.getChemin());
+    private final PanelImage PIERRE =  new PanelImage(tresor.PIERRE_SACREE.getChemin());
+    private final PanelImage CRISTAL =  new PanelImage(tresor.CRISTAL_ARDENT.getChemin());
+    private final PanelImage[] mesTresors = {new PanelImage(tresor.STATUE_ZEPHYR.getChemin()),
+                                            new PanelImage(tresor.CALICE_ONDE.getChemin()),
+                                            new PanelImage(tresor.PIERRE_SACREE.getChemin()),
+                                            new PanelImage(tresor.CRISTAL_ARDENT.getChemin())};
     public static final int DEFAUSSER = 10;
     public static final int DON_CARTE = 11;
     public static final int HELICOPTERE = 12;
     private final String debIndic = "Indications : ";
-    
-    
+    private final VueDeck piocheInnondation= new VueDeck(VueDeck.DECK_INONDATION);
+    private final VueDeck defausseInnondation = new VueDeck(VueDeck.DECK_INONDATION);
+    private final VueDeck piocheTresor= new VueDeck(VueDeck.DECK_TRESOR);
+    private final VueDeck defausseTresor= new VueDeck(VueDeck.DECK_TRESOR);
+    private final Font fontToutText = new Font(Font.SERIF, Font.CENTER_BASELINE, 15);
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
                if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
                    this.indications.setText(debIndic + "Choississez une Tuile parmis celle proposé pour faire l'action choisie.");
@@ -120,6 +131,7 @@ public class VueJeu extends Observe implements Observateur {
         for(VueAventurier vueAv: getVueAvsModif()){
             vueAv.addMouseListener(choixAvListener);
         }
+        indications.setText(debIndic+ "Cliquer sur l'Aventurier a qui vous voulez donner votre carte (sur sa couleur)");
     }
     public void faireChoixCarte(int etat,ArrayList<Modele.CarteJoueur> carteJ){
         ArrayList<VueCarte> vCarte;
@@ -189,6 +201,33 @@ public class VueJeu extends Observe implements Observateur {
         indications.setText(debIndic+" Il vous reste "+av.getActionsRestantes()+" actions restantes");
     }
 
+    public void gainTresor(tresor tres) {
+        int i=0;
+        boolean b=true;
+        while (i<mesTresors.length&&b){
+            if(mesTresors[i].getNomIm()==tres.getChemin()){
+                mesTresors[i].setVisible(true);
+                b=false;
+            }
+            i++;
+        }
+    }
+
+    public void erreur_DonCarte() {
+        indications.setText(debIndic+"Tu n'a aucune carte a donner");
+    }
+
+    public void erreur_choixAventurier() {
+        indications.setText(debIndic+"Tu ne peut donner de carte a aucun Aventurier");
+    }
+
+    private void initBouton(JButton btn) {
+            btn.setBackground(Color.yellow);
+            btn.setBorderPainted(true);
+            btn.setFont(fontToutText);
+            btn.setBorderPainted(false);
+    }
+
     public class MonteeDesEaux extends PanelImage {
         private int niveauEau;
         private MonteeDesEaux(int niveau) throws IOException { 
@@ -220,13 +259,15 @@ public class VueJeu extends Observe implements Observateur {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                actualise();
+                msg.vueAv.add((VueAventurier) e.getSource());
+                msg.typeact = TypeAction.CHOIX_INTER_DONCARTE;
+                notifierMessageAction(msg);
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                msg.vueAv.add((VueAventurier) e.getSource());
-                msg.typeact = TypeAction.CHOIX_INTER_DONCARTE;
-                notifierMessageAction(msg);
+                
             }
 
             @Override
@@ -249,12 +290,13 @@ public class VueJeu extends Observe implements Observateur {
         monteeDesEau = new MonteeDesEaux(niveauDeau);
         initHaut();
         initBas();
+        afficher(true);
     }
     public MonteeDesEaux getMonteeDesEau() {
         return monteeDesEau;
     }
     public void erreurTresor() {
-            indications.setText(debIndic+"Tu n' pas assez de carte trésor ou tu n'est pas sur une tuile qui donne de trésor");   
+            indications.setText(debIndic+"Tu n'a pas assez de carte trésor ou tu n'est pas sur une tuile qui donne de trésor");   
     }
 
     public void PartieGagner() {
@@ -277,18 +319,23 @@ public class VueJeu extends Observe implements Observateur {
         window.setSize(tk.getScreenSize().width,tk.getScreenSize().height);
         window.setLayout(new BorderLayout());
         window.setBackground(Color.white);
-        
     }
+    
     private void initBas() throws IOException {
         //InitBas et ses objets
         JPanel bas = new JPanel(new GridLayout(1,3));
         bas.setPreferredSize(new Dimension(window.getWidth(),(window.getWidth()-2*window.getWidth()/7-window.getHeight())));//Longueur calculer pour avoir une grille carée
         window.add(bas,BorderLayout.SOUTH);
         this.btnBouger = new JButton("Bouger") ;
+        initBouton(btnBouger);
         this.btnAssecher = new JButton( "Assecher");
-        this.btnDonnerCarte = new JButton("Donner Carte") ;
+        initBouton(btnAssecher);
+        this.btnDonnerCarte = new JButton("Donner Carte");
+        initBouton(btnDonnerCarte);
         this.btnGagnerTresor = new JButton("GagnerTresor");
-        this.btnTerminerTour = new JButton("Terminer Tour") ;
+        initBouton(btnGagnerTresor);
+        this.btnTerminerTour = new JButton("Terminer Tour");
+        initBouton(btnTerminerTour);
         JPanel decks = new JPanel(new BorderLayout());
         decks.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(decks);
@@ -298,29 +345,44 @@ public class VueJeu extends Observe implements Observateur {
         tresors.setPreferredSize(new Dimension(300,bas.getHeight()));
         bas.add(tresors);
         //Tresors
-        tresors.add(new PanelImage(tresor.STATUE_ZEPHYR.getChemin()));
-        tresors.add(new PanelImage((tresor.CALICE_ONDE.getChemin())));
-        tresors.add(new PanelImage((tresor.PIERRE_SACREE.getChemin())));
-        tresors.add(new PanelImage((tresor.CRISTAL_ARDENT.getChemin())));
+        JPanel[] mesPanelsTresors = new JPanel[4];
+        for (int i =0; i<mesPanelsTresors.length;i++){
+            mesPanelsTresors[i] = new JPanel();
+            mesPanelsTresors[i].setBackground(Color.white);
+            JLabel l = new JLabel("");
+            //mesPanelsTresors[i].add();
+            mesPanelsTresors[i].add(mesTresors[i]);
+            mesTresors[i].setPreferredSize(new Dimension(100,158));
+            mesTresors[i].setVisible(false);
+            tresors.add(mesPanelsTresors[i]);
+        }
         //Decks
-        GridLayout gDecks = new GridLayout(1,2);
+        GridLayout gDecks = new GridLayout(1,4);
         gDecks.setHgap(50);
         gDecks.setVgap(100);
-        JLabel pioche = new JLabel("Pioche",JLabel.CENTER);
-        JLabel defausse = new JLabel("Défausse",JLabel.CENTER);
+        JLabel pInnondation = new JLabel("Pioche Innondation",JLabel.CENTER);
+        JLabel dInnondation = new JLabel("Défausse Innodation",JLabel.CENTER);
+        JLabel pTresor = new JLabel("Pioche Tresor",JLabel.CENTER);
+        JLabel dTresor = new JLabel("Défausse Tresor",JLabel.CENTER);
         JPanel decksHaut = new JPanel(gDecks);
         decksHaut.setBackground(Color.white);
-        decksHaut.add(pioche);
-        decksHaut.add(defausse);
+        decksHaut.add(pInnondation);
+        decksHaut.add(dInnondation);
+        decksHaut.add(pTresor);
+        decksHaut.add(dTresor);
         JPanel decksBas = new JPanel(gDecks);
-        decksBas.add(new VueDeck());
-        decksBas.add(new VueDeck());
+        decksBas.add(piocheInnondation);
+        decksBas.add(defausseInnondation);
+        decksBas.add(piocheTresor);
+        decksBas.add(defausseTresor);
         decksBas.setBackground(Color.white);
         decks.add(decksHaut, BorderLayout.NORTH);
         decks.add(decksBas,BorderLayout.CENTER);
+        
         //panelBoutons
         indications = new JLabel("Bonne Chance ! ",JLabel.CENTER);
         indications.setPreferredSize(new Dimension(panelCentre.getWidth(),30));
+        indications.setFont(fontToutText);
         indications.setBackground(Color.white);
         panelCentre.add(indications,BorderLayout.NORTH);
         GridLayout g = new GridLayout(1,Nb_Boutons);
@@ -336,13 +398,15 @@ public class VueJeu extends Observe implements Observateur {
         BCCHaut.setBackground(Color.white);
         BCcentre.add(BCCHaut);
         //Verifier s'il y a un navigateur
+        
         Iterator it = this.mesVuesAvs.iterator();
         Nb_Boutons = 4;
         while (it.hasNext()){
             VueAventurier vue = (VueAventurier) it.next();
             vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
-            if (vue.getNomAventurier().equals("Navigateur")){
+            if (vue.getTypeAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;//Si oui mettre emplacement pour boutons deplacer allier
+                System.out.println("Je sui un navigateeur");
             }
         }
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
@@ -356,14 +420,16 @@ public class VueJeu extends Observe implements Observateur {
         boutonUnitaire[2].add(btnDonnerCarte);
         boutonUnitaire[3].add(btnGagnerTresor);
         if (Nb_Boutons==5){
-            DeplacerAllier=new JButton("Deplacer Allier");
-            boutonUnitaire[4].add(DeplacerAllier);
+            btnDeplacerAllier=new JButton("Déplacer Allier");
+            boutonUnitaire[4].add(btnDeplacerAllier);
+            initBouton(btnDeplacerAllier);
             boutonUnitaire[4].setBackground(Color.white);
             BCCHaut.add(boutonUnitaire[4]);
         }
         //PANEL Bas->Centre->Centre->Bas
         //initTerminerTour
         JPanel BCCBas = new JPanel();
+        BCCBas.setBackground(Color.white);
         BCCBas.add(btnTerminerTour);
         BCcentre.add(BCCBas);
         BCcentre.setBackground(Color.white);
@@ -371,33 +437,30 @@ public class VueJeu extends Observe implements Observateur {
         btnBouger.addActionListener(creeActionListener(TypeAction.DEPLACER));
         btnAssecher.addActionListener(creeActionListener(TypeAction.ASSECHER));
         btnTerminerTour.addActionListener(creeActionListener(TypeAction.TERMINER_TOUR));
-        btnGagnerTresor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MessageAction msg = new MessageAction();
-                msg.typeact = TypeAction.GAGNERTRESOR;
-                notifierMessageAction(msg);
-            }
-        });
+        btnGagnerTresor.addActionListener(creeActionListener(TypeAction.GAGNERTRESOR));
         btnDonnerCarte.addActionListener(creeActionListener(TypeAction.DONNERCARTE));
     }
     private ActionListener creeActionListener(TypeAction type){
         return new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                actualise();
                 MessageAction msg = new MessageAction();
                 msg.typeact = type;
                 notifierMessageAction(msg);
             }
         };
     }
-    public void ajoutCarte(Aventurier av,CarteJoueur carte){
+    public void ajoutCarte(Aventurier av,CarteJoueur carte) throws IOException{
         int i = 0;
         boolean b=false;
         while (i<mesVuesAvs.size() && !b){
             if (mesVuesAvs.get(i).getPion()==av.getPion()){
-                //translateVue
+                CarteUtils  ca= translate_Ca_VueCa(carte, av).getCarte();
+                System.out.println(ca);
+                mesVuesAvs.get(i).modifierMesVuesCarte(true,ca);
             }
+            i++;
         }
         
     }
@@ -456,6 +519,7 @@ public class VueJeu extends Observe implements Observateur {
     @Override 
     public void traiterMessage(Message msg){
         notifierMessage(msg);
+        
     }
     @Override
     public void traiterMessageAction(MessageAction msg){
@@ -470,6 +534,7 @@ public class VueJeu extends Observe implements Observateur {
                     msg.typeact = TypeAction.CHOIX_DEFAUSSER;
                 }
         }
+        
         notifierMessageAction(msg);
     }
 
