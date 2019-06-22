@@ -56,13 +56,14 @@ public class Controleur implements Observateur {
     private void addIndex(){
         index = (index+1)%getMesAventuriers().size();
     }
-    public void piocher (){
+    public void piocher () throws IOException{
         for (int i = 0; i < 2; i++) {
             CarteJoueur carte = deckTresor.Piocher();
             if(carte instanceof CarteMonteeEau){
                 MonteeDesEaux(carte);
             }else{
                 getAvTrActuel().AddCarte(carte);
+                jeu.ajoutCarte(getAvTrActuel(), carte);
             }
         }
         aPiocher = true;
@@ -122,7 +123,7 @@ public class Controleur implements Observateur {
         
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    public void checkFinTour(){
+    public void checkFinTour() throws IOException{
         if(getAvTrActuel().getActionsRestantes() <= 0 ){
             if(getAvTrActuel() instanceof Ingenieur && ((Ingenieur) getAvTrActuel()).aAssecher()){
                 //ihm fonction uniquement assecher
@@ -133,9 +134,9 @@ public class Controleur implements Observateur {
     }
     
     
-    public void finTour(){
+    public void finTour() throws IOException{
         if(!partieGagne()){
-//            piocher();
+            piocher();
             addIndex();
             debutTour();
             
@@ -170,6 +171,9 @@ public class Controleur implements Observateur {
         switch(msg.type){
             case DEBUTJEU:
                 accueil.afficher(false);
+                deckTresor = new DeckTresor();
+                //deckInnondation= new DeckInnondation() {};
+
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
             try {
@@ -181,97 +185,119 @@ public class Controleur implements Observateur {
                 jeu.afficher(true);
                 jeu.addObservateur(this);
                 debutTour();
-                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.calice));
-                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.pierre));
-                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.cristal));
-                getAvTrActuel().AddCarte(new CarteTresor(Utils.CarteUtils.helicoptere));
-            case ACTION:
+                CarteTresor ca = new CarteTresor(Utils.CarteUtils.calice);
+                getAvTrActuel().AddCarte(ca);
                 
-                break;
+                getAvTrActuel().AddCarte(ca);
+                getAvTrActuel().AddCarte(ca);
+                getAvTrActuel().AddCarte(ca);
+        {
+            try {
+                jeu.ajoutCarte(AvTrActuel, ca);
+                jeu.ajoutCarte(AvTrActuel, ca);
+                jeu.ajoutCarte(AvTrActuel, ca);
+                jeu.ajoutCarte(AvTrActuel, ca);
+            } catch (IOException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         }
     }
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
-        Tuile t;
-        switch(msg.typeact){
-            case DEPLACER:
-                if(getAvTrActuel().getDeplacement(grille).size()>0){
-                    jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille)); 
-                }
-                else{
-                    jeu.erreur_deplacer();
-                }
-                break;
-            case ASSECHER:
-                if (getAvTrActuel().getAssechement(grille).size()>0){
-                    jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
-                }
-                else {
-                    jeu.erreur_assecher();
-                }
-            break;
-            case TERMINER_TOUR:
-                finTour();
-                break;
-            case GAGNERTRESOR:
-                if (getAvTrActuel().checkGagnerTresor()!=null){
-                    //TO-DO
-                }
-                else{
-                    jeu.erreurTresor();
-                }
-                break;
-            case DONNERCARTE:
-                jeu.faireChoixAventurier(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()), VueJeu.DON_CARTE);
-                break;
-            case CHOIX_INTER_DONCARTE:
-                jeu.faireChoixCarte(VueJeu.DON_CARTE, getAvTrActuel().getCartesDonnables());
-                break;
-            
-            case CHOIX_TUILE_DEP:
-                t = grille.getTuile(msg.coord[0],msg.coord[1]);
-                getAvTrActuel().deplacer(t);
-                jeu.actualise();
-                jeu.deplacePion(getAvTrActuel().getPion(), t);
-                checkFinTour();
-                jeu.indic_Passif(this.getAvTrActuel());
-                break;
-            case CHOIX_TUILE_AS:
-                t = grille.getTuile(msg.coord[0],msg.coord[1]);
-                getAvTrActuel().assecher(t);
-                jeu.actualise();
-                jeu.indic_Passif(getAvTrActuel());
-                checkFinTour();
-                break;
-            case CHOIX_DONCARTE:
-                System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
-                Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
-                CarteJoueur carte = null;
-                
-                
-                Utils.tresor tres = null;
-                
-                
-                Iterator it = getAvTrActuel().getCartesDonnables().iterator();
-                
-                while(carte == null && it.hasNext()){
-                    CarteTresor ca = (CarteTresor) it.next();
-                    if(ca.getTresor() == tres){
-                        carte = ca;
+        try {
+            Tuile t;
+            switch(msg.typeact){
+                case DEPLACER:
+                    if(getAvTrActuel().getDeplacement(grille).size()>0){
+                        jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille));
                     }
-                }
-                
-                getAvTrActuel().DonnerCarte(carte, receveur);
-                CheckNbCarte(receveur);//finir*/
-                
-                
-                
-                
-                
-                
-                
-                break;
+                    else{
+                        jeu.erreur_deplacer();
+                    }
+                    break;
+                case ASSECHER:
+                    if (getAvTrActuel().getAssechement(grille).size()>0){
+                        jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
+                    }
+                    else {
+                        jeu.erreur_assecher();
+                    }
+                    break;
+                case TERMINER_TOUR:
+                    
+                    finTour();
+                    break;
+                case GAGNERTRESOR:
+                    if (getAvTrActuel().checkGagnerTresor()!=null){
+                        Utils.tresor tres = getAvTrActuel().checkGagnerTresor();
+                        getAvTrActuel().GagnerTresor(tres);
+                        jeu.gainTresor(tres);
+                    }
+                    else{
+                        jeu.erreurTresor();
+                    }
+                    break;
+                case DONNERCARTE:
+                    if(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()).size()>0){
+                        jeu.faireChoixAventurier(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()), VueJeu.DON_CARTE);
+                    }
+                    else{
+                        jeu.erreur_choixAventurier();
+                    }
+                    break;
+                case CHOIX_INTER_DONCARTE:
+                    if(getAvTrActuel().getCartesDonnables().size()>0){
+                        jeu.faireChoixCarte(VueJeu.DON_CARTE, getAvTrActuel().getCartesDonnables());
+                        
+                    }
+                    else{
+                        jeu.erreur_DonCarte();
+                    }
+                    break;
+                    
+                case CHOIX_TUILE_DEP:
+                    t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                    getAvTrActuel().deplacer(t);
+                    jeu.actualise();
+                    jeu.deplacePion(getAvTrActuel().getPion(), t);
+                    checkFinTour();
+                    jeu.indic_Passif(this.getAvTrActuel());
+                    break;
+                case CHOIX_TUILE_AS:
+                    t = grille.getTuile(msg.coord[0],msg.coord[1]);
+                    getAvTrActuel().assecher(t);
+                    jeu.actualise();
+                    jeu.indic_Passif(getAvTrActuel());
+                    checkFinTour();
+                    break;
+                case CHOIX_DONCARTE:
+                    System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
+                    Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
+                    CarteJoueur carte = null;
+                    Utils.tresor tres = null;
+                    Iterator it = getAvTrActuel().getCartesDonnables().iterator();
+                    while(carte == null && it.hasNext()){
+                        CarteTresor ca = (CarteTresor) it.next();
+                        if(ca.getTresor() == tres){
+                            carte = ca;
+                        }
+                    }
+                    
+                    getAvTrActuel().DonnerCarte(carte, receveur);
+                    CheckNbCarte(receveur);//finir*/
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    break;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
