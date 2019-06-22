@@ -28,6 +28,6 @@ public class Messager extends Aventurier {
 
     @Override
     public String getDescription() {
-        return "Donnez des cartes Trésor à un joueur n'importe où sur l'île pour 1 action par carte";
+        return  super.getDescription()+"Donnez des cartes Trésor à un joueur \nn'importe où sur l'île pour 1 action par \ncarte";
     }
 }

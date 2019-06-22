@@ -360,7 +360,9 @@ public abstract class Aventurier {
      *
      * @return renvoie la description des pouvoirs de l'aventurier
      */
-    public abstract String getDescription();
+    public  String getDescription(){
+        return "Pouvoir :\n";
+    };
     
     
 }

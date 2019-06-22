@@ -45,7 +45,7 @@ public class Explorateur extends Aventurier {
 
     @Override
     public String getDescription() {
-        return "Déplacez-vous et/ou asséchez diagonalement";
+        return super.getDescription()+"Déplacez-vous et/ou asséchez diagonalement";
     }
     
 }

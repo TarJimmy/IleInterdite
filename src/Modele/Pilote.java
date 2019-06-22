@@ -64,7 +64,7 @@ public class Pilote extends Aventurier {
 
     @Override
     public String getDescription() {
-        return "Une fois par tour, volez jusqu'à \nn'importe quelle tuile de l'île pour 1 action";
+        return  super.getDescription()+"Une fois par tour, volez jusqu'à \nn'importe quelle tuile de l'île pour 1 action";
     }
     
     

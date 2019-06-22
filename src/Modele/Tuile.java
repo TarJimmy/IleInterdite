@@ -29,7 +29,7 @@ public class Tuile {
      */
     public Tuile(TuilesUtils nom) {
         this.setNom(nom);
-        this.setEtat(EtatTuile.INONDEE);
+        this.setEtat(EtatTuile.ASSECHEE);
     }
 
     

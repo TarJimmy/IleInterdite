@@ -2,10 +2,10 @@ package Modele;
 
 import java.util.*;
 
-public abstract class DeckInnondation implements Deck {
+public class DeckInnondation implements Deck {
 
     ArrayList<CarteInnondation> pioche,defausse;
-
+    
     @Override
     public void initDeck() {
         

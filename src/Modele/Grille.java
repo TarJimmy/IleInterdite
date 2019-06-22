@@ -51,12 +51,10 @@ public final class Grille {
      */
     public Tuile getTuile(Utils.TuilesUtils nom){
         Tuile tui = null;
-        System.out.println(nom);
         for(int x=0;x<mesTuiles.length;x++){
            for(int y=0;y<mesTuiles[x].length;y++){
                 if (getTuile(x,y) != null){
                     if (getTuile(x,y).getNom().equals(nom)){
-                        System.out.println(getTuile(x,y).getNom());
                         tui = getTuile(x,y);
                     }
                 }
