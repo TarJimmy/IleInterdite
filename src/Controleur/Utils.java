@@ -161,8 +161,9 @@ public class Utils {
     pierre("Pierre","cartes/Pierre.png"),
     zephyr("Zéphyr","cartes/Zephyr.png"),
     sacsDeSable("Sacs de Sable","cartes/SacsDeSable.png"),
-    helicoptere("Helicoptere","cartes/Helicoptere.png");
-    
+    helicoptere("Helicoptere","cartes/Helicoptere.png"),
+    deckInnondation("Deck Innondation","cartes/FondBleu.png"),
+    deckTresor("Decks Tresor","cartes/FondRouge.png");
     
     
     private String nom;

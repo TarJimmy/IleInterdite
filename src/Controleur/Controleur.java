@@ -115,7 +115,7 @@ public class Controleur implements Observateur {
         grille.MonterNiveauDeau();
         deckInnondation.ResetPioche();
         deckTresor.Defausser(c);
-        //actualiser dans ihm
+        jeu.getMonteeDesEau().addNiveau();
     }
     public void faireDefausser(Aventurier av,int nbCartes){
             //defausser des cartes via l'ihm
@@ -171,8 +171,8 @@ public class Controleur implements Observateur {
         switch(msg.type){
             case DEBUTJEU:
                 accueil.afficher(false);
+                deckInnondation= new DeckInnondation();
                 deckTresor = new DeckTresor();
-                //deckInnondation= new DeckInnondation() {};
 
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
@@ -182,31 +182,17 @@ public class Controleur implements Observateur {
                 Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
-                jeu.afficher(true);
                 jeu.addObservateur(this);
+                System.out.println("Width : "+jeu.getVueGrille().getVueGrille().getWidth());
+            System.out.println("Heigth : "+jeu.getVueGrille().getVueGrille().getHeight());
                 debutTour();
-                CarteTresor ca = new CarteTresor(Utils.CarteUtils.calice);
-                getAvTrActuel().AddCarte(ca);
-                
-                getAvTrActuel().AddCarte(ca);
-                getAvTrActuel().AddCarte(ca);
-                getAvTrActuel().AddCarte(ca);
-        {
-            try {
-                jeu.ajoutCarte(AvTrActuel, ca);
-                jeu.ajoutCarte(AvTrActuel, ca);
-                jeu.ajoutCarte(AvTrActuel, ca);
-                jeu.ajoutCarte(AvTrActuel, ca);
-            } catch (IOException ex) {
-                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+       
         }
     }
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
-        try {
+        
             Tuile t;
             switch(msg.typeact){
                 case DEPLACER:
@@ -226,8 +212,13 @@ public class Controleur implements Observateur {
                     }
                     break;
                 case TERMINER_TOUR:
-                    
+            {
+                try {
                     finTour();
+                } catch (IOException ex) {
+                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                     break;
                 case GAGNERTRESOR:
                     if (getAvTrActuel().checkGagnerTresor()!=null){
@@ -260,19 +251,35 @@ public class Controleur implements Observateur {
                 case CHOIX_TUILE_DEP:
                     t = grille.getTuile(msg.coord[0],msg.coord[1]);
                     getAvTrActuel().deplacer(t);
-                    jeu.actualise();
                     jeu.deplacePion(getAvTrActuel().getPion(), t);
-                    checkFinTour();
+                    jeu.actualise();
+                    
                     jeu.indic_Passif(this.getAvTrActuel());
+            {
+                try {
+                    checkFinTour();
+                } catch (IOException ex) {
+                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                     break;
                 case CHOIX_TUILE_AS:
                     t = grille.getTuile(msg.coord[0],msg.coord[1]);
                     getAvTrActuel().assecher(t);
                     jeu.actualise();
+                    
+                    
                     jeu.indic_Passif(getAvTrActuel());
+            {
+                try {
                     checkFinTour();
+                } catch (IOException ex) {
+                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                     break;
                 case CHOIX_DONCARTE:
+                    System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                     System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                     Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                     CarteJoueur carte = null;
@@ -296,9 +303,7 @@ public class Controleur implements Observateur {
                     
                     break;
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     
