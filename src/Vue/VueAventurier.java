@@ -28,10 +28,6 @@ import javax.swing.border.MatteBorder;
 
 public class VueAventurier extends JPanel {
 
-	/**
-	 * 
-	 * @param carte
-	 */
     private final JPanel panelCentre ;
     private final JPanel panelAventurier;
     private final JPanel panelJScrool;
@@ -45,19 +41,22 @@ public class VueAventurier extends JPanel {
     private final int NB_CARTE_MAX = 5;
     private JPanel panelCartes;
     private String typeAventurier;
-	private void ajouterVueCarte(CarteUtils carte) throws IOException {
-            boolean b = false;
-            int i = 0;
-            while (!b &&i<NB_CARTE_MAX ){
-                if( mesCartes[i].isVide() ){
-                    mesCartes[i].toogleVide();
-                    mesCartes[i].setCarte(carte);
-                    b=true;
-                    mesCartes[i].repaint();
-                }
-                i++;
+    
+    
+    
+    public void ajouterVueCarte(CarteUtils carte) throws IOException {
+        boolean b = false;
+        int i = 0;
+        while (!b && i<NB_CARTE_MAX ){
+            if( mesCartes[i].isVide() ){
+                mesCartes[i].toogleVide();
+                mesCartes[i].setCarte(carte);
+                b=true;
+                mesCartes[i].repaint();
             }
-	}
+            i++;
+        }
+    }
 
 	public void choixCarte() {
 		// TODO - implement VueAventurier.choixCarte
@@ -68,7 +67,7 @@ public class VueAventurier extends JPanel {
 	 * 
 	 * @param carte
 	 */
-	private void SupprimerVueCarte(CarteUtils carte) throws IOException {
+	public void supprimerVueCarte(CarteUtils carte) throws IOException {
             boolean b = false;
             int i = 0;
             while (!b &&i<NB_CARTE_MAX ){
@@ -154,7 +153,7 @@ public class VueAventurier extends JPanel {
         this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, (couleur)));
     }
         
-    public Pion getPion() {
+    public Pion getPion(){
         return pion;
     }
 
@@ -166,15 +165,7 @@ public class VueAventurier extends JPanel {
      * si b=true ->Ajoute une carte
      * si b=false -> Supprime une carte
      */
-    public void modifierMesVuesCarte(boolean b,CarteUtils carte) throws IOException{
-        
-        if(b){
-            ajouterVueCarte(carte);
-        }
-        else{
-            SupprimerVueCarte(carte);
-        }
-    }
+ 
 
     public VueCarte[] getMesCartes() {
         return mesCartes;

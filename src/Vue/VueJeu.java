@@ -70,7 +70,7 @@ public class VueJeu extends Observe implements Observateur {
     private final Font fontToutText = new Font(Font.SERIF, Font.CENTER_BASELINE, 15);
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
                if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
-                   this.indications.setText(debIndic + "Choississez une Tuile parmis celle proposé pour faire l'action choisie.");
+                   this.indications.setText(debIndic + "Choississez une Tuile parmi celles proposés pour faire l'action choisie.");
                    vueGrille.faireChoixTuile(a, deplacement);
                }
 //Suivant sera pour choisir un aventurier
@@ -121,10 +121,13 @@ public class VueJeu extends Observe implements Observateur {
     
     public void faireChoixAventurier(ArrayList<Aventurier> avs,int etat){
         vueAvsModif = new ArrayList<>();
+        this.indications.setText(debIndic + "Choisissez un Aventurier parmi ceux disponibles pour faire l'action choisie.");
+        
         for(Aventurier av : avs){
             for(VueAventurier vueAv : getMesVuesAvs()){
                 if(av.getPion() == vueAv.getPion()){
                     vueAvsModif.add(vueAv);
+                    vueAv.activer(true);
                 }
             }
         }
@@ -138,19 +141,21 @@ public class VueJeu extends Observe implements Observateur {
         vCarte = new ArrayList<>();
         for(Modele.CarteJoueur c : carteJ){
             CarteUtils carteU = null;
-            switch(((CarteTresor) c).getTresor()){
-                case CALICE_ONDE:
-                    carteU = CarteUtils.calice;
-                    break;
-                case PIERRE_SACREE:
-                    carteU = CarteUtils.pierre;
-                    break;
-                case STATUE_ZEPHYR:
-                    carteU = CarteUtils.zephyr;
-                    break;
-                case CRISTAL_ARDENT:
-                    carteU = CarteUtils.cristal;
-                    break;
+            if(c instanceof CarteTresor){
+                switch(((CarteTresor) c).getTresor()){
+                    case CALICE_ONDE:
+                        carteU = CarteUtils.calice;
+                        break;
+                    case PIERRE_SACREE:
+                        carteU = CarteUtils.pierre;
+                        break;
+                    case STATUE_ZEPHYR:
+                        carteU = CarteUtils.zephyr;
+                        break;
+                    case CRISTAL_ARDENT:
+                        carteU = CarteUtils.cristal;
+                        break;
+                }
             }
             if(c instanceof CarteSpecial){
                 if(c instanceof Helicoptere){
@@ -166,8 +171,7 @@ public class VueJeu extends Observe implements Observateur {
             }
         }
         
-            
-        String desc = "Choisissez une carte à " + ((etat == DON_CARTE)?"donner":"defausser");
+        
         vChoixCarte = new VueChoixCarte(vCarte,etat);
         vChoixCarte.addObservateur(this);
     }
@@ -175,6 +179,9 @@ public class VueJeu extends Observe implements Observateur {
     public void actualise() {
         vueGrille.actualise();
         monteeDesEau.repaint();
+        for(VueAventurier vAv : getVueAvsModif()){
+            vAv.removeMouseListener(choixAvListener);
+        }
         
     }
 
@@ -220,17 +227,16 @@ public class VueJeu extends Observe implements Observateur {
     public void erreur_choixAventurier() {
         indications.setText(debIndic+"Tu ne peut donner de carte a aucun Aventurier");
     }
+    
+    public void changeEtat(EtatTuile etat, Tuile t) {
+        vueGrille.getVueTuile(t.getCoords()).changeEtat(etat);
+    }
 
     private void initBouton(JButton btn) {
             btn.setBackground(Color.yellow);
             btn.setBorderPainted(true);
             btn.setFont(fontToutText);
             btn.setBorderPainted(false);
-    }
-
-    public void changeEtat(EtatTuile etat, Tuile t) {
-            vueGrille.getVueTuile(t.getCoords()).changeEtat(etat);
-            System.out.println("Jy passe");
     }
 
     public class MonteeDesEaux extends PanelImage {
@@ -272,7 +278,10 @@ public class VueJeu extends Observe implements Observateur {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+                MessageAction msg = new MessageAction();
+                msg.vueAv.add((VueAventurier) e.getSource());
+                msg.typeact = TypeAction.CHOIX_INTER_DONCARTE;
+                traiterMessageAction(msg);
             }
 
             @Override
@@ -457,18 +466,13 @@ public class VueJeu extends Observe implements Observateur {
         };
     }
     public void ajoutCarte(Aventurier av,CarteJoueur carte) throws IOException{
-        int i = 0;
-        boolean b=false;
-        while (i<mesVuesAvs.size() && !b){
-            if (mesVuesAvs.get(i).getPion()==av.getPion()){
-                CarteUtils  ca= translate_Ca_VueCa(carte, av).getCarte();
-                System.out.println(ca);
-                mesVuesAvs.get(i).modifierMesVuesCarte(true,ca);
-            }
-            i++;
-        }
-        
+        translate_Av_VueAv(av).ajouterVueCarte(carte.getCarte());
     }
+    public void supprimeCarte(Aventurier av,CarteJoueur carte) throws IOException{
+        translate_Av_VueAv(av).supprimerVueCarte(carte.getCarte());
+    }
+    
+    
     public void erreur_deplacer(){
         this.indications.setText(debIndic+"Il n'y a aucune tuile pour vous deplacer");
     }
@@ -528,16 +532,19 @@ public class VueJeu extends Observe implements Observateur {
     }
     @Override
     public void traiterMessageAction(MessageAction msg){
+        actualise();
         switch(msg.typeact){
             case CHOIX_INTER_DONCARTE:
-                this.msg.typeact = TypeAction.CHOIX_DONCARTE;
+                this.msg.vueAv = msg.vueAv;
                 break;
-            case CHOIX_CARTE:
-                if(this.msg.typeact == TypeAction.CHOIX_INTER_DONCARTE){
-                    msg.typeact = TypeAction.CHOIX_DONCARTE;
-                }else {
-                    msg.typeact = TypeAction.CHOIX_DEFAUSSER;
-                }
+            case CHOIX_DONCARTE:
+                this.vChoixCarte.setVisible(false);
+                msg.vueAv = this.msg.vueAv;
+            break;
+            case CHOIX_DEFAUSSER:
+                this.vChoixCarte.setVisible(false);
+                this.msg.vueCarte = msg.vueCarte;
+                break;
         }
         
         notifierMessageAction(msg);
