@@ -163,6 +163,11 @@ public class Controleur implements Observateur {
             mesAventuriers.remove(mesAventuriers.get(mesAventuriers.size()-1));
         }
     }
+
+    public Grille getGrille() {
+        return grille;
+    }
+    
     /**
      *
      * @param msg
@@ -172,11 +177,12 @@ public class Controleur implements Observateur {
         switch(msg.type){
             case DEBUTJEU:
                 accueil.afficher(false);
-                deckInnondation= new DeckInnondation();
-                deckTresor = new DeckTresor();
-
+                
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
+                
+                deckInnondation= new DeckInnondation(getGrille());
+                deckTresor = new DeckTresor();
             try {
                 jeu = new VueJeu(grille,mesAventuriers,msg.noms,msg.difficulte);
             } catch (IOException ex) {
@@ -185,7 +191,7 @@ public class Controleur implements Observateur {
                 
                 jeu.addObservateur(this);
                 System.out.println("Width : "+jeu.getVueGrille().getVueGrille().getWidth());
-            System.out.println("Heigth : "+jeu.getVueGrille().getVueGrille().getHeight());
+                System.out.println("Heigth : "+jeu.getVueGrille().getVueGrille().getHeight());
                 debutTour();
        
         }
