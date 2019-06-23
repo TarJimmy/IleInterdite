@@ -16,6 +16,7 @@ import Controleur.Utils.TuilesUtils;
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
@@ -38,7 +39,7 @@ public final class VueTuile extends PanelImage {
         setLayout(g);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         setBorder(new BevelBorder(BevelBorder.RAISED,Color.BLUE,Color.BLACK,Color.BLUE,Color.BLACK));
-        setImage(this.tuile.getAssecher());
+        setImage(this.tuile.getInnonder());
         activer(false);
         
     }
@@ -83,13 +84,15 @@ public final class VueTuile extends PanelImage {
         @Override
         protected void paintComponent(Graphics g1) {
              Graphics2D g = (Graphics2D) g1;
+             Stroke sauv = g.getStroke();
             if(!estCoulee){
                 g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 if (activer){
                     g.setStroke(new BasicStroke(10));
+                    g.drawRect(0, 0, this.getWidth(), this.getHeight());
                 
                 }
-                //g.setStroke(new BasicStroke(4));
+                g.setStroke(sauv);
                 
             }
             else {

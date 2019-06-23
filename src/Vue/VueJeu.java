@@ -228,6 +228,11 @@ public class VueJeu extends Observe implements Observateur {
             btn.setBorderPainted(false);
     }
 
+    public void changeEtat(EtatTuile etat, Tuile t) {
+            vueGrille.getVueTuile(t.getCoords()).changeEtat(etat);
+            System.out.println("Jy passe");
+    }
+
     public class MonteeDesEaux extends PanelImage {
         private int niveauEau;
         private MonteeDesEaux(int niveau) throws IOException { 
