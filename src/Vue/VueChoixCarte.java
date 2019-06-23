@@ -15,9 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import Controleur.*;
-import static Vue.VueJeu.DON_CARTE;
+import static Vue.VueJeu.*;
 import java.awt.Color;
-
 
 /**
  *
@@ -54,7 +53,7 @@ public class VueChoixCarte extends Observe{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     msg.vueCarte = ((VueCarte) e.getSource());
-                    msg.typeact = TypeAction.CHOIX_CARTE;
+                    msg.typeact = ((etat == VueJeu.DON_CARTE)?TypeAction.CHOIX_DONCARTE:TypeAction.CHOIX_DEFAUSSER);
                     notifierMessageAction(msg);
                 }
 
@@ -63,14 +62,14 @@ public class VueChoixCarte extends Observe{
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                VueCarte vue = (VueCarte)e.getSource();
-                vue.setBackground(Color.black);
+                    VueCarte vue = (VueCarte)e.getSource();
+                    vue.setBackground(Color.black);
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                VueCarte vue = (VueCarte)e.getSource();
-                vue.setBackground(Color.white);
+                    VueCarte vue = (VueCarte)e.getSource();
+                    vue.setBackground(Color.white);
                 }
                 
             };
@@ -83,7 +82,7 @@ public class VueChoixCarte extends Observe{
             
             panelDesc = new JPanel();
             
-            desc = new JLabel("Choisissez une carte à" + ((etat == DON_CARTE)?"donner":"defausser"));
+            desc = new JLabel("Choisissez une carte à " + ((etat == DON_CARTE)?"donner":"defausser"));
             panelDesc.add(desc);
             
             window.add(panelDesc,BorderLayout.SOUTH);
@@ -107,4 +106,8 @@ public class VueChoixCarte extends Observe{
                 
                 
             }
+
+    public void setVisible(boolean b) {
+        this.window.setVisible(b);
+    }
     }
