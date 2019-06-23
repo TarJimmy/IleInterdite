@@ -1,10 +1,10 @@
 package Modele;
 
-public abstract class CarteInnondation {
+public class CarteInnondation {
 
     Tuile maTuile;
 
-    public CarteInnondation(Tuile maTuile) {
+    CarteInnondation(Tuile maTuile) {
         this.maTuile = maTuile;
     }
 

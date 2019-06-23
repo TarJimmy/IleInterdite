@@ -2,7 +2,7 @@ package Modele;
 
 import java.util.*;
 
-public class DeckTresor implements Deck {
+public class DeckTresor {
 
     private ArrayList<CarteJoueur> pioche,defausse;
 
@@ -10,7 +10,7 @@ public class DeckTresor implements Deck {
         initDeck();
     }
     
-    @Override
+    
     public void initDeck(){
         pioche = new ArrayList<>();
         defausse = new ArrayList<>();
@@ -31,7 +31,7 @@ public class DeckTresor implements Deck {
     }
     
     
-    @Override
+    
     public void Melanger() {
         Collections.shuffle(getPioche());
     }
@@ -58,7 +58,7 @@ public class DeckTresor implements Deck {
         getDefausse().add(carte);
     }
 
-    @Override
+   
     public void ResetPioche() {
         getPioche().addAll(getDefausse());
         getDefausse().clear();

@@ -2,16 +2,31 @@ package Modele;
 
 import java.util.*;
 
-public class DeckInnondation implements Deck {
+public class DeckInnondation {
 
     ArrayList<CarteInnondation> pioche,defausse;
+
+    public DeckInnondation(Grille grille) {
+        Tuile[][] tab = grille.getMesTuiles();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if(tab[i][j] != null){
+                    Defausser(new CarteInnondation(tab[i][j]));
+                }
+            }
+        }
+        ResetPioche();
+    }
+
     
-    @Override
+    
+    
+    
     public void initDeck() {
         
     }
 
-    @Override
+    
     public void Melanger() {
         Collections.shuffle(getDefausse());
     }
@@ -48,7 +63,7 @@ public class DeckInnondation implements Deck {
     }
     
 
-    @Override
+    
     public void ResetPioche() {
         Melanger();
         getPioche().addAll(getDefausse());
