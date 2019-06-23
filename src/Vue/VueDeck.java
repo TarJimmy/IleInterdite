@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  * @author beaufima
  */
 public class VueDeck extends PanelImage{
-    public static String DECK_INONDATION =Utils.CarteUtils.deckInnondation.getChemin();
+    public static String DECK_INONDATION =Utils.CarteUtils.deckInondation.getChemin();
     public static String DECK_TRESOR =Utils.CarteUtils.deckTresor.getChemin();
     VueDeck(String choix) throws IOException{
         super(choix);

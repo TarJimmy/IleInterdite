@@ -16,6 +16,7 @@ package Controleur;
 	DEPLACER,
         CHOIX_TUILE_DEP,
         CHOIX_TUILE_AS,
+        CHOIX_TUILE_DEP_FORCE,
         CHOIX_INTER_DONCARTE,
         CHOIX_CARTE,
         CHOIX_DONCARTE,

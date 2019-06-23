@@ -59,17 +59,23 @@ public class VueJeu extends Observe implements Observateur {
                                             new PanelImage(tresor.CALICE_ONDE.getChemin()),
                                             new PanelImage(tresor.PIERRE_SACREE.getChemin()),
                                             new PanelImage(tresor.CRISTAL_ARDENT.getChemin())};
+    
+    
+    public static final int CHOIX_DEP=1;
+    public static final int CHOIX_AS=2;
+    
+    
     public static final int DEFAUSSER = 10;
     public static final int DON_CARTE = 11;
     public static final int HELICOPTERE = 12;
     private final String debIndic = "Indications : ";
-    private final VueDeck piocheInnondation= new VueDeck(VueDeck.DECK_INONDATION);
-    private final VueDeck defausseInnondation = new VueDeck(VueDeck.DECK_INONDATION);
+    private final VueDeck piocheInondation= new VueDeck(VueDeck.DECK_INONDATION);
+    private final VueDeck defausseInondation = new VueDeck(VueDeck.DECK_INONDATION);
     private final VueDeck piocheTresor= new VueDeck(VueDeck.DECK_TRESOR);
     private final VueDeck defausseTresor= new VueDeck(VueDeck.DECK_TRESOR);
     private final Font fontToutText = new Font(Font.SERIF, Font.CENTER_BASELINE, 15);
     public void faireChoixTuile(int a, ArrayList<Tuile> deplacement) {
-               if(a==vueGrille.CHOIX_AS || a==vueGrille.CHOIX_DEP) {
+               if(a==CHOIX_AS || a==CHOIX_DEP) {
                    this.indications.setText(debIndic + "Choississez une Tuile parmi celles proposés pour faire l'action choisie.");
                    vueGrille.faireChoixTuile(a, deplacement);
                }
@@ -182,6 +188,7 @@ public class VueJeu extends Observe implements Observateur {
         for(VueAventurier vAv : getVueAvsModif()){
             vAv.removeMouseListener(choixAvListener);
         }
+        BtnSetEnabled(true);
         
     }
 
@@ -189,10 +196,10 @@ public class VueJeu extends Observe implements Observateur {
         vueGrille.deplacePion(pion,t);
     }
     public int getCHOIX_AS(){
-        return VueGrille.CHOIX_AS;
+        return CHOIX_AS;
     }
     public int getCHOIX_DEP(){
-        return VueGrille.CHOIX_DEP;
+        return CHOIX_DEP;
     }
 
     public void faireChoixAventuriers(ArrayList<Aventurier> avsDonsCarte) {
@@ -205,7 +212,7 @@ public class VueJeu extends Observe implements Observateur {
     }
 
     public void indic_Passif(Aventurier av ) {
-        indications.setText(debIndic+" Il vous reste "+av.getActionsRestantes()+" actions restantes");
+        indications.setText(debIndic+" Vous avez " + av.getActionsRestantes() + ((av.getActionsRestantes() ==1)?" action restante":" actions restantes" ));
     }
 
     public void gainTresor(tresor tres) {
@@ -314,13 +321,13 @@ public class VueJeu extends Observe implements Observateur {
     }
 
     public void PartieGagner() {
-            // TODO - implement vueJeu.PartieGagner
-            throw new UnsupportedOperationException();
+        BtnSetEnabled(false);
+        indications.setText(debIndic + "Vous avez Gagnée !");
     }
 
     public void PartiePerdu() {
-            // TODO - implement vueJeu.PartiePerdu
-            throw new UnsupportedOperationException();
+        BtnSetEnabled(false);
+        indications.setText(debIndic + "Vous avez Perdu !");
     }
 
 
@@ -374,19 +381,19 @@ public class VueJeu extends Observe implements Observateur {
         GridLayout gDecks = new GridLayout(1,4);
         gDecks.setHgap(50);
         gDecks.setVgap(100);
-        JLabel pInnondation = new JLabel("Pioche Innondation",JLabel.CENTER);
-        JLabel dInnondation = new JLabel("Défausse Innodation",JLabel.CENTER);
+        JLabel pInondation = new JLabel("Pioche Inondation",JLabel.CENTER);
+        JLabel dInondation = new JLabel("Défausse Inondation",JLabel.CENTER);
         JLabel pTresor = new JLabel("Pioche Tresor",JLabel.CENTER);
         JLabel dTresor = new JLabel("Défausse Tresor",JLabel.CENTER);
         JPanel decksHaut = new JPanel(gDecks);
         decksHaut.setBackground(Color.white);
-        decksHaut.add(pInnondation);
-        decksHaut.add(dInnondation);
+        decksHaut.add(pInondation);
+        decksHaut.add(dInondation);
         decksHaut.add(pTresor);
         decksHaut.add(dTresor);
         JPanel decksBas = new JPanel(gDecks);
-        decksBas.add(piocheInnondation);
-        decksBas.add(defausseInnondation);
+        decksBas.add(piocheInondation);
+        decksBas.add(defausseInondation);
         decksBas.add(piocheTresor);
         decksBas.add(defausseTresor);
         decksBas.setBackground(Color.white);
@@ -420,7 +427,6 @@ public class VueJeu extends Observe implements Observateur {
             vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
             if (vue.getTypeAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;//Si oui mettre emplacement pour boutons deplacer allier
-                System.out.println("Je sui un navigateeur");
             }
         }
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
@@ -528,7 +534,6 @@ public class VueJeu extends Observe implements Observateur {
     @Override 
     public void traiterMessage(Message msg){
         notifierMessage(msg);
-        
     }
     @Override
     public void traiterMessageAction(MessageAction msg){
@@ -553,5 +558,24 @@ public class VueJeu extends Observe implements Observateur {
     public ArrayList<VueAventurier> getVueAvsModif() {
         return vueAvsModif;
     }
+    public void deplacementforce(ArrayList<Tuile> deplacement){
+        BtnSetEnabled(false);
+        faireChoixTuile(CHOIX_DEP, deplacement);
+    }
+    private void BtnSetEnabled(boolean b){
+        btnBouger.setEnabled(b);
+        btnAssecher.setEnabled(b);
+        btnDonnerCarte.setEnabled(b);
+        btnGagnerTresor.setEnabled(b);
+        btnTerminerTour.setEnabled(b);
+        if(Nb_Boutons == 5){
+            btnDeplacerAllier.setEnabled(b);
+        }
+    }
+    
+    public void debutTour(Aventurier av){
+        indications.setText(debIndic + "Au tour de " + translate_Av_VueAv(av).getNomAventurier());
+    }
+    
     
 }

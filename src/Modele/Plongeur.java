@@ -66,7 +66,7 @@ public class Plongeur extends Aventurier {
     }
     @Override
     public String getDescription() {
-        return  super.getDescription()+"Passez par 1 ou plusieurs \ntuiles adjacentes innondées \net/ou manquantes pour 1 action \n(vous devez terminer votre tour sur une tuile)";
+        return  super.getDescription()+"Passez par 1 ou plusieurs tuiles adjacentes\ninnondées et/ou manquantes pour 1 action\n(vous devez terminer votre tour sur une tuile)";
     }
     
 }

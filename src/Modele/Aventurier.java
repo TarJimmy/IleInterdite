@@ -333,7 +333,7 @@ public abstract class Aventurier {
         return actionsRestantes;
     }
 
-    private void setActionsRestantes(int actionsRestantes) {
+    public void setActionsRestantes(int actionsRestantes) {
         this.actionsRestantes = actionsRestantes;
     }
     @Override

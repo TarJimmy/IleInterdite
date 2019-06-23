@@ -27,7 +27,7 @@ public class Controleur implements Observateur {
     private VueJeu jeu;
     private ArrayList<Aventurier> mesAventuriers;
     private Grille grille;
-    private DeckInnondation deckInnondation;
+    private DeckInondation deckInondation;
     private DeckTresor deckTresor;
     private Aventurier AvTrActuel;
     private int index;
@@ -57,18 +57,52 @@ public class Controleur implements Observateur {
     private void addIndex(){
         index = (index+1)%getMesAventuriers().size();
     }
-    public void piocher () throws IOException{
-        for (int i = 0; i < 2; i++) {
-            CarteJoueur carte = deckTresor.Piocher();
-            if(carte instanceof CarteMonteeEau){
-                MonteeDesEaux(carte);
-            }else{
-                getAvTrActuel().AddCarte(carte);
-                jeu.ajoutCarte(getAvTrActuel(), carte);
+    public boolean piocher () throws IOException{
+        if(!aPiocher){
+            aPiocher = true;
+            for (int i = 0; i < 2; i++) {
+                CarteJoueur carte = getDeckTresor().Piocher();
+                if(carte instanceof CarteMonteeEau){
+                    MonteeDesEaux(carte);
+                }else{
+                    getAvTrActuel().AddCarte(carte);
+                    jeu.ajoutCarte(getAvTrActuel(), carte);
+                }
+            }
+            
+            //Pioche des cartes inondation
+            ArrayList<Tuile> tuiles = getDeckInondation().Inondation(grille.getEchelonMonteEau());
+            for(Tuile tui : tuiles){
+                jeu.changeEtat(tui.getEtat(), tui);
             }
         }
-        aPiocher = true;
-        CheckNbCarte(getAvTrActuel());
+        boolean interruption = false;
+        Iterator it = getMesAventuriers().iterator();
+        int i=0;
+        
+        while(it.hasNext() && !interruption){
+            i++;
+            Aventurier av = (Aventurier) it.next();
+                if(!av.getMaPos().estDisponible()){
+                    if(av.getDeplacement(grille).size() > 0){
+                        interruption = true;
+                        System.out.println("deplacement forcé");
+                        AvTrActuel = av;
+                        if(AvTrActuel instanceof Pilote){
+                            ((Pilote) AvTrActuel).setaVoler(false);
+                        }
+                        getAvTrActuel().setActionsRestantes(0);
+                        jeu.deplacementforce(AvTrActuel.getDeplacement(grille));
+                        System.out.println(i);
+                    }else{
+                        jeu.PartiePerdu();
+                    }
+                }
+            }
+        if(!interruption){
+            CheckNbCarte(getAvTrActuel());
+        }
+        return !interruption;
     }
     public boolean partieGagne(){
         boolean gagne = true;
@@ -89,13 +123,20 @@ public class Controleur implements Observateur {
     }
     public boolean partiePerdu(){
         boolean perdu = !grille.getTuile(Utils.TuilesUtils.heliport).estDisponible();
-        perdu = perdu || grille.getEchelonMonteEau() <= 10;
+        perdu = perdu || grille.getEchelonMonteEau() >= 10;
         if(!perdu){
             HashSet<Utils.tresor> tresors = new HashSet<>();
             for(Tuile tui : grille.getTuilesDisponibles()){
                 tresors.add(tui.getTresor());
             }
             perdu = tresors.contains(Utils.tresor.values());
+        }
+        if(!perdu){
+            for(Aventurier av : getMesAventuriers()){
+                if(!av.getMaPos().estDisponible()){
+                    perdu = av.getDeplacement(grille).size() == 0;
+                }
+            }
         }
         return perdu;
     }
@@ -105,6 +146,7 @@ public class Controleur implements Observateur {
         aPiocher = false;
         setTrAv();
         getAvTrActuel().DebutTour();
+        jeu.debutTour(AvTrActuel);
     }
 
     public Aventurier getAvTrActuel(){
@@ -113,9 +155,10 @@ public class Controleur implements Observateur {
     
     
     public void MonteeDesEaux(CarteJoueur c){
+        System.out.println("montee des eaux");
         grille.MonterNiveauDeau();
-        deckInnondation.ResetPioche();
-        deckTresor.Defausser(c);
+        deckInondation.ResetPioche();
+        getDeckTresor().Defausser(c);
         jeu.getMonteeDesEau().addNiveau();
     }
     public void faireDefausser(Aventurier av,int nbCartes){
@@ -133,20 +176,21 @@ public class Controleur implements Observateur {
             finTour();
         }
     }
-    
+
     
     public void finTour() throws IOException{
         if(!partieGagne()){
-            piocher();
-            addIndex();
-            debutTour();
-            
+            if(piocher() && !partiePerdu()){
+                addIndex();
+                debutTour();
+            }
+        }else{
+            jeu.PartieGagner();
         }
-
     }
     public void CheckNbCarte(Aventurier av){
         if( av.nbCarte() > 5){
-            faireDefausser(av, av.nbCarte()-5);
+            //faireDefausser(av, av.nbCarte()-5);
         }
     }
     
@@ -181,7 +225,7 @@ public class Controleur implements Observateur {
                 grille= new Grille(msg.difficulte);
                 creationAventurier(msg.nbJoueur);
                 
-                deckInnondation= new DeckInnondation(getGrille());
+                deckInondation= new DeckInondation(getGrille());
                 deckTresor = new DeckTresor();
             try {
                 jeu = new VueJeu(grille,mesAventuriers,msg.noms,msg.difficulte);
@@ -190,12 +234,43 @@ public class Controleur implements Observateur {
             }
                 
                 jeu.addObservateur(this);
-                System.out.println("Width : "+jeu.getVueGrille().getVueGrille().getWidth());
-                System.out.println("Heigth : "+jeu.getVueGrille().getVueGrille().getHeight());
+                piochesInitial();
                 debutTour();
-       
         }
     }
+    public void piochesInitial(){
+        //Pioche des cartes pour les joueurs
+        for(Aventurier av : getMesAventuriers()){
+            for (int i = 0; i < 2; i++) {
+                CarteJoueur carte = getDeckTresor().Piocher();
+            while(carte instanceof CarteMonteeEau){
+                getDeckTresor().Defausser(carte);
+                carte = getDeckTresor().Piocher();
+            }
+            try {
+                av.AddCarte(carte);
+                jeu.ajoutCarte(av, carte);
+            } catch (IOException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }
+        getDeckTresor().ResetPioche();
+        //Pioche des cartes inondation
+        ArrayList<Tuile> tuiles = getDeckInondation().InondationInitial();
+        for(Tuile tui : tuiles){
+            jeu.changeEtat(tui.getEtat(), tui);
+        }
+    }
+
+    public DeckInondation getDeckInondation() {
+        return deckInondation;
+    }
+
+    public DeckTresor getDeckTresor() {
+        return deckTresor;
+    }
+    
 
     @Override
     public void traiterMessageAction(MessageAction msg) {
@@ -270,8 +345,6 @@ public class Controleur implements Observateur {
                     jeu.indic_Passif(getAvTrActuel());  
                     break;
                 case CHOIX_DONCARTE:
-                    System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
-                    System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                     Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
                     CarteJoueur carte = null;
                     Utils.tresor tres = null;
@@ -302,6 +375,7 @@ public class Controleur implements Observateur {
     public static void main(String[]args ) throws IOException{
         new Controleur();
     }
+
 
     
 }

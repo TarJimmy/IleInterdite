@@ -32,8 +32,6 @@ public class VueGrille extends Observe {
         private MessageAction msg;
         private ArrayList<VuePion> mesPions;
         private MouseListener act;
-        public static final int CHOIX_DEP=1;
-        public static final int CHOIX_AS=2;
 	public VueGrille (Grille grille,ArrayList<Aventurier> avs) throws IOException{
             GridLayout g =new GridLayout(6,6);
             g.setHgap(10);
@@ -129,10 +127,10 @@ public class VueGrille extends Observe {
                 @Override
                 public void mouseClicked(MouseEvent arg0) {
                     switch(a){
-                        case CHOIX_DEP :
+                        case VueJeu.CHOIX_DEP :
                             msg.typeact = TypeAction.CHOIX_TUILE_DEP;
                             break;
-                        case CHOIX_AS :
+                        case VueJeu.CHOIX_AS :
                             msg.typeact = TypeAction.CHOIX_TUILE_AS;
                             break;
                     }
@@ -162,9 +160,6 @@ public class VueGrille extends Observe {
     public void deplacePion(Utils.Pion pion, Tuile t) {
         for (VuePion vuePion : mesPions){
             if (vuePion.getPion()==pion){
-                System.out.println();
-                System.out.println("nb pion = " +this.getVueTuile(t.getCoords()).getComponents().length);
-                System.out.println(vuePion);
                 vuePion.setMaTuile(this.getVueTuile(t.getCoords()));
             }
         }

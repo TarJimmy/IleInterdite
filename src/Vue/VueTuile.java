@@ -39,7 +39,7 @@ public final class VueTuile extends PanelImage {
         setLayout(g);
         setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         setBorder(new BevelBorder(BevelBorder.RAISED,Color.BLUE,Color.BLACK,Color.BLUE,Color.BLACK));
-        setImage(this.tuile.getInnonder());
+        setImage(this.tuile.getAssecher());
         activer(false);
         
     }
