@@ -7,6 +7,7 @@
 package Controleur;
 
 
+import Controleur.Utils.EtatTuile;
 import Controleur.Utils.tresor;
 import Modele.*;
 import Vue.*;
@@ -253,30 +254,14 @@ public class Controleur implements Observateur {
                     getAvTrActuel().deplacer(t);
                     jeu.deplacePion(getAvTrActuel().getPion(), t);
                     jeu.actualise();
-                    
                     jeu.indic_Passif(this.getAvTrActuel());
-            {
-                try {
-                    checkFinTour();
-                } catch (IOException ex) {
-                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
                     break;
                 case CHOIX_TUILE_AS:
                     t = grille.getTuile(msg.coord[0],msg.coord[1]);
                     getAvTrActuel().assecher(t);
+                    jeu.changeEtat(t.getEtat(),t);
                     jeu.actualise();
-                    
-                    
-                    jeu.indic_Passif(getAvTrActuel());
-            {
-                try {
-                    checkFinTour();
-                } catch (IOException ex) {
-                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+                    jeu.indic_Passif(getAvTrActuel());  
                     break;
                 case CHOIX_DONCARTE:
                     System.out.println(jeu.getMesVuesAvs().indexOf(msg.vueAv));
@@ -294,15 +279,13 @@ public class Controleur implements Observateur {
                     
                     getAvTrActuel().DonnerCarte(carte, receveur);
                     CheckNbCarte(receveur);//finir*/
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     break;
             }
+        try {
+            checkFinTour();
+        } catch (IOException ex) {
+            Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
