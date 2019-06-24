@@ -42,7 +42,7 @@ public class VueJeu extends Observe implements Observateur {
     private JButton btnDonnerCarte;
     private JButton btnGagnerTresor;
     private JButton btnTerminerTour;
-    //private JButton btnDeplacerAllier;
+    private JButton btnDeplacerAllier;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
     private JLabel indications;
@@ -81,7 +81,7 @@ public class VueJeu extends Observe implements Observateur {
                }
 //Suivant sera pour choisir un aventurier
     }
-    //Transforme une VueAventurier en aventurier
+    
     public Aventurier translate_VueAv_Av(VueAventurier va,ArrayList<Aventurier> avs){
         Aventurier aventurier = null;
         for(Aventurier av : avs){
@@ -91,7 +91,7 @@ public class VueJeu extends Observe implements Observateur {
         }
         return aventurier;
     }
-    //Transforme un aventurier en VueAventurier
+    
     public VueAventurier translate_Av_VueAv(Aventurier av){
         VueAventurier vueAv = null;
         for(VueAventurier vAv : getMesVuesAvs()){
@@ -102,7 +102,7 @@ public class VueJeu extends Observe implements Observateur {
         return vueAv;
     }
     
-    //Transforme une carte en VueCarte
+    
     public VueCarte translate_Ca_VueCa(CarteJoueur c,Aventurier av){
         VueAventurier VueAv = translate_Av_VueAv(av);
         VueCarte vueCarte = null;
@@ -113,7 +113,7 @@ public class VueJeu extends Observe implements Observateur {
         }
         return vueCarte;
     }
-    //Transforme une vueCarte en carte
+    
     public CarteJoueur translate_VueCa_Ca(VueCarte vueCa,ArrayList<CarteJoueur> caJoueur){
         CarteJoueur caJ = null;
         
@@ -124,7 +124,7 @@ public class VueJeu extends Observe implements Observateur {
         }
         return caJ;
     }
-    //Porpose le choix d'un aventurier
+    
     public void faireChoixAventurier(ArrayList<Aventurier> avs,int etat){
         vueAvsModif = new ArrayList<>();
         this.indications.setText(debIndic + "Choisissez un Aventurier parmi ceux disponibles pour faire l'action choisie.");
@@ -142,8 +142,7 @@ public class VueJeu extends Observe implements Observateur {
         }
         indications.setText(debIndic+ "Cliquer sur l'Aventurier a qui vous voulez donner votre carte (sur sa couleur)");
     }
-    //Porpose le choix d'une carte
-    public void faireChoixCarte(int etat,ArrayList<Modele.CarteJoueur> carteJ){
+    public void faireChoixCarte(int etat,ArrayList<Modele.CarteJoueur> carteJ, Aventurier av){
         ArrayList<VueCarte> vCarte;
         vCarte = new ArrayList<>();
         for(Modele.CarteJoueur c : carteJ){
@@ -177,12 +176,16 @@ public class VueJeu extends Observe implements Observateur {
                 Logger.getLogger(VueJeu.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if(etat == DEFAUSSER){
+            msg.vueAv.add(translate_Av_VueAv(av));
+        }
+        
         
         
         vChoixCarte = new VueChoixCarte(vCarte,etat);
         vChoixCarte.addObservateur(this);
     }
-    //Actualise la vue Grille et les VueAventuriers si elle ont été modifié par une action précedente
+    
     public void actualise() {
         vueGrille.actualise();
         monteeDesEau.repaint();
@@ -192,27 +195,28 @@ public class VueJeu extends Observe implements Observateur {
         BtnSetEnabled(true);
         
     }
-//Déplace un pion
-    private void deplacePion(Utils.Pion pion, Tuile t) {
+
+    public void deplacePion(Utils.Pion pion, Tuile t) {
         vueGrille.deplacePion(pion,t);
     }
-    
     public int getCHOIX_AS(){
         return CHOIX_AS;
     }
     public int getCHOIX_DEP(){
         return CHOIX_DEP;
     }
-    //Fait le déplacement complet du pion et termine le déplacement
+
+
+
     public void finDeplacement(Aventurier av,Tuile t) {
         this.actualise();
         deplacePion(av.getPion(),t);
     }
-    //Indications du nombre d'actions restantes
+
     public void indic_Passif(Aventurier av ) {
         indications.setText(debIndic+" Vous avez " + av.getActionsRestantes() + ((av.getActionsRestantes() ==1)?" action restante":" actions restantes" ));
     }
-    //Affiche le gain du tresor tres
+
     public void gainTresor(tresor tres) {
         int i=0;
         boolean b=true;
@@ -224,26 +228,26 @@ public class VueJeu extends Observe implements Observateur {
             i++;
         }
     }
-//Indique au joueur qu'il ne peut pa donner de carte
+
     public void erreur_DonCarte() {
         indications.setText(debIndic+"Tu n'a aucune carte a donner");
     }
-//Indique au joueur qu'il ne peut pas chosiir d'aventurier
+
     public void erreur_choixAventurier() {
         indications.setText(debIndic+"Tu ne peut donner de carte a aucun Aventurier");
     }
-    //Change l'étaat de la vueTuile associé à t
+    
     public void changeEtat(EtatTuile etat, Tuile t) {
         vueGrille.getVueTuile(t.getCoords()).changeEtat(etat);
     }
-//initialise les boutons
+
     private void initBouton(JButton btn) {
             btn.setBackground(Color.yellow);
             btn.setBorderPainted(true);
             btn.setFont(fontToutText);
             btn.setBorderPainted(false);
     }
-//Classe de l'image montée des eaux
+
     public class MonteeDesEaux extends PanelImage {
         private int niveauEau;
         private MonteeDesEaux(int niveau) throws IOException { 
@@ -254,7 +258,6 @@ public class VueJeu extends Observe implements Observateur {
 
         private void setNiveauEau(int niveauEau) {
             this.niveauEau = niveauEau;
-            repaint();
         }
         public void addNiveau(){
             niveauEau++;
@@ -264,15 +267,16 @@ public class VueJeu extends Observe implements Observateur {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             g.setColor(Color.yellow);
-            g.fillRect(getWidth()/15, getHeight()-(niveauEau)*(getHeight()/100)-(18*getHeight()/100), 2*getWidth()/4, 10);
+            g.fillRect(getWidth()/15, getHeight()-(niveauEau)*((9/10)*getHeight()/100)-(18*getHeight()/100), 2*getWidth()/4, 10);
         }
     }
-    //Constructeur de la vueJeu
+    
     public VueJeu(Grille grille,ArrayList<Modele.Aventurier> mesAvs, ArrayList<String> mesNoms, int niveauDeau) throws IOException {
         //Initialisation Composant
         initWindow();
         vueAvsModif = new ArrayList<>();
         choixAvListener  = new MouseListener() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 actualise();
@@ -301,12 +305,12 @@ public class VueJeu extends Observe implements Observateur {
             public void mouseExited(MouseEvent e) {
             }
         };
+        
         msg = new MessageAction();
         creationVuesAventuriers(mesNoms, mesAvs);
         vueGrille = new VueGrille(grille,mesAvs);
         vueGrille.addObservateur(this);
-        monteeDesEau = new MonteeDesEaux(1);
-        monteeDesEau.addNiveau();
+        monteeDesEau = new MonteeDesEaux(niveauDeau);
         initHaut();
         initBas();
         afficher(true);
@@ -314,23 +318,22 @@ public class VueJeu extends Observe implements Observateur {
     public MonteeDesEaux getMonteeDesEau() {
         return monteeDesEau;
     }
-    //Indique aux joueurs qu'il ne peut pas Gagner de tresor
     public void erreurTresor() {
             indications.setText(debIndic+"Tu n'a pas assez de carte trésor ou tu n'est pas sur une tuile qui donne de trésor");   
     }
-    //Indique a l'utilisateur qu'il a gagné la partie
+
     public void PartieGagner() {
         BtnSetEnabled(false);
         indications.setText(debIndic + "Vous avez Gagnée !");
     }
-    //Indique a l'utilisateur qu'il a perdu la partie
+
     public void PartiePerdu() {
         BtnSetEnabled(false);
         indications.setText(debIndic + "Vous avez Perdu !");
     }
 
 
-    //Initialise la fenetre
+
     private void initWindow(){
         window = new JFrame();
         window.setResizable(false);
@@ -340,7 +343,7 @@ public class VueJeu extends Observe implements Observateur {
         window.setLayout(new BorderLayout());
         window.setBackground(Color.white);
     }
-    //Initialise la partie bas de la fenetre
+    
     private void initBas() throws IOException {
         //InitBas et ses objets
         JPanel bas = new JPanel(new GridLayout(1,3));
@@ -424,10 +427,9 @@ public class VueJeu extends Observe implements Observateur {
         while (it.hasNext()){
             VueAventurier vue = (VueAventurier) it.next();
             vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
-            //Règle Simplifié
-            /*if (vue.getTypeAventurier().equals("Navigateur")){
+            if (vue.getTypeAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;//Si oui mettre emplacement pour boutons deplacer allier
-            }*/
+            }
         }
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
         for (int i =0;i<Nb_Boutons;i++){
@@ -439,14 +441,13 @@ public class VueJeu extends Observe implements Observateur {
         boutonUnitaire[1].add(btnAssecher);
         boutonUnitaire[2].add(btnDonnerCarte);
         boutonUnitaire[3].add(btnGagnerTresor);
-        //On a finalement pris les règles simplifé
-        /*if (Nb_Boutons==5){
+        if (Nb_Boutons==5){
             btnDeplacerAllier=new JButton("Déplacer Allier");
             boutonUnitaire[4].add(btnDeplacerAllier);
             initBouton(btnDeplacerAllier);
             boutonUnitaire[4].setBackground(Color.white);
             BCCHaut.add(boutonUnitaire[4]);
-        }*/
+        }
         //PANEL Bas->Centre->Centre->Bas
         //initTerminerTour
         JPanel BCCBas = new JPanel();
@@ -461,7 +462,6 @@ public class VueJeu extends Observe implements Observateur {
         btnGagnerTresor.addActionListener(creeActionListener(TypeAction.GAGNERTRESOR));
         btnDonnerCarte.addActionListener(creeActionListener(TypeAction.DONNERCARTE));
     }
-    //Crée un action listener avec pour msg.Type rentrée en paramètre
     private ActionListener creeActionListener(TypeAction type){
         return new ActionListener(){
             @Override
@@ -473,24 +473,20 @@ public class VueJeu extends Observe implements Observateur {
             }
         };
     }
-    //Ajoute une carte (carte) à un aventurier (av)
     public void ajoutCarte(Aventurier av,CarteJoueur carte) throws IOException{
         translate_Av_VueAv(av).ajouterVueCarte(carte.getCarte());
     }
-    //Supprime une carte (carte) à un aventurier (av)
     public void supprimeCarte(Aventurier av,CarteJoueur carte) throws IOException{
         translate_Av_VueAv(av).supprimerVueCarte(carte.getCarte());
     }
     
-    //Indique aux joueurs que l'action déplacer n'est pas 
+    
     public void erreur_deplacer(){
         this.indications.setText(debIndic+"Il n'y a aucune tuile pour vous deplacer");
     }
-    //Indique aux  joueurs que l'action assécher n'est pas disponible
     public void erreur_assecher(){
         this.indications.setText(debIndic+"Il n'y a aucune tuile a assecher présente");
     }
-    //Initailise la partie du haut de la vueJeu
     private JPanel initHaut() {
         JPanel haut = new JPanel(new BorderLayout());
         int taille = mesVuesAvs.size();
@@ -508,8 +504,8 @@ public class VueJeu extends Observe implements Observateur {
         window.add(haut,BorderLayout.CENTER);
         return haut;
     }
-//Affiche la fenetre
-    private void afficher(boolean b) {
+
+    public void afficher(boolean b) {
         window.setVisible(b);
     }
 
@@ -520,7 +516,6 @@ public class VueJeu extends Observe implements Observateur {
     public VueGrille getVueGrille() {
         return vueGrille;
     }
-    //Crée les VueAventuriers avec pour parametres des aventuriers
     private void creationVuesAventuriers(ArrayList<String> mesNoms,ArrayList<Modele.Aventurier> av) throws IOException{
         mesVuesAvs = new ArrayList<>();
         int taille = av.size();
@@ -528,7 +523,6 @@ public class VueJeu extends Observe implements Observateur {
             mesVuesAvs.add(new VueAventurier(mesNoms.get(i), av.get(i),i));
         }
     }
-    //Modifie la vue du tour de l'aventurier actuel
     public void setTrActuel(Aventurier av) {
         for (VueAventurier vue : mesVuesAvs){
             if (vue.getPion()==av.getPion()){
@@ -566,24 +560,21 @@ public class VueJeu extends Observe implements Observateur {
     public ArrayList<VueAventurier> getVueAvsModif() {
         return vueAvsModif;
     }
-    //Fais un déplacmeent forcé
     public void deplacementforce(ArrayList<Tuile> deplacement){
         BtnSetEnabled(false);
         faireChoixTuile(CHOIX_DEP, deplacement);
     }
-    //Desactive les boutons
     private void BtnSetEnabled(boolean b){
         btnBouger.setEnabled(b);
         btnAssecher.setEnabled(b);
         btnDonnerCarte.setEnabled(b);
         btnGagnerTresor.setEnabled(b);
         btnTerminerTour.setEnabled(b);
-        //Règle simplifié
-        /*if(Nb_Boutons == 5){
+        if(Nb_Boutons == 5){
             btnDeplacerAllier.setEnabled(b);
-        }*/
+        }
     }
-    //Label d'indications de début d'un tour
+    
     public void debutTour(Aventurier av){
         indications.setText(debIndic + "Au tour de " + translate_Av_VueAv(av).getNomAventurier());
     }
