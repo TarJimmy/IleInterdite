@@ -42,7 +42,7 @@ public class VueJeu extends Observe implements Observateur {
     private JButton btnDonnerCarte;
     private JButton btnGagnerTresor;
     private JButton btnTerminerTour;
-    private JButton btnDeplacerAllier;
+    //private JButton btnDeplacerAllier;
     private JFrame window;
     private MonteeDesEaux monteeDesEau;
     private JLabel indications;
@@ -424,9 +424,10 @@ public class VueJeu extends Observe implements Observateur {
         while (it.hasNext()){
             VueAventurier vue = (VueAventurier) it.next();
             vue.setPreferredSize(new Dimension(window.getWidth()/7,window.getHeight()));
-            if (vue.getTypeAventurier().equals("Navigateur")){
+            //Règle Simplifié
+            /*if (vue.getTypeAventurier().equals("Navigateur")){
                 Nb_Boutons +=1;//Si oui mettre emplacement pour boutons deplacer allier
-            }
+            }*/
         }
         JPanel[] boutonUnitaire = new JPanel[Nb_Boutons];
         for (int i =0;i<Nb_Boutons;i++){
@@ -438,13 +439,14 @@ public class VueJeu extends Observe implements Observateur {
         boutonUnitaire[1].add(btnAssecher);
         boutonUnitaire[2].add(btnDonnerCarte);
         boutonUnitaire[3].add(btnGagnerTresor);
-        if (Nb_Boutons==5){
+        //On a finalement pris les règles simplifé
+        /*if (Nb_Boutons==5){
             btnDeplacerAllier=new JButton("Déplacer Allier");
             boutonUnitaire[4].add(btnDeplacerAllier);
             initBouton(btnDeplacerAllier);
             boutonUnitaire[4].setBackground(Color.white);
             BCCHaut.add(boutonUnitaire[4]);
-        }
+        }*/
         //PANEL Bas->Centre->Centre->Bas
         //initTerminerTour
         JPanel BCCBas = new JPanel();
@@ -576,9 +578,10 @@ public class VueJeu extends Observe implements Observateur {
         btnDonnerCarte.setEnabled(b);
         btnGagnerTresor.setEnabled(b);
         btnTerminerTour.setEnabled(b);
-        if(Nb_Boutons == 5){
+        //Règle simplifié
+        /*if(Nb_Boutons == 5){
             btnDeplacerAllier.setEnabled(b);
-        }
+        }*/
     }
     //Label d'indications de début d'un tour
     public void debutTour(Aventurier av){
