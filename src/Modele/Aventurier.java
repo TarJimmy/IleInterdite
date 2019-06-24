@@ -135,6 +135,7 @@ public abstract class Aventurier {
                 }
             }
         }
+        getTresorsRecuperer().add(tres);
         actionsRestantes--;
         return cartes;
     }

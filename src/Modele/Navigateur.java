@@ -28,6 +28,12 @@ public class Navigateur extends Aventurier {
     public ArrayList<Tuile> getDeplacementNav(Grille grille) {
         return getDeplacement(grille);
     }
+
+    @Override
+    public void DebutTour() {
+        super.DebutTour();
+        setActionsRestantes(4);
+    }
     
     
     

@@ -18,7 +18,7 @@ public class Tuile {
     private TuilesUtils nom;
     private EtatTuile etat;
     private int[] coords;
-    private tresor tresor;
+    private tresor tres;
 
     //CONSTRUCTEUR 
     //Il faut rajouter Tresor
@@ -30,6 +30,7 @@ public class Tuile {
     public Tuile(TuilesUtils nom) {
         this.setNom(nom);
         this.setEtat(EtatTuile.ASSECHEE);
+        this.tres = nom.getTres();
     }
 
     
@@ -66,7 +67,7 @@ public class Tuile {
      * @return
      */
     public tresor getTresor() {
-        return tresor;
+        return tres;
     }
       
     //SETTERS
@@ -88,11 +89,11 @@ public class Tuile {
     }
 
     /**
-     * Met à jour le tresor
+     * Met à jour le tres
      * @param tresor
      */
     public void setTresor(tresor tresor) {
-        this.tresor = tresor;
+        this.tres = tresor;
     }
     
     //methodes
