@@ -24,11 +24,4 @@ public class VueCarte extends PanelImage {
         this.carte = carte;
         super.setImage(this.carte.getChemin());
     }
-    
-    public static void main(String[] args) throws IOException{
-        JFrame j = new JFrame("Test");
-        j.setSize(200, 400);
-        j.add(new VueCarte(CarteUtils.calice));
-        j.setVisible(true);
-    }
 }

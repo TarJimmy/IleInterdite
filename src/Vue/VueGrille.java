@@ -44,7 +44,7 @@ public class VueGrille extends Observe {
             creePion(avs);
             vueModif = new ArrayList<>();
         }
-        
+        //Initailise les cases de la grille
         private void initGrille(Grille grille) throws IOException{
             vuesTuiles = new VueTuile[6][6];
             Tuile[][] tuiles = grille.getMesTuiles();
@@ -64,12 +64,13 @@ public class VueGrille extends Observe {
                 }
             }
         }
+        //return la tuile avec pour coordonnées coords
         public VueTuile getVueTuile(int[] coords){
             return vuesTuiles[coords[0]][coords[1]];
         }
         
         
-        public int[] getCoords(VueTuile vue) { // est change en public pour demo
+        private int[] getCoords(VueTuile vue) { // renvoie la VueTuile vue de la Vuegrille
             int[] c = new int[2];
             for( int x=0;x<vuesTuiles.length;x++){
                 for (int y=0;y<vuesTuiles[x].length;y++){
@@ -86,7 +87,7 @@ public class VueGrille extends Observe {
     public JPanel getVueGrille() {
         return vueGrille;
     }
-
+    //Actualise la vueGrille (tout les élements de la vueModis)
     public void actualise() {
         for (VueTuile tuile : vueModif){
             tuile.removeMouseListener(act);
@@ -95,7 +96,7 @@ public class VueGrille extends Observe {
         vueModif.clear();
     }
 
-    
+    //Crée des pions sur leurs cases associés
     private void creePion(ArrayList<Aventurier> avs){
         mesPions = new ArrayList<>();
         int i=0;
@@ -105,9 +106,8 @@ public class VueGrille extends Observe {
             i++;
         }
     }
-     private void choixAventurier(ArrayList<VueAventurier> vues){
-        }
-
+    //Fais le choix de la tuile est envoie un type message different si c'est pour assecher une tuile ou se déplacer dessus
+    //Toute les vues afficher sont sauvegardé dans vueModifs
     public void faireChoixTuile( int a,ArrayList<Tuile> tuiles) {
             act = new MouseListener() {
                 @Override
@@ -148,15 +148,11 @@ public class VueGrille extends Observe {
             vueModif.add(vuesTuiles[x][y]);
         }
     }
-
-    public void faireChoixVueAventuriers( ArrayList<VueAventurier> translateAve_VueAvs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     public ArrayList<VuePion> getMesPions() {
         return mesPions;
     }
-
+    //Déplace le pion pion sur la tuile t
     public void deplacePion(Utils.Pion pion, Tuile t) {
         for (VuePion vuePion : mesPions){
             if (vuePion.getPion()==pion){
@@ -164,16 +160,7 @@ public class VueGrille extends Observe {
             }
         }
     }
-
-    
-
-   
-
-    
-    private class choixAv extends JFrame{
-
-    }
-    }
+}
        
 
     

@@ -23,9 +23,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public final class VueTuile extends PanelImage {
-        private Image image;
-        private final TuilesUtils tuile;
-        private boolean estCoulee;
+    private Image image;
+    private final TuilesUtils tuile;
+    private boolean estCoulee;
     private boolean activer;
 
     VueTuile (Tuile tuile) throws IOException{
@@ -47,8 +47,8 @@ public final class VueTuile extends PanelImage {
     public TuilesUtils getTuile() {
         return tuile;
     }
-     
-        @Override
+    //Modifie l'image
+    @Override
     public void setImage(String etat) {
         try {
             this.image = ImageIO.read(new File(System.getProperty("user.dir") + "/src/Images/"+etat));
@@ -57,19 +57,20 @@ public final class VueTuile extends PanelImage {
             System.err.println("Erreur de lecture de "+etat);
         }
     }
-    
+    //Initialise la vue D'un pion
     public void initVuePion(VuePion vue){
         vue.setMaTuile(this);
     }
+    //Ajoute la vue D'un pion
     public void addVuePion(VuePion vue){
         add(vue);
     }
 
-
+    //Suprimme la vue D'un Pion
     public void supVuePion(VuePion vue){
         this.remove(vue);
     }
-    
+    //Change l'image de la tuile en fonction de l'état rentré en paramêtre
     public void changeEtat(Utils.EtatTuile etat){
         switch(etat){
             case COULEE:
@@ -106,20 +107,10 @@ public final class VueTuile extends PanelImage {
     public String toString(){
         return tuile.getNom();
     }
-
+//Active ou désactive la tuile en fonction du boolean b
     public void activer(boolean b) {
         activer=b;
         repaint();
         setEnabled(b);
-        
     }
-    public static void main(String[]args) throws IOException{
-        JFrame j = new JFrame("test");
-        j.setLocationRelativeTo(null);
-        j.setSize(500, 500);
-        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        j.add(new VueTuile(new Tuile(TuilesUtils.heliport)));
-        j.setVisible(true);
-    }
-    
 }

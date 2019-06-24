@@ -45,7 +45,6 @@ public class VueChoixCarte extends Observe{
             
             panelCarte = new JPanel();
             panelCarte.setLayout(g);
-            
             listener = new MouseListener(){
                 @Override
                 public void mouseClicked(MouseEvent e) {}
@@ -73,7 +72,7 @@ public class VueChoixCarte extends Observe{
                 }
                 
             };
-            
+            //Affiche les vueCartes rentrées en paramètres avec leurs actionListeners associés
             for(VueCarte v : vueCartes){
                 panelCarte.add(v);
                 v.addMouseListener(listener);

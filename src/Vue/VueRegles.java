@@ -82,6 +82,7 @@ public class VueRegles {
         window.add(center);
         window.setVisible(true);
     }
+    //Ajoute les images des règles
     private void initImageRegle() throws IOException{
         image = new PanelImage[8];
         for (int i =0;i<image.length;i++){
@@ -92,6 +93,7 @@ public class VueRegles {
        public static void main(String[] args) throws IOException{
            new VueRegles();
        }
+       //Permet la customisations des Boutons
     private class BoutonsPerso extends JButton implements MouseListener{
         private final Color couleur = Color.lightGray;
         public BoutonsPerso(String nom){

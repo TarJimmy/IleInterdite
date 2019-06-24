@@ -280,6 +280,7 @@ public class VueAccueil extends Observe{
     public int getNB_JOUEUR_MAX() {
         return NB_JOUEUR_MAX;
     }
+    //Renvoie la valeur du slide
     private int DonneEchelon(){
         return slider.getValue();
     }
