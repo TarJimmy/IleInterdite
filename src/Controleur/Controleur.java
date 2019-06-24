@@ -275,6 +275,8 @@ public class Controleur implements Observateur {
     @Override
     public void traiterMessageAction(MessageAction msg) {
         
+        try {
+            
             Tuile t;
             switch(msg.typeact){
                 case DEPLACER:
@@ -294,14 +296,14 @@ public class Controleur implements Observateur {
                     }
                     break;
                 case TERMINER_TOUR:
-            {
-                try {
-                    finTour();
-                } catch (IOException ex) {
-                    Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                {
+                    try {
+                        finTour();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-                    break;
+                break;
                 case GAGNERTRESOR:
                     if (getAvTrActuel().checkGagnerTresor()!=null){
                         Utils.tresor tres = getAvTrActuel().checkGagnerTresor();
@@ -342,26 +344,27 @@ public class Controleur implements Observateur {
                     getAvTrActuel().assecher(t);
                     jeu.changeEtat(t.getEtat(),t);
                     jeu.actualise();
-                    jeu.indic_Passif(getAvTrActuel());  
+                    jeu.indic_Passif(getAvTrActuel());
                     break;
                 case CHOIX_DONCARTE:
-                    Aventurier receveur = getMesAventuriers().get(jeu.getMesVuesAvs().indexOf(msg.vueAv));
-                    CarteJoueur carte = null;
-                    Utils.tresor tres = null;
-                    Iterator it = getAvTrActuel().getCartesDonnables().iterator();
-                    while(carte == null && it.hasNext()){
-                        CarteTresor ca = (CarteTresor) it.next();
-                        if(ca.getTresor() == tres){
-                            carte = ca;
-                        }
-                    }
+                    Aventurier receveur = jeu.translate_VueAv_Av(msg.vueAv.get(0), getMesAventuriers());
+                    CarteJoueur carte = jeu.translate_VueCa_Ca(msg.vueCarte, getAvTrActuel().getCartesDonnables());
                     
                     getAvTrActuel().DonnerCarte(carte, receveur);
-                    CheckNbCarte(receveur);//finir*/
+                    jeu.ajoutCarte(receveur, carte);
+                    jeu.supprimeCarte(getAvTrActuel(), carte);
+                    
+                    
+                    CheckNbCarte(receveur);
+                    checkFinTour();
                     break;
             }
-        try {
-            checkFinTour();
+            try {
+                checkFinTour();
+            } catch (IOException ex) {
+                Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
         }
