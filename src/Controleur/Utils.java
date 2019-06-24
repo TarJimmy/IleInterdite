@@ -169,6 +169,8 @@ public class Utils {
     private String nom;
     private String chemin;
     
+    
+    
     CarteUtils(String nom,String chemin){
         this.nom = nom;
         this.chemin = chemin;
@@ -197,42 +199,48 @@ public class Utils {
     }
 }
     public enum TuilesUtils {
-    pont_des_abimes("Le Pont des Abimes","TuilesAssechees/LePontDesAbimes.png","TuilesInondees/LePontDesAbimes_Inonde.png"),
-    heliport("Héliport","TuilesAssechees/Heliport.png","TuilesInondees/Heliport_Inonde.png"),
-    porte_de_bronze ("La Porte de Bronze","TuilesAssechees/LaPorteDeBronze.png","TuilesInondees/LaPorteDeBronze_Inonde.png"),
-    caverne_des_ombres ("La Carverne des Ombres","TuilesAssechees/LaCarverneDesOmbres.png","TuilesInondees/LaCarverneDesOmbres_Inonde.png"),
-    porte_de_fer ("La Porte de Fer","TuilesAssechees/LaPorteDeFer.png","TuilesInondees/LaPorteDeFer_Inonde.png"),
-    porte_dor ("La Porte d’Or","TuilesAssechees/LaPortedOr.png","TuilesInondees/LaPortedOr_Inonde.png"),
-    falaises_de_loubli ("Les Falaises de l’Oubli","TuilesAssechees/LesFalaisesDeLOubli.png","TuilesInondees/LesFalaisesDeLOubli_Inonde.png"),
-    palais_de_corail ("Le Palais de Corail","TuilesAssechees/LePalaisDeCorail.png","TuilesInondees/LePalaisDeCorail_Inonde.png"),
-    porte_dargent ("La Porte d’Argent","TuilesAssechees/LaPortedArgent.png","TuilesInondees/LaPortedArgent_Inonde.png"),
-    dunes_de_lillusion ("Les Dunes de l’Illusion","TuilesAssechees/LesDunesDeLIllusion.png","TuilesInondees/LesDunesDeLIllusion_Inonde.png"),
-    porte_de_cuivre ("La Porte de Cuivre","TuilesAssechees/LaPorteDeCuivre.png","TuilesInondees/LaPorteDeCuivre_Inonde.png"),
-    jardin_des_hurlements ("Le Jardin des Hurlements","TuilesAssechees/LeJardinDesHurlements.png","TuilesInondees/LeJardinDesHurlements_Inonde.png"),
-    foret_pourpre ("La Foret Pourpre","TuilesAssechees/LaForetPourpre.png","TuilesInondees/LaForetPourpre_Inonde.png"),
-    lagon_perdu ("Le Lagon Perdu","TuilesAssechees/LeLagonPerdu.png","TuilesInondees/LeLagonPerdu_Inonde.png"),
-    marais_brumeux ("Le Marais Brumeux","TuilesAssechees/LeMaraisBrumeux.png","TuilesInondees/LeMaraisBrumeux_Inonde.png"),
-    observatoire ("Observatoire","TuilesAssechees/Observatoire.png","TuilesInondees/Observatoire_Inonde.png"),
-    rocher_fantome ("Le Rocher Fantôme","TuilesAssechees/LeRocherFantome.png","TuilesInondees/LeRocherFantome_Inonde.png"),
-    caverne_du_brasier ("La Caverne du Brasier","TuilesAssechees/LaCarverneDuBrasier.png","TuilesInondees/LaCarverneDuBrasier_Inonde.png"),
-    temple_du_soleil ("Le Temple du Soleil","TuilesAssechees/LeTempleDuSoleil.png","TuilesInondees/LeTempleDuSoleil_Inonde.png"),
-    temple_de_la_lune ("Le Temple de La Lune","TuilesAssechees/LeTempleDeLaLune.png","TuilesInondees/LeTempleDeLaLune_Inonde.png"),
-    palais_des_marees ("Le Palais des Marees","TuilesAssechees/LePalaisDesMarees.png","TuilesInondees/LePalaisDesMarees_Inonde.png"),
-    val_du_crepuscule ("Le Val du Crepuscule","TuilesAssechees/LeValDuCrepuscule.png","TuilesInondees/LeValDuCrepuscule_Inonde.png"),
-    tour_du_guet ("La Tour du Guet","TuilesAssechees/LaTourDuGuet.png","TuilesInondees/LaTourDuGuet_Inonde.png"),
-    jardin_des_murmures ("Le Jardin des Murmures","TuilesAssechees/LeJardinDesMurmures.png","TuilesInondees/LeJardinDesMurmures_Inonde.png");
+    pont_des_abimes("Le Pont des Abimes","TuilesAssechees/LePontDesAbimes.png","TuilesInondees/LePontDesAbimes_Inonde.png",null),
+    heliport("Héliport","TuilesAssechees/Heliport.png","TuilesInondees/Heliport_Inonde.png",null),
+    porte_de_bronze ("La Porte de Bronze","TuilesAssechees/LaPorteDeBronze.png","TuilesInondees/LaPorteDeBronze_Inonde.png",null),
+    caverne_des_ombres ("La Carverne des Ombres","TuilesAssechees/LaCarverneDesOmbres.png","TuilesInondees/LaCarverneDesOmbres_Inonde.png",tresor.CRISTAL_ARDENT),
+    porte_de_fer ("La Porte de Fer","TuilesAssechees/LaPorteDeFer.png","TuilesInondees/LaPorteDeFer_Inonde.png",null),
+    porte_dor ("La Porte d’Or","TuilesAssechees/LaPortedOr.png","TuilesInondees/LaPortedOr_Inonde.png",null),
+    falaises_de_loubli ("Les Falaises de l’Oubli","TuilesAssechees/LesFalaisesDeLOubli.png","TuilesInondees/LesFalaisesDeLOubli_Inonde.png",null),
+    palais_de_corail ("Le Palais de Corail","TuilesAssechees/LePalaisDeCorail.png","TuilesInondees/LePalaisDeCorail_Inonde.png",tresor.CALICE_ONDE),
+    porte_dargent ("La Porte d’Argent","TuilesAssechees/LaPortedArgent.png","TuilesInondees/LaPortedArgent_Inonde.png",null),
+    dunes_de_lillusion ("Les Dunes de l’Illusion","TuilesAssechees/LesDunesDeLIllusion.png","TuilesInondees/LesDunesDeLIllusion_Inonde.png",null),
+    porte_de_cuivre ("La Porte de Cuivre","TuilesAssechees/LaPorteDeCuivre.png","TuilesInondees/LaPorteDeCuivre_Inonde.png",null),
+    jardin_des_hurlements ("Le Jardin des Hurlements","TuilesAssechees/LeJardinDesHurlements.png","TuilesInondees/LeJardinDesHurlements_Inonde.png",tresor.STATUE_ZEPHYR),
+    foret_pourpre ("La Foret Pourpre","TuilesAssechees/LaForetPourpre.png","TuilesInondees/LaForetPourpre_Inonde.png",null),
+    lagon_perdu ("Le Lagon Perdu","TuilesAssechees/LeLagonPerdu.png","TuilesInondees/LeLagonPerdu_Inonde.png",null),
+    marais_brumeux ("Le Marais Brumeux","TuilesAssechees/LeMaraisBrumeux.png","TuilesInondees/LeMaraisBrumeux_Inonde.png",null),
+    observatoire ("Observatoire","TuilesAssechees/Observatoire.png","TuilesInondees/Observatoire_Inonde.png",null),
+    rocher_fantome ("Le Rocher Fantôme","TuilesAssechees/LeRocherFantome.png","TuilesInondees/LeRocherFantome_Inonde.png",null),
+    caverne_du_brasier ("La Caverne du Brasier","TuilesAssechees/LaCarverneDuBrasier.png","TuilesInondees/LaCarverneDuBrasier_Inonde.png",tresor.CRISTAL_ARDENT),
+    temple_du_soleil ("Le Temple du Soleil","TuilesAssechees/LeTempleDuSoleil.png","TuilesInondees/LeTempleDuSoleil_Inonde.png",tresor.PIERRE_SACREE),
+    temple_de_la_lune ("Le Temple de La Lune","TuilesAssechees/LeTempleDeLaLune.png","TuilesInondees/LeTempleDeLaLune_Inonde.png",tresor.PIERRE_SACREE),
+    palais_des_marees ("Le Palais des Marees","TuilesAssechees/LePalaisDesMarees.png","TuilesInondees/LePalaisDesMarees_Inonde.png",tresor.CALICE_ONDE),
+    val_du_crepuscule ("Le Val du Crepuscule","TuilesAssechees/LeValDuCrepuscule.png","TuilesInondees/LeValDuCrepuscule_Inonde.png",null),
+    tour_du_guet ("La Tour du Guet","TuilesAssechees/LaTourDuGuet.png","TuilesInondees/LaTourDuGuet_Inonde.png",null),
+    jardin_des_murmures ("Le Jardin des Murmures","TuilesAssechees/LeJardinDesMurmures.png","TuilesInondees/LeJardinDesMurmures_Inonde.png",tresor.STATUE_ZEPHYR);
 
     private String nom;
     private String assecher;
     private String innondee;
+    private tresor tres;
     //Constructeur
-    TuilesUtils(String nom, String assecher, String innondee){
+    TuilesUtils(String nom, String assecher, String innondee,tresor tres){
         this.nom = nom;
         this.assecher = assecher;
         this.innondee = innondee;
+        this.tres = tres;
     }
     public String getNom() {
         return nom;
+    }
+
+    public tresor getTres() {
+        return tres;
     }
 
     public String getAssecher() {
@@ -243,9 +251,6 @@ public class Utils {
         return innondee;
     }
 
-        public tresor getTresor() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
     }
     /**
      * Permet de poser une question à laquelle l'utilisateur répond par oui ou non

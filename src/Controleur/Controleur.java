@@ -31,8 +31,9 @@ public class Controleur implements Observateur {
     private DeckTresor deckTresor;
     private Aventurier AvTrActuel;
     private int index;
+    private ArrayList<VuePion> mesPions;
     private boolean aPiocher;
-    //Création du controleur
+    
     Controleur() throws IOException{
         accueil = new VueAccueil();
         accueil.addObservateur(this);
@@ -40,11 +41,11 @@ public class Controleur implements Observateur {
         index = 0;
         
     }
-    //Liste des trésors récupéré
+
     public HashSet<Utils.tresor> getTresorsRecuperers() {
         return Aventurier.getTresorsRecuperer();
     }
-    //Renvoie les Aventuriers de la partie en cours
+    
     public ArrayList<Aventurier> getMesAventuriers() {
         return mesAventuriers;
     }
@@ -53,11 +54,9 @@ public class Controleur implements Observateur {
         this.AvTrActuel = getMesAventuriers().get(index);
         jeu.setTrActuel(getAvTrActuel());
     }
-    //Ajoute l'index
     private void addIndex(){
         index = (index+1)%getMesAventuriers().size();
     }
-    //Pioche 2 fois (avec l'aide du boolean) 
     public boolean piocher () throws IOException{
         if(!aPiocher){
             aPiocher = true;
@@ -65,7 +64,6 @@ public class Controleur implements Observateur {
                 CarteJoueur carte = getDeckTresor().Piocher();
                 if(carte instanceof CarteMonteeEau){
                     MonteeDesEaux(carte);
-                    System.out.println("Montée des eaux actuel :" + grille.getEchelonMonteEau());
                 }else{
                     getAvTrActuel().AddCarte(carte);
                     jeu.ajoutCarte(getAvTrActuel(), carte);
@@ -78,46 +76,40 @@ public class Controleur implements Observateur {
                 jeu.changeEtat(tui.getEtat(), tui);
             }
         }
-        //Force le déplacement d'un aventurier si la tuile où il est positionner devient coulée
         boolean interruption = false;
         Iterator it = getMesAventuriers().iterator();
-        int i=0;
+        
         while(it.hasNext() && !interruption){
-            i++;
             Aventurier av = (Aventurier) it.next();
                 if(!av.getMaPos().estDisponible()){
                     if(av.getDeplacement(grille).size() > 0){
                         interruption = true;
-                        System.out.println("deplacement forcé");
                         AvTrActuel = av;
                         if(AvTrActuel instanceof Pilote){
                             ((Pilote) AvTrActuel).setaVoler(false);
                         }
                         getAvTrActuel().setActionsRestantes(0);
                         jeu.deplacementforce(AvTrActuel.getDeplacement(grille));
-                        System.out.println(i);
                     }else{
                         jeu.PartiePerdu();
                     }
                 }
             }
-        //Si il y a déjà une interruption, il n'y en a pas une deuxième
         if(!interruption){
             CheckNbCarte(getAvTrActuel());
         }
         return !interruption;
     }
-   //Renvoie true si la partie est Gagné
     public boolean partieGagne(){
         boolean gagne = true;
-        gagne = getTresorsRecuperers().contains(Utils.tresor.values());
+        gagne = getTresorsRecuperers().size() == Utils.tresor.values().length;
         if(gagne){
             boolean helicoptere = false;
             for(Aventurier av : getMesAventuriers()){
                 gagne = gagne && av.getMaPos().getNom().equals(Utils.TuilesUtils.heliport);
                 if(!helicoptere){
                     for(CarteJoueur c : av.getCartesSpecial()){
-                        helicoptere = helicoptere && c instanceof Helicoptere;
+                        helicoptere = helicoptere || c instanceof Helicoptere;
                     }
                 }
             }
@@ -125,7 +117,6 @@ public class Controleur implements Observateur {
         }
         return gagne;
     }
-    //Revnoie true si la partie est perdu
     public boolean partiePerdu(){
         boolean perdu = !grille.getTuile(Utils.TuilesUtils.heliport).estDisponible();
         perdu = perdu || grille.getEchelonMonteEau() >= 10;
@@ -146,7 +137,7 @@ public class Controleur implements Observateur {
         return perdu;
     }
     
-    //Initialise le debut du tour
+    
     private void debutTour(){
         aPiocher = false;
         setTrAv();
@@ -158,7 +149,7 @@ public class Controleur implements Observateur {
         return AvTrActuel;
     }
     
-    //Fait une montée des eaux
+    
     public void MonteeDesEaux(CarteJoueur c){
         grille.MonterNiveauDeau();
         deckInondation.ResetPioche();
@@ -169,33 +160,36 @@ public class Controleur implements Observateur {
             //defausser des cartes via l'ihm
             //Defausser(int nbCartes) avec nbCartes = getAvTrActuel().nbCarte()
         
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    //Vérifie que 'aventurier actuel possède encore 1 action possible
     public void checkFinTour() throws IOException{
         if(getAvTrActuel().getActionsRestantes() <= 0 ){
+            if(getAvTrActuel() instanceof Ingenieur && ((Ingenieur) getAvTrActuel()).aAssecher()){
+                //ihm fonction uniquement assecher
+               // VueJeu.IngenieurAssecherFT();
+            }
             finTour();
         }
     }
 
-    //Fait les action nécessaire pour la fin d'un tour
+    
     public void finTour() throws IOException{
-        if(!partieGagne()){
+        if(partieGagne()){
+            jeu.PartieGagner();
+        }else{
             if(piocher() && !partiePerdu()){
                 addIndex();
                 debutTour();
             }
-        }else{
-            jeu.PartieGagner();
         }
     }
-    //Force le defaussage si l'aventurier possède plus de 5 carte
     public void CheckNbCarte(Aventurier av){
         if( av.nbCarte() > 5){
             //faireDefausser(av, av.nbCarte()-5);
         }
     }
-    //Initialise les aventurier de manière aléatoire
-    private void creationAventurier(int nbAventuriers){
+    
+    protected void creationAventurier(int nbAventuriers){
         mesAventuriers = new ArrayList<>();
         mesAventuriers.add(new Ingenieur(grille));
         mesAventuriers.add(new Messager(grille));
@@ -220,7 +214,6 @@ public class Controleur implements Observateur {
     @Override
     public void traiterMessage(Message msg) {
         switch(msg.type){
-            //Action pour le debut du jeu
             case DEBUTJEU:
                 accueil.afficher(false);
                 
@@ -240,7 +233,6 @@ public class Controleur implements Observateur {
                 debutTour();
         }
     }
-    //Fais la piche du début du jeu
     public void piochesInitial(){
         //Pioche des cartes pour les joueurs
         for(Aventurier av : getMesAventuriers()){
@@ -282,7 +274,6 @@ public class Controleur implements Observateur {
             
             Tuile t;
             switch(msg.typeact){
-                //Action déclencher si l'utilisateur clique sur le bouton deplacer de la vueJeu
                 case DEPLACER:
                     if(getAvTrActuel().getDeplacement(grille).size()>0){
                         jeu.faireChoixTuile(jeu.getCHOIX_DEP(), getAvTrActuel().getDeplacement(grille));
@@ -291,7 +282,6 @@ public class Controleur implements Observateur {
                         jeu.erreur_deplacer();
                     }
                     break;
-                    //Action déclencher si l'utilisateur clique sur le bouton assecher de la vueJeu
                 case ASSECHER:
                     if (getAvTrActuel().getAssechement(grille).size()>0){
                         jeu.faireChoixTuile(jeu.getCHOIX_AS(),getAvTrActuel().getAssechement(grille));
@@ -300,30 +290,28 @@ public class Controleur implements Observateur {
                         jeu.erreur_assecher();
                     }
                     break;
-                    //Action déclencher si l'utilisateur clique sur le bouton TermnerTour de la vueJeu
                 case TERMINER_TOUR:
                 {
-                    try {
-                        finTour();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    finTour();
                 }
                 break;
-                //Action déclencher si l'utilisateur clique sur le bouton GagnerTresor de la vueJeu
                 case GAGNERTRESOR:
                     if (getAvTrActuel().checkGagnerTresor()!=null){
                         Utils.tresor tres = getAvTrActuel().checkGagnerTresor();
-                        getAvTrActuel().GagnerTresor(tres);
+                        ArrayList<CarteJoueur> cartes = getAvTrActuel().GagnerTresor(tres);
                         jeu.gainTresor(tres);
+                        for(CarteJoueur ca : cartes){
+                            deckTresor.Defausser(ca);
+                            jeu.supprimeCarte(getAvTrActuel(), ca);
+                        }
+                        jeu.indic_Passif(getAvTrActuel());
                     }
                     else{
                         jeu.erreurTresor();
                     }
+                    checkFinTour();
                     break;
                 case DONNERCARTE:
-                    //Action déclencher si l'utilisateur clique sur le bouton Donner carte de la vueJeu
-                    //Il active le choix d'un aventurier
                     if(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()).size()>0){
                         jeu.faireChoixAventurier(getAvTrActuel().getAvsDonsCarte(getMesAventuriers()), VueJeu.DON_CARTE);
                     }
@@ -331,32 +319,32 @@ public class Controleur implements Observateur {
                         jeu.erreur_choixAventurier();
                     }
                     break;
-                    //Action déclencher si l'utilisateur clique sur l'aventurier a qui il veut donner une carte de la vueJeu
                 case CHOIX_INTER_DONCARTE:
                     if(getAvTrActuel().getCartesDonnables().size()>0){
                         jeu.faireChoixCarte(VueJeu.DON_CARTE, getAvTrActuel().getCartesDonnables());
+                        
                     }
                     else{
                         jeu.erreur_DonCarte();
                     }
                     break;
-                    //Action déclencher lorsque l'utilisateur choisie la tuile où il veut se déplacer
+                    
                 case CHOIX_TUILE_DEP:
                     t = grille.getTuile(msg.coord[0],msg.coord[1]);
                     getAvTrActuel().deplacer(t);
-                    jeu.finDeplacement(getAvTrActuel(), t);
+                    jeu.deplacePion(getAvTrActuel().getPion(), t);
                     jeu.actualise();
                     jeu.indic_Passif(this.getAvTrActuel());
+                    checkFinTour();
                     break;
-                    //Action déclencher lorsque l'utilisateur choisie la tuile qu'il veut assecher
                 case CHOIX_TUILE_AS:
                     t = grille.getTuile(msg.coord[0],msg.coord[1]);
                     getAvTrActuel().assecher(t);
                     jeu.changeEtat(t.getEtat(),t);
                     jeu.actualise();
                     jeu.indic_Passif(getAvTrActuel());
+                    checkFinTour();
                     break;
-                    //Action declencher lorsque l'utilisateur a choisie la carte a qui il veut donner
                 case CHOIX_DONCARTE:
                     Aventurier receveur = jeu.translate_VueAv_Av(msg.vueAv.get(0), getMesAventuriers());
                     CarteJoueur carte = jeu.translate_VueCa_Ca(msg.vueCarte, getAvTrActuel().getCartesDonnables());
@@ -388,6 +376,10 @@ public class Controleur implements Observateur {
     
     public static void main(String[]args ) throws IOException{
         new Controleur();
+    }
+
+    public VueJeu getJeu() {
+        return jeu;
     }
 
 
